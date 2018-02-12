@@ -11,12 +11,6 @@
 	<description>Epiphy is a lightweight library for property based data model access.</description>
 	<url>http://www.mantledillusion.com</url>
 
-	<!--Epiphytes are pseudo-parasitic plants. They live on the surface of other 
-		organisms in order to benefit from their environment, but do not break that 
-		organisms surface, leaving the host unharmed. This prevents the host from 
-		getting injuries and diseases because the symbiosis, effectively extending 
-		the epiphyte life's length. -->
-
 	<licenses>
 		<license>
 			<name>The Apache License, Version 2.0</name>
@@ -33,12 +27,6 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:git://github.com/MantledIllusion/epiphy.git</connection>
-		<developerConnection>scm:git:ssh://github.com/MantledIllusion/epiphy.git</developerConnection>
-		<url>https://github.com/MantledIllusion/epiphy.git</url>
-	</scm>
-
 	<properties>
 		<!-- java compiler version -->
 		<java.compiler.version>1.8</java.compiler.version>
@@ -50,6 +38,23 @@
 		<!-- maven dependency versions -->
 		<junit.version>4.12</junit.version>
 	</properties>
+
+	<scm>
+		<connection>scm:git:git://github.com/MantledIllusion/epiphy.git</connection>
+		<developerConnection>scm:git:ssh://github.com/MantledIllusion/epiphy.git</developerConnection>
+		<url>https://github.com/MantledIllusion/epiphy.git</url>
+	</scm>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+	</distributionManagement>
 
 	<dependencies>
 		<!-- testing dependencies -->
@@ -66,24 +71,58 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.5.1</version>
 				<configuration>
 					<source>${java.compiler.version}</source>
 					<target>${java.compiler.version}</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>deploy</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar-no-fork</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
