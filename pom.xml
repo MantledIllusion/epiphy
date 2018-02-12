@@ -1,17 +1,43 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>com.mantledillusion.data</groupId>
 	<artifactId>epiphy</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
 	<name>Epiphy</name>
 	<description>Epiphy is a lightweight library for property based data model access.</description>
+	<url>http://www.mantledillusion.com</url>
 
 	<!--Epiphytes are pseudo-parasitic plants. They live on the surface of other 
 		organisms in order to benefit from their environment, but do not break that 
 		organisms surface, leaving the host unharmed. This prevents the host from 
 		getting injuries and diseases because the symbiosis, effectively extending 
 		the epiphyte life's length. -->
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Tobias Weber</name>
+			<email>tobias.weber@mantledillusion.com</email>
+			<organization>Mantled Illusion</organization>
+			<organizationUrl>http://www.mantledillusion.com</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/MantledIllusion/epiphy.git</connection>
+		<developerConnection>scm:git:ssh://github.com/MantledIllusion/epiphy.git</developerConnection>
+		<url>https://github.com/MantledIllusion/epiphy.git</url>
+	</scm>
 
 	<properties>
 		<!-- java compiler version -->
