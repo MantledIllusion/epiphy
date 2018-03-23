@@ -37,9 +37,12 @@ public final class DefiniteModelProperty<M, T> extends ModelProperty<M, T> {
 		}
 
 		@Override
-		public C get(P source, IndexContext context) {
-			checkParent(source);
-			return this.setter.get(source);
+		public C get(P source, IndexContext context, boolean allowNull) {
+			if (checkParent(source, allowNull)) {
+				return this.setter.get(source);
+			} else {
+				return null;
+			}
 		}
 	}
 
@@ -53,7 +56,7 @@ public final class DefiniteModelProperty<M, T> extends ModelProperty<M, T> {
 
 		@Override
 		public void set(P target, C value, IndexContext context) {
-			checkParent(target);
+			checkParent(target, false);
 			this.setter.set(target, value);
 		}
 	}
@@ -168,9 +171,14 @@ public final class DefiniteModelProperty<M, T> extends ModelProperty<M, T> {
 				new IndexedDefiniteSetter<T, List<C>>(setter));
 	}
 
-	private <P> void checkParent(P parent) {
+	private <P> boolean checkParent(P parent, boolean allowNull) {
 		if (parent == null) {
-			throw new InterruptedPropertyPathException(DefiniteModelProperty.this);
+			if (allowNull) {
+				return false;
+			} else {
+				throw new InterruptedPropertyPathException(DefiniteModelProperty.this);
+			}
 		}
+		return true;
 	}
 }

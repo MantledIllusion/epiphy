@@ -20,4 +20,10 @@ public class GetTreeModelPropertyTest extends AbstractTreeModelPropertyTest {
 		this.model.sub.subSub = null;
 		TreeModelProperties.SUBSUBID.get(this.model);
 	}
+
+	@Test
+	public void testGetPropertyAllowIntermediateNull() {
+		this.model.sub.subSub = null;
+		assertEquals(null, TreeModelProperties.SUBSUBID.get(this.model, true));
+	}
 }

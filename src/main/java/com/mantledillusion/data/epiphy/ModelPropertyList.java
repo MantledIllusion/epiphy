@@ -32,9 +32,12 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 		}
 
 		@Override
-		public E get(List<E> source, IndexContext context) {
-			this.list.checkListIndexing(source, context, true);
-			return source.get(context.indexOf(this.list));
+		public E get(List<E> source, IndexContext context, boolean allowNull) {
+			if (this.list.checkListIndexing(source, context, true, allowNull)) {
+				return source.get(context.indexOf(this.list));
+			} else {
+				return null;
+			}
 		}
 	}
 
@@ -49,7 +52,7 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 
 		@Override
 		public void set(List<E> target, E value, IndexContext context) {
-			this.list.checkListIndexing(target, context, true);
+			this.list.checkListIndexing(target, context, true, false);
 			target.set(context.indexOf(this.list), value);
 		}
 	}
@@ -205,7 +208,7 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	public void add(M model, E element, IndexContext context) {
 		context = context == null ? DefaultIndexContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false);
+		checkListIndexing(list, context, false, false);
 		if (context.contains(this)) {
 			list.add(context.indexOf(this), element);
 		} else {
@@ -262,7 +265,7 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	public E remove(M model, IndexContext context) {
 		context = context == null ? DefaultIndexContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false);
+		checkListIndexing(list, context, false, false);
 		if (context.contains(this)) {
 			return list.remove((int) context.indexOf(this));
 		} else {
@@ -270,8 +273,11 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 		}
 	}
 
-	private void checkListIndexing(List<E> list, IndexContext context, boolean indexRequired) {
+	private boolean checkListIndexing(List<E> list, IndexContext context, boolean indexRequired, boolean allowNull) {
 		if (list == null) {
+			if (allowNull) {
+				return false;
+			}
 			throw new InterruptedPropertyPathException(this);
 		} else if (indexRequired) {
 			if (!context.contains(this)) {
@@ -280,5 +286,6 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 				throw new OutboundPropertyPathException(this, context.indexOf(this), list.size());
 			}
 		}
+		return true;
 	}
 }

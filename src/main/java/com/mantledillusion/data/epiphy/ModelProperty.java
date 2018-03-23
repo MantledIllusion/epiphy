@@ -38,7 +38,7 @@ public abstract class ModelProperty<M, T> {
 
 	interface IndexedGetter<P, T> {
 
-		T get(P source, IndexContext context);
+		T get(P source, IndexContext context, boolean allowNull);
 	}
 
 	interface IndexedSetter<P, T> {
@@ -230,7 +230,30 @@ public abstract class ModelProperty<M, T> {
 	 *             path.
 	 */
 	public final T get(M model) {
-		return get(model, null);
+		return get(model, null, false);
+	}
+
+	/**
+	 * Retrieves this {@link ModelProperty}'s property out of the given model.
+	 * 
+	 * @param model
+	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 * @param allowNull
+	 *            Allows any parent property of this property to be null. If set to
+	 *            true, instead of throwing an
+	 *            {@link InterruptedPropertyPathException}, the method will just
+	 *            return null.
+	 * @return The retrieved property; might return null if the property is null or
+	 *         if a parent property is null and allowNull is set to true
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ModelProperty} is null
+	 *             and allowNull is set to false.
+	 * @throws UnindexedPropertyPathException
+	 *             If there is any listed property in this {@link ModelProperty}'s
+	 *             path.
+	 */
+	public final T get(M model, boolean allowNull) {
+		return get(model, null, allowNull);
 	}
 
 	/**
@@ -251,20 +274,48 @@ public abstract class ModelProperty<M, T> {
 	 *             path that does not have a {@link PropertyIndex} included in the
 	 *             given {@link IndexContext}.
 	 */
-	@SuppressWarnings("unchecked")
 	public final T get(M model, IndexContext context) {
+		return get(model, context, false);
+	}
+
+	/**
+	 * Retrieves this {@link ModelProperty}'s property out of the given model, using
+	 * the given {@link IndexContext}.
+	 * 
+	 * @param model
+	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 * @param context
+	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            properties from the root property to his {@link ModelProperty}.
+	 * @param allowNull
+	 *            Allows any parent property of this property to be null. If set to
+	 *            true, instead of throwing an
+	 *            {@link InterruptedPropertyPathException}, the method will just
+	 *            return null.
+	 * @return The retrieved property; might return null if the property is null or
+	 *         if a parent property is null and allowNull is set to true
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ModelProperty} is null
+	 *             and allowNull is set to false.
+	 * @throws UnindexedPropertyPathException
+	 *             If there is any listed property in this {@link ModelProperty}'s
+	 *             path that does not have a {@link PropertyIndex} included in the
+	 *             given {@link IndexContext}.
+	 */
+	@SuppressWarnings("unchecked")
+	public final T get(M model, IndexContext context, boolean allowNull) {
 		context = context == null ? DefaultIndexContext.EMPTY : context;
 		if (parent == null) {
 			return (T) model;
 		} else {
-			return castAndGet(model, context);
+			return castAndGet(model, context, allowNull);
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	private <P> T castAndGet(M model, IndexContext context) {
+	private <P> T castAndGet(M model, IndexContext context, boolean allowNull) {
 		P parentValue = ((ModelProperty<M, P>) this.parent).get(model, context);
-		return ((IndexedGetter<P, T>) this.getter).get(parentValue, context);
+		return ((IndexedGetter<P, T>) this.getter).get(parentValue, context, allowNull);
 	}
 
 	/**
