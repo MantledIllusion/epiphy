@@ -2,8 +2,11 @@ package com.mantledillusion.data.epiphy;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
@@ -34,7 +37,8 @@ import com.mantledillusion.data.epiphy.io.Setter;
  */
 public abstract class ModelProperty<M, T> {
 
-	public static final String PROPERTY_NAME_PATTERN = "[a-zA-Z0-9_]+";
+	public static final String PROPERTY_ID_PATTERN = "[a-zA-Z0-9_-]+";
+	public static final String PROPERTY_PATH_PATTERN = PROPERTY_ID_PATTERN + "(\\." + PROPERTY_ID_PATTERN + ")*";
 
 	interface IndexedGetter<P, T> {
 
@@ -47,9 +51,11 @@ public abstract class ModelProperty<M, T> {
 	}
 
 	private final String id;
+	private final String name;
 
 	private final ModelProperty<M, ?> parent;
-	private final Set<ModelProperty<M, ?>> allChildren = new HashSet<>();
+	private final Map<String, ModelProperty<M, ?>> childrenByPaths = new HashMap<>();
+	private final Map<ModelProperty<M, ?>, String> pathsByChildren = new IdentityHashMap<>();
 
 	private final IndexedGetter<?, T> getter;
 	private final IndexedSetter<?, T> setter;
@@ -66,9 +72,9 @@ public abstract class ModelProperty<M, T> {
 	<P> ModelProperty(String id, ModelProperty<M, P> parent, IndexedGetter<P, T> getter, IndexedSetter<P, T> setter,
 			boolean isListed) {
 		id = id == null ? String.valueOf(System.identityHashCode(this)) : id;
-		if (!id.matches(PROPERTY_NAME_PATTERN)) {
+		if (!id.matches(PROPERTY_ID_PATTERN)) {
 			throw new IllegalArgumentException("The property id '" + id + "' does not match the pattern '"
-					+ PROPERTY_NAME_PATTERN + "' for model property names.");
+					+ PROPERTY_ID_PATTERN + "' for model property names.");
 		}
 
 		this.parent = parent;
@@ -80,16 +86,18 @@ public abstract class ModelProperty<M, T> {
 
 		if (this.parent == null) {
 			this.id = id;
+			this.name = id;
 			this.path = Collections.singletonList(this);
 
 			this.indices = Collections.emptySet();
 		} else {
-			this.id = parent.getId() + '.' + id;
+			this.id = id;
+			this.name = parent.getName() + '.' + id;
 			List<ModelProperty<M, ?>> path = new ArrayList<ModelProperty<M, ?>>(this.parent.path);
 			path.addAll(Collections.singletonList(this));
 			this.path = Collections.unmodifiableList(path);
 
-			parent.addChild(this);
+			this.parent.addChild(id, this);
 
 			Set<ModelProperty<M, ?>> indices = new HashSet<>(this.parent.indices);
 			if (this.parent.isList()) {
@@ -100,23 +108,48 @@ public abstract class ModelProperty<M, T> {
 		this.context = Collections.unmodifiableSet(new HashSet<>(this.path));
 	}
 
-	private <T2> void addChild(ModelProperty<M, T2> child) {
-		this.allChildren.add(child);
+	private <T2> void addChild(String id, ModelProperty<M, T2> child) {
+		String path = this.id + '.' + id;
+
+		if (this.childrenByPaths.containsKey(path)) {
+			throw new IllegalStateException(
+					"Cannot add more than one child to the property " + this + " with the id " + id);
+		}
+
+		this.childrenByPaths.put(path, child);
+		this.pathsByChildren.put(child, path);
 		if (this.parent != null) {
-			this.parent.addChild(child);
+			this.parent.addChild(path, child);
 		}
 	}
 
 	/**
-	 * The id this {@link ModelProperty} is identified by.
+	 * The id this {@link ModelProperty} is identified by in relation to its direct
+	 * parent.
 	 * <p>
-	 * If not set to a specific value upon creation, this method returns this
-	 * {@link ModelProperty}'s objectId as provided by the JVM.
+	 * If not set to a specific value (or null) upon creation, this method returns
+	 * this {@link ModelProperty}'s objectId as provided by the JVM.
 	 * 
 	 * @return This {@link ModelProperty}'s id; never null
 	 */
 	public String getId() {
-		return this.id;
+		return id;
+	}
+
+	/**
+	 * The name this {@link ModelProperty} is identified by in relation to the
+	 * model's root property.
+	 * <p>
+	 * The name of a property is the {@link ModelProperty}'s path from the model
+	 * root property to the property itself.
+	 * <p>
+	 * A property path is a properties' id, appended to the id's of 0-n of it's
+	 * parents, separated by the '.' character.
+	 * 
+	 * @return This {@link ModelProperty}'s name; never null
+	 */
+	public String getName() {
+		return this.name;
 	}
 
 	/**
@@ -164,6 +197,47 @@ public abstract class ModelProperty<M, T> {
 	}
 
 	/**
+	 * Returns the child of this {@link ModelProperty} with the given path.
+	 * <p>
+	 * A property path is a properties' id, appended to the id's of 0-n of it's
+	 * parents, separated by the '.' character.
+	 * <p>
+	 * A property path is always relative to the {@link ModelProperty} it is used
+	 * on. For example, in a property tree with a hierarchy of A-&gt;B-&gt;C-&gtD;,
+	 * the property path from B to D is B.C.D, as B is the property to begin at.
+	 * 
+	 * @param propertyPath
+	 *            The property path to return the child for; might be null, although
+	 *            there will never be a child for a null child path.
+	 * @return The child at the end of the given path, as seen from this
+	 *         {@link ModelProperty}; might be null if there is none
+	 */
+	public final ModelProperty<M, ?> getChild(String propertyPath) {
+		if (propertyPath != null && !propertyPath.matches(PROPERTY_PATH_PATTERN)) {
+			throw new IllegalArgumentException("The property path '" + propertyPath
+					+ "' is not valid; a property path has to match " + PROPERTY_PATH_PATTERN);
+		}
+		return this.childrenByPaths.get(propertyPath);
+	}
+
+	/**
+	 * Returns the path of this {@link ModelProperty}'s child.
+	 * <p>
+	 * Note that the child is recognized by objectId; the method will return null
+	 * for given a child instance of another property model, even if that model is
+	 * equal.
+	 * 
+	 * @param child
+	 *            The child to returns the path for; might be null, although there
+	 *            will never be a path for a null child.
+	 * @return The path at whose end the given child is located, as seen from this
+	 *         {@link ModelProperty}; might be null if the child is unknown
+	 */
+	public final String getChildPath(ModelProperty<M, ?> child) {
+		return this.pathsByChildren.get(child);
+	}
+
+	/**
 	 * Returns a collapsed {@link Set} of all child properties in the complete
 	 * subtree this {@link ModelProperty} is the parent of.
 	 * 
@@ -171,7 +245,17 @@ public abstract class ModelProperty<M, T> {
 	 *         {@link ModelProperty}; never null
 	 */
 	public final Set<ModelProperty<M, ?>> getAllChildren() {
-		return Collections.unmodifiableSet(this.allChildren);
+		return Collections.unmodifiableSet(new HashSet<>(this.childrenByPaths.values()));
+	}
+
+	/**
+	 * Returns the property paths of all of this {@link ModelProperty}'s children.
+	 * 
+	 * @return A {@link Set} of all paths leading to this properties's children;
+	 *         never null, might be empty
+	 */
+	public final Set<String> getAllChildPaths() {
+		return Collections.unmodifiableSet(this.childrenByPaths.keySet());
 	}
 
 	/**
@@ -449,7 +533,7 @@ public abstract class ModelProperty<M, T> {
 	 */
 	@Override
 	public final int hashCode() {
-		return id.hashCode();
+		return name.hashCode();
 	}
 
 	/**
@@ -479,7 +563,7 @@ public abstract class ModelProperty<M, T> {
 	 */
 	@Override
 	public final String toString() {
-		return this.id;
+		return this.name;
 	}
 
 	/**

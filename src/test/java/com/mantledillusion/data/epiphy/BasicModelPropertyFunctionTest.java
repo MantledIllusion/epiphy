@@ -50,7 +50,7 @@ public class BasicModelPropertyFunctionTest {
 	}
 	
 	@Test
-	public void testId() {
+	public void testName() {
 		assertEquals("model.subList.sub.subId", MixedModelProperties.SUBID.toString());
 	}
 }

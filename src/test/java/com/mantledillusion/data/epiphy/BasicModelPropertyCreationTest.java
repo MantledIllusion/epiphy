@@ -18,6 +18,11 @@ public class BasicModelPropertyCreationTest {
 	}
 
 	@Test(expected=IllegalArgumentException.class)
+	public void testDefineChildWithInvalidId() {
+		this.root.registerChild("model.Id", root -> root.modelId, (root, modelId) -> root.modelId = modelId);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
 	public void testCreateChildWithoutGetter() {
 		@SuppressWarnings("unused")
 		DefiniteModelProperty<MixedModel, String> modelId = this.root.registerChild(null, (model, value) -> model.modelId = value);
@@ -46,5 +51,11 @@ public class BasicModelPropertyCreationTest {
 		@SuppressWarnings("unused")
 		DefiniteModelProperty<MixedModel, MixedSubType> subList = this.subList.defineElementAsChild();
 		this.subList.defineElementAsChildList();
+	}
+	
+	@Test(expected=IllegalStateException.class)
+	public void testDefineIdTwice() {
+		this.root.registerChild("modelId", root -> root.modelId, (root, modelId) -> root.modelId = modelId);
+		this.root.registerChild("modelId", root -> root.modelId, (root, modelId) -> root.modelId = modelId);
 	}
 }
