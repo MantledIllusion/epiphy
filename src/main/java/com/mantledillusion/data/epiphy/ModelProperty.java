@@ -217,6 +217,67 @@ public abstract class ModelProperty<M, T> {
 	}
 
 	/**
+	 * Returns whether this {@link ModelProperty}'s property is null, including the
+	 * case when a parent property is null.
+	 * 
+	 * @param model
+	 *            The model to lookup the property from; might be null.
+	 * @return True if this {@link ModelProperty} or any of its parents is null,
+	 *         false if it has a non-null value
+	 */
+	public final boolean isNull(M model) {
+		return get(model, true) == null;
+	}
+
+	/**
+	 * Returns whether this {@link ModelProperty}'s property is null, including the
+	 * case when a parent property is null.
+	 * 
+	 * @param model
+	 *            The model to lookup the property from; might be null.
+	 * @param context
+	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            properties from the root property to his {@link ModelProperty};
+	 *            might be null.
+	 * @return True if this {@link ModelProperty} or any of its parents is null,
+	 *         false if it has a non-null value
+	 */
+	public final boolean isNull(M model, IndexContext context) {
+		return get(model, context, true) == null;
+	}
+
+	/**
+	 * Returns whether this {@link ModelProperty} is reachable, so the property
+	 * itself might be null, but all of its parents aren't.
+	 * 
+	 * @param model
+	 *            The model to lookup the property from; might be null.
+	 * @return True if all of this {@link ModelProperty}'s parents
+	 */
+	public final boolean exists(M model) {
+		return exists(model, null);
+	}
+
+	/**
+	 * Returns whether this {@link ModelProperty} is reachable, so the property
+	 * itself might be null, but all of its parents aren't.
+	 * 
+	 * @param model
+	 *            The model to lookup the property from; might be null.
+	 * @param context
+	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            properties from the root property to his {@link ModelProperty};
+	 * @return True if all of this {@link ModelProperty}'s parents
+	 */
+	public final boolean exists(M model, IndexContext context) {
+		if (this.parent == null) {
+			return true;
+		} else {
+			return !this.parent.isNull(model, context);
+		}
+	}
+
+	/**
 	 * Retrieves this {@link ModelProperty}'s property out of the given model.
 	 * 
 	 * @param model
@@ -237,7 +298,8 @@ public abstract class ModelProperty<M, T> {
 	 * Retrieves this {@link ModelProperty}'s property out of the given model.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might be null if
+	 *            allowNull is set to true.
 	 * @param allowNull
 	 *            Allows any parent property of this property to be null. If set to
 	 *            true, instead of throwing an
@@ -264,7 +326,8 @@ public abstract class ModelProperty<M, T> {
 	 *            The model to retrieve the property from; might <b>NOT</b> be null.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty}.
+	 *            properties from the root property to his {@link ModelProperty};
+	 *            might be null.
 	 * @return The retrieved property; might return null if the property is null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ModelProperty} is
@@ -283,10 +346,12 @@ public abstract class ModelProperty<M, T> {
 	 * the given {@link IndexContext}.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might be null if
+	 *            allowNull is set to true.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty}.
+	 *            properties from the root property to his {@link ModelProperty};
+	 *            might be null.
 	 * @param allowNull
 	 *            Allows any parent property of this property to be null. If set to
 	 *            true, instead of throwing an
@@ -304,10 +369,10 @@ public abstract class ModelProperty<M, T> {
 	 */
 	@SuppressWarnings("unchecked")
 	public final T get(M model, IndexContext context, boolean allowNull) {
-		context = context == null ? DefaultIndexContext.EMPTY : context;
-		if (parent == null) {
+		if (this.parent == null) {
 			return (T) model;
 		} else {
+			context = context == null ? DefaultIndexContext.EMPTY : context;
 			return castAndGet(model, context, allowNull);
 		}
 	}
@@ -321,6 +386,9 @@ public abstract class ModelProperty<M, T> {
 	/**
 	 * Sets the given value to the property of the given model instance this
 	 * {@link ModelProperty} represents.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object)} in the model.
 	 * 
 	 * @param model
 	 *            The model to set the property on; might <b>NOT</b> be null.
@@ -340,6 +408,9 @@ public abstract class ModelProperty<M, T> {
 	/**
 	 * Sets the given value to the property of the given model instance this
 	 * {@link ModelProperty} represents, using the given {@link IndexContext}.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object, IndexContext)} in the model.
 	 * 
 	 * @param model
 	 *            The model to set the property on; might <b>NOT</b> be null.
@@ -347,7 +418,8 @@ public abstract class ModelProperty<M, T> {
 	 *            The value to set; might be null.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty}.
+	 *            properties from the root property to his {@link ModelProperty};
+	 *            might be null.
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ModelProperty} is
 	 *             null.
@@ -357,8 +429,8 @@ public abstract class ModelProperty<M, T> {
 	 *             given {@link IndexContext}.
 	 */
 	public final void set(M model, T value, IndexContext context) {
-		context = context == null ? DefaultIndexContext.EMPTY : context;
 		if (this.parent != null) {
+			context = context == null ? DefaultIndexContext.EMPTY : context;
 			castAndSet(model, value, context);
 		}
 	}

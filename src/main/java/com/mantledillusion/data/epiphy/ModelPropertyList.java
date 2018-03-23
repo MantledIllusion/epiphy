@@ -163,6 +163,9 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	/**
 	 * Adds the given element to the list represented by this
 	 * {@link ModelPropertyList} in the given model.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object)} in the model.
 	 * 
 	 * @param model
 	 *            The model to add the element to; might <b>NOT</b> be null.
@@ -182,6 +185,9 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	/**
 	 * Adds the given element to the list represented by this
 	 * {@link ModelPropertyList} in the given model.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object, IndexContext)} in the model.
 	 * 
 	 * @param model
 	 *            The model to add the element to; might <b>NOT</b> be null.
@@ -219,6 +225,9 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	/**
 	 * Removes the given element from the list represented by this
 	 * {@link ModelPropertyList} in the given model.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object)} in the model.
 	 * 
 	 * @param model
 	 *            The model to remove the element from; might <b>NOT</b> be null.
@@ -238,6 +247,9 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 	/**
 	 * Removes the given element from the list represented by this
 	 * {@link ModelPropertyList} in the given model.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object, IndexContext)} in the model.
 	 * 
 	 * @param model
 	 *            The model to remove the element from; might <b>NOT</b> be null.
