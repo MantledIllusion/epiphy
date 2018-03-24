@@ -203,7 +203,7 @@ public abstract class ModelProperty<M, T> {
 	 * parents, separated by the '.' character.
 	 * <p>
 	 * A property path is always relative to the {@link ModelProperty} it is used
-	 * on. For example, in a property tree with a hierarchy of A-&gt;B-&gt;C-&gtD;,
+	 * on. For example, in a property tree with a hierarchy of A-&gt;B-&gt;C-&gt;D;,
 	 * the property path from B to D is B.C.D, as B is the property to begin at.
 	 * 
 	 * @param propertyPath
