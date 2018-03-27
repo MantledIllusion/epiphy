@@ -463,7 +463,7 @@ public abstract class ModelProperty<M, T> {
 
 	@SuppressWarnings("unchecked")
 	private <P> T castAndGet(M model, IndexContext context, boolean allowNull) {
-		P parentValue = ((ModelProperty<M, P>) this.parent).get(model, context);
+		P parentValue = ((ModelProperty<M, P>) this.parent).get(model, context, allowNull);
 		return ((IndexedGetter<P, T>) this.getter).get(parentValue, context, allowNull);
 	}
 
