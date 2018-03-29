@@ -160,6 +160,16 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 		return childList;
 	}
 
+	@Override
+	public boolean hasChildrenIn(M model, IndexContext context) {
+		context = context == null ? DefaultIndexContext.EMPTY : context;
+		if (!context.contains(this)) {
+			throw new UnindexedPropertyPathException(this);
+		}
+		return !isNull(model, context) && hasChildren() && context.indexOf(this) >= 0
+				&& context.indexOf(this) < get(model, context).size();
+	}
+
 	/**
 	 * Adds the given element to the list represented by this
 	 * {@link ModelPropertyList} in the given model.

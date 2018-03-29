@@ -170,6 +170,11 @@ public final class DefiniteModelProperty<M, T> extends ModelProperty<M, T> {
 		return new ModelPropertyList<M, C>(id, this, new IndexedDefiniteGetter<T, List<C>>(getter),
 				new IndexedDefiniteSetter<T, List<C>>(setter));
 	}
+	
+	@Override
+	public boolean hasChildrenIn(M model, IndexContext context) {
+		return !isNull(model, context) && hasChildren();
+	}
 
 	private <P> boolean checkParent(P parent, boolean allowNull) {
 		if (parent == null) {

@@ -356,10 +356,49 @@ public abstract class ModelProperty<M, T> {
 	public final boolean exists(M model, IndexContext context) {
 		if (this.parent == null) {
 			return true;
+		} else if (this.parent.exists(model, context)) {
+			return this.parent.hasChildrenIn(model, context);
 		} else {
-			return !this.parent.isNull(model, context);
+			return false;
 		}
 	}
+
+	/**
+	 * Returns whether this {@link ModelProperty} has any registered children.
+	 * 
+	 * @return True if least one child has been registered, false otherwise
+	 */
+	public final boolean hasChildren() {
+		return !this.childrenByPaths.isEmpty();
+	}
+
+	/**
+	 * Returns whether this {@link ModelProperty} has any children in the given
+	 * model.
+	 * 
+	 * @param model
+	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 * @return True if this property is not null and has any children in the given
+	 *         model.
+	 */
+	public final boolean hasChildrenIn(M model) {
+		return hasChildrenIn(model, null);
+	}
+
+	/**
+	 * Returns whether this {@link ModelProperty} has any children in the given
+	 * model.
+	 * 
+	 * @param model
+	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 * @param context
+	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            properties from the root property to this {@link ModelProperty};
+	 *            might be null.
+	 * @return True if this property is not null and has any children in the given
+	 *         model.
+	 */
+	public abstract boolean hasChildrenIn(M model, IndexContext context);
 
 	/**
 	 * Retrieves this {@link ModelProperty}'s property out of the given model.
@@ -410,7 +449,7 @@ public abstract class ModelProperty<M, T> {
 	 *            The model to retrieve the property from; might <b>NOT</b> be null.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty};
+	 *            properties from the root property to this {@link ModelProperty};
 	 *            might be null.
 	 * @return The retrieved property; might return null if the property is null
 	 * @throws InterruptedPropertyPathException
@@ -434,7 +473,7 @@ public abstract class ModelProperty<M, T> {
 	 *            allowNull is set to true.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty};
+	 *            properties from the root property to this {@link ModelProperty};
 	 *            might be null.
 	 * @param allowNull
 	 *            Allows any parent property of this property to be null. If set to
@@ -502,7 +541,7 @@ public abstract class ModelProperty<M, T> {
 	 *            The value to set; might be null.
 	 * @param context
 	 *            The {@link IndexContext} that should be used to satisfy the listed
-	 *            properties from the root property to his {@link ModelProperty};
+	 *            properties from the root property to this {@link ModelProperty};
 	 *            might be null.
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ModelProperty} is
@@ -526,8 +565,8 @@ public abstract class ModelProperty<M, T> {
 	}
 
 	/**
-	 * Returns the hash code of his {@link ModelProperty}, which is the hash code of
-	 * its id.
+	 * Returns the hash code of this {@link ModelProperty}, which is the hash code
+	 * of its id.
 	 * 
 	 * @return The hash code of this {@link ModelProperty}'s id.
 	 */
