@@ -305,7 +305,11 @@ public final class ModelPropertyList<M, E> extends ModelProperty<M, List<E>> {
 			if (!context.contains(this)) {
 				throw new UnindexedPropertyPathException(this);
 			} else if (context.indexOf(this) < 0 || context.indexOf(this) >= list.size()) {
-				throw new OutboundPropertyPathException(this, context.indexOf(this), list.size());
+				if (allowNull) {
+					return false;
+				} else {
+					throw new OutboundPropertyPathException(this, context.indexOf(this), list.size());
+				}
 			}
 		}
 		return true;
