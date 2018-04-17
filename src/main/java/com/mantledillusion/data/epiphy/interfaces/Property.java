@@ -3,7 +3,6 @@ package com.mantledillusion.data.epiphy.interfaces;
 import java.util.List;
 import java.util.Set;
 
-import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
 
@@ -54,7 +53,7 @@ public interface Property<M, T> {
 	/**
 	 * Returns whether this {@link Property} instance represents a property that is
 	 * a {@link List} of other properties, or in other words, a
-	 * {@link ModelPropertyList}.
+	 * {@link ListedProperty}.
 	 * 
 	 * @return True if this {@link Property} represents a {@link List} of
 	 *         properties; false if not
@@ -64,7 +63,7 @@ public interface Property<M, T> {
 	/**
 	 * Returns whether this {@link Property} is a listed property (or put
 	 * differently; whether this {@link Property}'s instances are nested in a
-	 * {@link List}, so the parent property is a {@link ModelPropertyList}.
+	 * {@link List}, so the parent property is a {@link ListedProperty}.
 	 * 
 	 * @return True if this {@link Property} is a listed property; false if not
 	 */

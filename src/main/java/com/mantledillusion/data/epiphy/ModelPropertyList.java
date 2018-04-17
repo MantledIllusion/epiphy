@@ -2,13 +2,14 @@ package com.mantledillusion.data.epiphy;
 
 import java.util.List;
 
+import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
 import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
 
 /**
- * Implementation of {@link WriteableProperty} that represents a {@link List} of
- * model properties.
+ * Implementation of {@link ListedProperty} and {@link WriteableProperty} that
+ * represents a listed, writable model property.
  *
  * @param <M>
  *            The root model type of this {@link ModelPropertyList}'s property

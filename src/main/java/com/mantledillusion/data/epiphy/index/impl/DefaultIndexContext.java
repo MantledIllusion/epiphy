@@ -4,16 +4,16 @@ import java.lang.reflect.Method;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
+import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
 import com.mantledillusion.data.epiphy.interfaces.Property;
 
 /**
  * Default implementation of {@link IndexContext}.
  * <p>
  * Context of {@link PropertyIndex}es that basically contains a {@link Map} of
- * {@link ModelPropertyList}-&gt;{@link Integer} pairs determining the indices.
+ * {@link ListedProperty}-&gt;{@link Integer} pairs determining the indices.
  * <p>
  * {@link DefaultIndexContext}s can be created using the {@link #of(PropertyIndex...)}
  * {@link Method}.
@@ -25,13 +25,13 @@ public class DefaultIndexContext implements IndexContext {
 	 */
 	public static final DefaultIndexContext EMPTY = new DefaultIndexContext();
 
-	private final Map<ModelPropertyList<?, ?>, Integer> indices;
+	private final Map<ListedProperty<?, ?>, Integer> indices;
 
 	private DefaultIndexContext() {
 		this(new IdentityHashMap<>());
 	}
 
-	private DefaultIndexContext(IdentityHashMap<ModelPropertyList<?, ?>, Integer> indices) {
+	private DefaultIndexContext(IdentityHashMap<ListedProperty<?, ?>, Integer> indices) {
 		this.indices = indices;
 	}
 

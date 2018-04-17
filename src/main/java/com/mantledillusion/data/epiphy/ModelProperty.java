@@ -1,25 +1,13 @@
 package com.mantledillusion.data.epiphy;
 
-import java.lang.reflect.Method;
-
+import com.mantledillusion.data.epiphy.interfaces.DefiniteProperty;
 import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
-import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
-import com.mantledillusion.data.epiphy.io.Setter;
 
 /**
- * Implementation of {@link WriteableProperty} that represents a definite, single
- * model property.
- * <p>
- * On a {@link ModelProperty} instance, the {@link Method}s...<br>
- * - {@link #registerChild(Getter, Setter)}<br>
- * - {@link #registerChild(String, Getter, Setter)}<br>
- * ... can be used to add a definite child property to that instance. Also, the
- * {@link Method}s...<br>
- * - {@link #registerChildList(Getter, Setter)}<br>
- * - {@link #registerChildList(String, Getter, Setter)}<br>
- * ... can be used to add child property lists to that instance.
+ * Implementation of {@link DefiniteProperty} and {@link WriteableProperty} that
+ * represents a definite, writable model property.
  * 
  * @param <M>
  *            The root model type of this {@link ModelProperty}'s property tree.
@@ -30,7 +18,7 @@ public final class ModelProperty<M, T> extends DefiniteModelProperty<M, T> imple
 
 	private final IndexedGetter<?, T> getter;
 	private final IndexedSetter<?, T> setter;
-	
+
 	ModelProperty(String id) {
 		this(id, null, null, null);
 	}

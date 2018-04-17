@@ -4,12 +4,13 @@ import java.util.List;
 
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.index.IndexContext;
+import com.mantledillusion.data.epiphy.interfaces.DefiniteProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
-abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> {
+abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> implements DefiniteProperty<M, T> {
 
 	private final class IndexedDefiniteGetter<P, C> implements IndexedGetter<P, C> {
 
@@ -57,46 +58,12 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> {
 		return !isNull(model, context) && hasChildren();
 	}
 
-	/**
-	 * Registers a child to this {@link ModelProperty} that can be accessed
-	 * by the given {@link Getter}/{@link Setter} combination.
-	 * 
-	 * @param <C>
-	 *            The child properties' type.
-	 * @param getter
-	 *            The {@link Getter} that can be applied onto this
-	 *            {@link ModelProperty} to retrieve the child property;
-	 *            might <b>NOT</b> be null.
-	 * @param setter
-	 *            The {@link Setter} that can be applied onto this
-	 *            {@link ModelProperty} to set the child property; might
-	 *            <b>NOT</b> be null.
-	 * @return The instantiated child property; never null
-	 */
+	@Override
 	public <C> ModelProperty<M, C> registerChild(Getter<T, C> getter, Setter<T, C> setter) {
 		return registerChild(null, getter, setter);
 	}
 
-	/**
-	 * Registers an id'ed child to this {@link ModelProperty} that can be
-	 * accessed by the given {@link Getter}/{@link Setter} combination.
-	 * 
-	 * @param <C>
-	 *            The child properties' type.
-	 * @param id
-	 *            The id the returned child {@link ModelProperty} will be
-	 *            identified by; might be null. All parent id's (including this
-	 *            {@link ModelProperty}'s id) will be prepended.
-	 * @param getter
-	 *            The {@link Getter} that can be applied onto this
-	 *            {@link ModelProperty} to retrieve the child
-	 *            {@link ModelProperty}; might <b>NOT</b> be null.
-	 * @param setter
-	 *            The {@link Setter} that can be applied onto this
-	 *            {@link ModelProperty} to set the child
-	 *            {@link ModelProperty}; might <b>NOT</b> be null.
-	 * @return The instantiated child property; never null
-	 */
+	@Override
 	public <C> ModelProperty<M, C> registerChild(String id, Getter<T, C> getter, Setter<T, C> setter) {
 		if (getter == null) {
 			throw new IllegalArgumentException("Cannot build a child property with a null getter.");
@@ -107,46 +74,12 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> {
 				new IndexedDefiniteSetter<T, C>(setter));
 	}
 
-	/**
-	 * Registers a listed child to this {@link ModelProperty} that can be
-	 * accessed by the given {@link Getter}/{@link Setter} combination.
-	 * 
-	 * @param <C>
-	 *            The child properties' type.
-	 * @param getter
-	 *            The {@link Getter} that can be applied onto this
-	 *            {@link ModelProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
-	 * @param setter
-	 *            The {@link Setter} that can be applied onto this
-	 *            {@link ModelProperty} to set the listed child property;
-	 *            might <b>NOT</b> be null.
-	 * @return The instantiated listed child property; never null
-	 */
+	@Override
 	public <C> ModelPropertyList<M, C> registerChildList(Getter<T, List<C>> getter, Setter<T, List<C>> setter) {
 		return registerChildList(null, getter, setter);
 	}
 
-	/**
-	 * Registers an id'ed listed child to this {@link ModelProperty} that
-	 * can be accessed by the given {@link Getter}/{@link Setter} combination.
-	 * 
-	 * @param <C>
-	 *            The child properties' type.
-	 * @param id
-	 *            The id the returned listed child {@link ModelPropertyList} will be
-	 *            identified by; might be null. All parent id's (including this
-	 *            {@link ModelProperty}'s id) will be prepended.
-	 * @param getter
-	 *            The {@link Getter} that can be applied onto this
-	 *            {@link ModelProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
-	 * @param setter
-	 *            The {@link Setter} that can be applied onto this
-	 *            {@link ModelProperty} to set the listed child property;
-	 *            might <b>NOT</b> be null.
-	 * @return The instantiated listed child property; never null
-	 */
+	@Override
 	public <C> ModelPropertyList<M, C> registerChildList(String id, Getter<T, List<C>> getter,
 			Setter<T, List<C>> setter) {
 		if (getter == null) {

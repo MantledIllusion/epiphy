@@ -1,20 +1,20 @@
 package com.mantledillusion.data.epiphy.index;
 
-import com.mantledillusion.data.epiphy.ModelPropertyList;
+import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
 
 /**
  * Represents a single property index, which is basically an
- * {@link ModelPropertyList}-&gt;{@link Integer} pair.
+ * {@link ListedProperty}-&gt;{@link Integer} pair.
  * <p>
  * {@link PropertyIndex}es can be created using the
- * {@link #of(ModelPropertyList, int)} method.
+ * {@link #of(ListedProperty, int)} method.
  */
 public final class PropertyIndex {
 
-	private final ModelPropertyList<?, ?> key;
+	private final ListedProperty<?, ?> key;
 	private final Integer value;
 
-	private PropertyIndex(ModelPropertyList<?, ?> key, Integer value) {
+	private PropertyIndex(ListedProperty<?, ?> key, Integer value) {
 		this.key = key;
 		this.value = value;
 	}
@@ -24,7 +24,7 @@ public final class PropertyIndex {
 	 * 
 	 * @return The property; never null
 	 */
-	public ModelPropertyList<?, ?> getProperty() {
+	public ListedProperty<?, ?> getProperty() {
 		return key;
 	}
 
@@ -83,7 +83,7 @@ public final class PropertyIndex {
 	 *            The index the given property has to have.
 	 * @return A new {@link PropertyIndex}; never null
 	 */
-	public static PropertyIndex of(ModelPropertyList<?, ?> listedProperty, int index) {
+	public static PropertyIndex of(ListedProperty<?, ?> listedProperty, int index) {
 		if (listedProperty == null) {
 			throw new IllegalArgumentException("Cannot create an index for a null listed property.");
 		}

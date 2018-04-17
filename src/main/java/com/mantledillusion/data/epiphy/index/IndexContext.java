@@ -2,14 +2,14 @@ package com.mantledillusion.data.epiphy.index;
 
 import java.util.Map;
 
-import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.index.impl.DefaultIndexContext;
+import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
 import com.mantledillusion.data.epiphy.interfaces.Property;
 
 /**
  * Interface for index contexts, which are basically {@link Map}s of
- * {@link ModelPropertyList}-&gt;{@link Integer} pairs determining the indices
- * of {@link ModelPropertyList}s.
+ * {@link ListedProperty}-&gt;{@link Integer} pairs determining the indices of
+ * {@link ListedProperty}s.
  * <p>
  * The default implementation of this interface is {@link DefaultIndexContext}.
  */
@@ -19,9 +19,9 @@ public interface IndexContext {
 	 * Retrieves the index for the given listed property.
 	 * <p>
 	 * Note that the parameter for retrieving is {@link Property}, not
-	 * {@link ModelPropertyList} for convenience reasons; an implementation of
+	 * {@link ListedProperty} for convenience reasons; an implementation of
 	 * {@link IndexContext} should never return anything but null when
-	 * listedProperty.getClass() instanceof {@link ModelPropertyList} = false.
+	 * listedProperty.getClass() instanceof {@link ListedProperty} = false.
 	 * 
 	 * @param listedProperty
 	 *            The listed property to retrieve the index for; might be null.
@@ -35,9 +35,9 @@ public interface IndexContext {
 	 * {@link Property}.
 	 * <p>
 	 * Note that the parameter for checking is {@link Property}, not
-	 * {@link ModelPropertyList} for convenience reasons; an implementation of
+	 * {@link ListedProperty} for convenience reasons; an implementation of
 	 * {@link IndexContext} should never return anything but false when
-	 * listedProperty.getClass() instanceof {@link ModelPropertyList} = false.
+	 * listedProperty.getClass() instanceof {@link ListedProperty} = false.
 	 * 
 	 * @param listedProperty
 	 *            The listed property to check index existence for; might be null.
