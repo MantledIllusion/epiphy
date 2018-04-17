@@ -8,7 +8,7 @@ import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
 
 public class BasicModelPropertyCreationTest {
 	
-	private DefiniteModelProperty<MixedModel, MixedModel> root;
+	private ModelProperty<MixedModel, MixedModel> root;
 	private ModelPropertyList<MixedModel, MixedSubType> subList;
 	
 	@Before
@@ -25,13 +25,13 @@ public class BasicModelPropertyCreationTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testCreateChildWithoutGetter() {
 		@SuppressWarnings("unused")
-		DefiniteModelProperty<MixedModel, String> modelId = this.root.registerChild(null, (model, value) -> model.modelId = value);
+		ModelProperty<MixedModel, String> modelId = this.root.registerChild(null, (model, value) -> model.modelId = value);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
 	public void testCreateChildWithoutSetter() {
 		@SuppressWarnings("unused")
-		DefiniteModelProperty<MixedModel, String> modelId = this.root.registerChild(model -> model.modelId, null);
+		ModelProperty<MixedModel, String> modelId = this.root.registerChild(model -> model.modelId, null);
 	}
 
 	@Test(expected=IllegalArgumentException.class)
@@ -49,7 +49,7 @@ public class BasicModelPropertyCreationTest {
 	@Test(expected=IllegalStateException.class)
 	public void testDefineElementTwice() {
 		@SuppressWarnings("unused")
-		DefiniteModelProperty<MixedModel, MixedSubType> subList = this.subList.defineElementAsChild();
+		ModelProperty<MixedModel, MixedSubType> subList = this.subList.defineElementAsChild();
 		this.subList.defineElementAsChildList();
 	}
 	

@@ -4,10 +4,10 @@ import java.lang.reflect.Method;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
+import com.mantledillusion.data.epiphy.interfaces.Property;
 
 /**
  * Default implementation of {@link IndexContext}.
@@ -36,12 +36,12 @@ public class DefaultIndexContext implements IndexContext {
 	}
 
 	@Override
-	public Integer indexOf(ModelProperty<?, ?> listedProperty) {
+	public Integer indexOf(Property<?, ?> listedProperty) {
 		return this.indices.get(listedProperty);
 	}
 
 	@Override
-	public boolean contains(ModelProperty<?, ?> listedProperty) {
+	public boolean contains(Property<?, ?> listedProperty) {
 		return this.indices.containsKey(listedProperty);
 	}
 
