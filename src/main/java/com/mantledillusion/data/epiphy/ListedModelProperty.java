@@ -68,11 +68,6 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	}
 
 	@Override
-	public ModelProperty<M, E> defineElementAsChild() {
-		return defineElementAsChild(null);
-	}
-
-	@Override
 	public ModelProperty<M, E> defineElementAsChild(String elementId) {
 		if (this.element != null) {
 			throw new IllegalStateException("The element of this model property list has already been defined.");
@@ -81,11 +76,6 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 				new IndexedListedGetter<E>(this), new IndexedListedSetter<E>(this));
 		this.element = child;
 		return child;
-	}
-
-	@Override
-	public <C> ModelPropertyList<M, C> defineElementAsChildList() {
-		return defineElementAsChildList(null);
 	}
 
 	@Override
@@ -102,11 +92,6 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	}
 
 	@Override
-	public void add(M model, E element) {
-		add(model, element, null);
-	}
-
-	@Override
 	public void add(M model, E element, IndexContext context) {
 		context = context == null ? DefaultIndexContext.EMPTY : context;
 		List<E> list = get(model, context);
@@ -116,11 +101,6 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 		} else {
 			list.add(element);
 		}
-	}
-
-	@Override
-	public E remove(M model) {
-		return remove(model, null);
 	}
 
 	@Override

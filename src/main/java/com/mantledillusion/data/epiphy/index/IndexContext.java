@@ -4,7 +4,7 @@ import java.util.Map;
 
 import com.mantledillusion.data.epiphy.index.impl.DefaultIndexContext;
 import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
-import com.mantledillusion.data.epiphy.interfaces.Property;
+import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 
 /**
  * Interface for index contexts, which are basically {@link Map}s of
@@ -18,7 +18,7 @@ public interface IndexContext {
 	/**
 	 * Retrieves the index for the given listed property.
 	 * <p>
-	 * Note that the parameter for retrieving is {@link Property}, not
+	 * Note that the parameter for retrieving is {@link ReadableProperty}, not
 	 * {@link ListedProperty} for convenience reasons; an implementation of
 	 * {@link IndexContext} should never return anything but null when
 	 * listedProperty.getClass() instanceof {@link ListedProperty} = false.
@@ -28,13 +28,13 @@ public interface IndexContext {
 	 * @return The index of the listed property; might be null, if the given
 	 *         property is not indexed
 	 */
-	public Integer indexOf(Property<?, ?> listedProperty);
+	public Integer indexOf(ReadableProperty<?, ?> listedProperty);
 
 	/**
 	 * Checks if this {@link DefaultIndexContext} contains an index for the given
-	 * {@link Property}.
+	 * {@link ReadableProperty}.
 	 * <p>
-	 * Note that the parameter for checking is {@link Property}, not
+	 * Note that the parameter for checking is {@link ReadableProperty}, not
 	 * {@link ListedProperty} for convenience reasons; an implementation of
 	 * {@link IndexContext} should never return anything but false when
 	 * listedProperty.getClass() instanceof {@link ListedProperty} = false.
@@ -44,5 +44,5 @@ public interface IndexContext {
 	 * @return True if there is an index for the given listed property; false
 	 *         otherwise
 	 */
-	public boolean contains(Property<?, ?> listedProperty);
+	public boolean contains(ReadableProperty<?, ?> listedProperty);
 }

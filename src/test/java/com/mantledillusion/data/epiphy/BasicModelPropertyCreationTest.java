@@ -8,7 +8,7 @@ import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
 
 public class BasicModelPropertyCreationTest {
 	
-	private ModelProperty<MixedModel, MixedModel> root;
+	private ReadOnlyModelProperty<MixedModel, MixedModel> root;
 	private ModelPropertyList<MixedModel, MixedSubType> subList;
 	
 	@Before

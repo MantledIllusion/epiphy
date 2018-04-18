@@ -4,10 +4,11 @@ import java.util.List;
 
 import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
+import com.mantledillusion.data.epiphy.ReadOnlyModelPropertyList;
 
 public class ListModelProperties {
 	
-	public static final ModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootChildList();
+	public static final ReadOnlyModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootChildList();
 	
 	public static final ModelPropertyList<List<List<String>>, String> ELEMENTLIST = MODEL.defineElementAsChildList("elementList");
 	

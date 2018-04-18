@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mantledillusion.data.epiphy.index.IndexContext;
-import com.mantledillusion.data.epiphy.interfaces.Property;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.Setter;
@@ -24,13 +23,13 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	private final String name;
 
 	protected final AbstractModelProperty<M, ?> parent;
-	protected final Map<String, Property<M, ?>> childrenByPaths = new HashMap<>();
-	protected final Map<Property<M, ?>, String> pathsByChildren = new IdentityHashMap<>();
+	protected final Map<String, ReadableProperty<M, ?>> childrenByPaths = new HashMap<>();
+	protected final Map<ReadableProperty<M, ?>, String> pathsByChildren = new IdentityHashMap<>();
 
-	private final List<Property<M, ?>> path;
-	private final Set<Property<M, ?>> context;
+	private final List<ReadableProperty<M, ?>> path;
+	private final Set<ReadableProperty<M, ?>> context;
 	private final boolean isList;
-	private final Set<Property<M, ?>> indices;
+	private final Set<ReadableProperty<M, ?>> indices;
 
 	<P> AbstractModelProperty(String id, AbstractModelProperty<M, P> parent, boolean isListed) {
 		id = id == null ? String.valueOf(System.identityHashCode(this)) : id;
@@ -52,13 +51,13 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 		} else {
 			this.id = id;
 			this.name = parent.getName() + '.' + id;
-			List<Property<M, ?>> path = new ArrayList<>(this.parent.path);
+			List<ReadableProperty<M, ?>> path = new ArrayList<>(this.parent.path);
 			path.addAll(Collections.singletonList(this));
 			this.path = Collections.unmodifiableList(path);
 
 			this.parent.addChild(id, this);
 
-			Set<Property<M, ?>> indices = new HashSet<>(this.parent.indices);
+			Set<ReadableProperty<M, ?>> indices = new HashSet<>(this.parent.indices);
 			if (this.parent.isList()) {
 				indices.add(this.parent);
 			}
@@ -118,12 +117,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final boolean hasChildrenIn(M model) {
-		return hasChildrenIn(model, null);
-	}
-
-	@Override
-	public final Property<M, ?> getChild(String propertyPath) {
+	public final ReadableProperty<M, ?> getChild(String propertyPath) {
 		if (propertyPath != null && !propertyPath.matches(PROPERTY_PATH_PATTERN)) {
 			throw new IllegalArgumentException("The property path '" + propertyPath
 					+ "' is not valid; a property path has to match " + PROPERTY_PATH_PATTERN);
@@ -132,12 +126,12 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final String getChildPath(Property<M, ?> child) {
+	public final String getChildPath(ReadableProperty<M, ?> child) {
 		return this.pathsByChildren.get(child);
 	}
 
 	@Override
-	public final Set<Property<M, ?>> getAllChildren() {
+	public final Set<ReadableProperty<M, ?>> getAllChildren() {
 		return Collections.unmodifiableSet(new HashSet<>(this.childrenByPaths.values()));
 	}
 
@@ -147,23 +141,18 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final List<Property<M, ?>> getPath() {
+	public final List<ReadableProperty<M, ?>> getPath() {
 		return this.path;
 	}
 
 	@Override
-	public final Set<Property<M, ?>> getContext() {
+	public final Set<ReadableProperty<M, ?>> getContext() {
 		return this.context;
 	}
 
 	@Override
-	public final Set<Property<M, ?>> getIndices() {
+	public final Set<ReadableProperty<M, ?>> getIndices() {
 		return this.indices;
-	}
-
-	@Override
-	public final boolean exists(M model) {
-		return exists(model, null);
 	}
 
 	@Override
@@ -178,10 +167,10 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns the hash code of this {@link Property}, which is the
-	 * hash code of its id.
+	 * Returns the hash code of this {@link ReadableProperty}, which is the hash code of its
+	 * id.
 	 * 
-	 * @return The hash code of this {@link Property}'s id.
+	 * @return The hash code of this {@link ReadableProperty}'s id.
 	 */
 	@Override
 	public final int hashCode() {
@@ -189,18 +178,18 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns whether this {@link Property} is the exact same
-	 * instance as the given {@link Object}.
+	 * Returns whether this {@link ReadableProperty} is the exact same instance as the given
+	 * {@link Object}.
 	 * <p>
 	 * The reason to handle this so strictly is that due to the generic nature and
-	 * the {@link Getter}/{@link Setter} mechanic of {@link Property}s
-	 * it can never be determined whether 2 {@link Property} instances
-	 * actually refer to the same property in the same parent type.
+	 * the {@link Getter}/{@link Setter} mechanic of {@link ReadableProperty}s it can never
+	 * be determined whether 2 {@link ReadableProperty} instances actually refer to the same
+	 * property in the same parent type.
 	 * 
 	 * @param obj
 	 *            The {@link Object} to check against; might be null.
-	 * @return True if the given object is the exact same as this
-	 *         {@link Property}; false if not
+	 * @return True if the given object is the exact same as this {@link ReadableProperty};
+	 *         false if not
 	 */
 	@Override
 	public final boolean equals(Object obj) {
@@ -208,10 +197,10 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns the id of this {@link Property}, as that is the {@link String} an
-	 * {@link Property} is identified by.
+	 * Returns the id of this {@link ReadableProperty}, as that is the {@link String} an
+	 * {@link ReadableProperty} is identified by.
 	 * 
-	 * @return This {@link Property}'s id
+	 * @return This {@link ReadableProperty}'s id
 	 */
 	@Override
 	public final String toString() {
@@ -220,62 +209,74 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 
 	/**
 	 * Creates a new model property root to start building a property tree with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
 	 * 
 	 * @param <M>
 	 *            The root model type of the property tree the created
-	 *            {@link ModelProperty} represents.
-	 * @return A new {@link ModelProperty} without any parent that may function as
-	 *         property tree root; never null
+	 *            {@link ReadOnlyModelProperty} represents.
+	 * @return A new {@link ReadOnlyModelProperty} without any parent that may
+	 *         function as property tree root; never null
 	 */
-	public static <M> ModelProperty<M, M> rootChild() {
-		return new ModelProperty<>(null);
+	public static <M> ReadOnlyModelProperty<M, M> rootChild() {
+		return new ReadOnlyModelProperty<>(null);
 	}
 
 	/**
 	 * Creates a new id'ed model property root to start building a property tree
 	 * with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
 	 * 
 	 * @param <M>
 	 *            The root model type of the property tree the created
-	 *            {@link ModelProperty} represents.
+	 *            {@link ReadOnlyModelProperty} represents.
 	 * @param id
-	 *            The id the returned root {@link ModelProperty} will be identified
-	 *            by; might be null.
-	 * @return A new {@link ModelProperty} without any parent that may function as
-	 *         property tree root; never null
-	 */
-	public static <M> ModelProperty<M, M> rootChild(String id) {
-		return new ModelProperty<>(id);
-	}
-
-	/**
-	 * Creates a new id'ed model property list root to start building a property
-	 * tree with.
-	 * 
-	 * @param <M>
-	 *            The root model element type of the property tree the created
-	 *            {@link ModelPropertyList} represents.
-	 * @return A new {@link ModelPropertyList} without any parent that may function
-	 *         as property tree root; never null
-	 */
-	public static <M> ModelPropertyList<List<M>, M> rootChildList() {
-		return new ModelPropertyList<>(null);
-	}
-
-	/**
-	 * Creates a new id'ed model property list root to start building a property
-	 * tree with.
-	 * 
-	 * @param <M>
-	 *            The root model element type of the property tree the created
-	 *            {@link ModelPropertyList} represents.
-	 * @param id
-	 *            The id the returned root {@link ModelPropertyList} will be
+	 *            The id the returned root {@link ReadOnlyModelProperty} will be
 	 *            identified by; might be null.
-	 * @return A new {@link ModelPropertyList} without any parent that may function
-	 *         as property tree root; never null
+	 * @return A new {@link ReadOnlyModelProperty} without any parent that may
+	 *         function as property tree root; never null
 	 */
-	public static <M> ModelPropertyList<List<M>, M> rootChildList(String id) {
-		return new ModelPropertyList<>(id);
+	public static <M> ReadOnlyModelProperty<M, M> rootChild(String id) {
+		return new ReadOnlyModelProperty<>(id);
+	}
+
+	/**
+	 * Creates a new id'ed model property list root to start building a property
+	 * tree with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
+	 * 
+	 * @param <M>
+	 *            The root model element type of the property tree the created
+	 *            {@link ReadOnlyModelPropertyList} represents.
+	 * @return A new {@link ReadOnlyModelPropertyList} without any parent that may
+	 *         function as property tree root; never null
+	 */
+	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootChildList() {
+		return new ReadOnlyModelPropertyList<>(null);
+	}
+
+	/**
+	 * Creates a new id'ed model property list root to start building a property
+	 * tree with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
+	 * 
+	 * @param <M>
+	 *            The root model element type of the property tree the created
+	 *            {@link ReadOnlyModelPropertyList} represents.
+	 * @param id
+	 *            The id the returned root {@link ReadOnlyModelPropertyList} will be
+	 *            identified by; might be null.
+	 * @return A new {@link ReadOnlyModelPropertyList} without any parent that may
+	 *         function as property tree root; never null
+	 */
+	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootChildList(String id) {
+		return new ReadOnlyModelPropertyList<>(id);
 	}
 }

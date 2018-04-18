@@ -59,8 +59,11 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 	}
 
 	@Override
-	public <C> ModelProperty<M, C> registerChild(Getter<T, C> getter, Setter<T, C> setter) {
-		return registerChild(null, getter, setter);
+	public <C> ReadOnlyModelProperty<M, C> registerChild(String id, Getter<T, C> getter) {
+		if (getter == null) {
+			throw new IllegalArgumentException("Cannot build a child property with a null getter.");
+		}
+		return new ReadOnlyModelProperty<M, C>(id, this, new IndexedDefiniteGetter<T, C>(getter));
 	}
 
 	@Override
@@ -75,8 +78,11 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 	}
 
 	@Override
-	public <C> ModelPropertyList<M, C> registerChildList(Getter<T, List<C>> getter, Setter<T, List<C>> setter) {
-		return registerChildList(null, getter, setter);
+	public <C> ReadOnlyModelPropertyList<M, C> registerChildList(String id, Getter<T, List<C>> getter) {
+		if (getter == null) {
+			throw new IllegalArgumentException("Cannot build a listed child property with a null getter.");
+		}
+		return new ReadOnlyModelPropertyList<M, C>(id, this, new IndexedDefiniteGetter<T, List<C>>(getter));
 	}
 
 	@Override

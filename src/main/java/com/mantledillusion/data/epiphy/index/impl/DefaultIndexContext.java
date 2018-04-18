@@ -7,7 +7,7 @@ import java.util.Map;
 import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
 import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
-import com.mantledillusion.data.epiphy.interfaces.Property;
+import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 
 /**
  * Default implementation of {@link IndexContext}.
@@ -36,12 +36,12 @@ public class DefaultIndexContext implements IndexContext {
 	}
 
 	@Override
-	public Integer indexOf(Property<?, ?> listedProperty) {
+	public Integer indexOf(ReadableProperty<?, ?> listedProperty) {
 		return this.indices.get(listedProperty);
 	}
 
 	@Override
-	public boolean contains(Property<?, ?> listedProperty) {
+	public boolean contains(ReadableProperty<?, ?> listedProperty) {
 		return this.indices.containsKey(listedProperty);
 	}
 

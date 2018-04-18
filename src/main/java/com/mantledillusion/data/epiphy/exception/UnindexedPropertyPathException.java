@@ -1,7 +1,7 @@
 package com.mantledillusion.data.epiphy.exception;
 
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
-import com.mantledillusion.data.epiphy.interfaces.Property;
+import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 
 /**
  * Exception that might be thrown if a listed property occurs on a property path
@@ -18,7 +18,7 @@ public final class UnindexedPropertyPathException extends RuntimeException {
 	 *            The listed property that no {@link PropertyIndex} was provided
 	 *            for; might be null.
 	 */
-	public UnindexedPropertyPathException(Property<?, ?> listedProperty) {
+	public UnindexedPropertyPathException(ReadableProperty<?, ?> listedProperty) {
 		super("No index given for listed property '" + listedProperty + "'");
 	}
 }

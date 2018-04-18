@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.exception;
 
-import com.mantledillusion.data.epiphy.interfaces.Property;
+import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 
 /**
  * Exception that might be thrown if a null property value occurs on a property
@@ -17,7 +17,7 @@ public class InterruptedPropertyPathException extends NullPointerException {
 	 *            The parent property whose property value was null so no child
 	 *            property value could be determined; might be null
 	 */
-	public InterruptedPropertyPathException(Property<?, ?> parentProperty) {
+	public InterruptedPropertyPathException(ReadableProperty<?, ?> parentProperty) {
 		super("Unable to retrieve a child from parent property '" + parentProperty
 				+ "'; the value representing the parent was null.");
 	}

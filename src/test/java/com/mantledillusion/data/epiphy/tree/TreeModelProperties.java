@@ -1,13 +1,14 @@
 package com.mantledillusion.data.epiphy.tree;
 
 import com.mantledillusion.data.epiphy.ModelProperty;
+import com.mantledillusion.data.epiphy.ReadOnlyModelProperty;
 import com.mantledillusion.data.epiphy.tree.model.TreeModel;
 import com.mantledillusion.data.epiphy.tree.model.TreeSubSubType;
 import com.mantledillusion.data.epiphy.tree.model.TreeSubType;
 
 public class TreeModelProperties {
 
-	public static final ModelProperty<TreeModel, TreeModel> MODEL = ModelProperty.rootChild("model");
+	public static final ReadOnlyModelProperty<TreeModel, TreeModel> MODEL = ModelProperty.rootChild("model");
 
 	public static final ModelProperty<TreeModel, String> MODELID = MODEL.registerChild("modelId", model -> model.modelId, (model, value) -> model.modelId = value);
 	

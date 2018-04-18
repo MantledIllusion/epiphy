@@ -11,7 +11,27 @@ import com.mantledillusion.data.epiphy.exception.UnindexedPropertyPathException;
 import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
 
-public interface ListedProperty<M, E> extends Property<M, List<E>> {
+/**
+ * Interface for types that define a listed multi instance {@link ReadableProperty}.
+ * <p>
+ * On a {@link ListedProperty} instance, the {@link Method}s...<br>
+ * - {@link #defineElementAsChild()}<br>
+ * - {@link #defineElementAsChild(String)}<br>
+ * ... can be used to specify the listed element as a definite child property to
+ * that instance. Also, the {@link Method}s...<br>
+ * - {@link #defineElementAsChildList()}<br>
+ * - {@link #defineElementAsChildList(String)}<br>
+ * ... can be used to specify the listed element as a listed child property to
+ * that instance.
+ * 
+ * @param <M>
+ *            The root model type of this {@link ListedProperty}'s property
+ *            tree.
+ * @param <E>
+ *            The type of the property element this {@link ListedProperty}
+ *            represents.
+ */
+public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>> {
 
 	/**
 	 * Defines the element of this {@link ListedProperty} to be a
@@ -22,7 +42,9 @@ public interface ListedProperty<M, E> extends Property<M, List<E>> {
 	 * @return The {@link ModelProperty} that represents an element of this
 	 *         {@link ListedProperty}; never null
 	 */
-	public ModelProperty<M, E> defineElementAsChild();
+	public default ModelProperty<M, E> defineElementAsChild() {
+		return defineElementAsChild(null);
+	}
 
 	/**
 	 * Defines the element of this {@link ListedProperty} to be a
@@ -57,7 +79,9 @@ public interface ListedProperty<M, E> extends Property<M, List<E>> {
 	 * @return The {@link ModelPropertyList} that represents an element of this
 	 *         {@link ListedProperty}; never null
 	 */
-	public <C> ModelPropertyList<M, C> defineElementAsChildList();
+	public default <C> ModelPropertyList<M, C> defineElementAsChildList() {
+		return defineElementAsChildList(null);
+	}
 
 	/**
 	 * Defines the element of this {@link ListedProperty} to be a
@@ -95,13 +119,15 @@ public interface ListedProperty<M, E> extends Property<M, List<E>> {
 	 * @param element
 	 *            The element to add; might be null.
 	 * @throws InterruptedPropertyPathException
-	 *             If any property on the path to this {@link ListedModelProperty}
-	 *             is null.
+	 *             If any property on the path to this {@link ListedProperty} is
+	 *             null.
 	 * @throws UnindexedPropertyPathException
 	 *             If there is any listed property in this {@link ListedProperty}'s
 	 *             path.
 	 */
-	public void add(M model, E element);
+	public default void add(M model, E element) {
+		add(model, element, null);
+	}
 
 	/**
 	 * Adds the given element to the list represented by this {@link ListedProperty}
@@ -153,7 +179,9 @@ public interface ListedProperty<M, E> extends Property<M, List<E>> {
 	 *             If there is any listed property in this {@link ListedProperty}'s
 	 *             path.
 	 */
-	public E remove(M model);
+	public default E remove(M model) {
+		return remove(model, null);
+	}
 
 	/**
 	 * Removes the given element from the list represented by this
