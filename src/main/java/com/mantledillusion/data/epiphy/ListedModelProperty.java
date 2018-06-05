@@ -114,6 +114,20 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 			return list.remove((int) list.size() - 1);
 		}
 	}
+	
+	@Override
+	public Integer remove(M model, E element, IndexContext context) {
+		context = context == null ? DefaultIndexContext.EMPTY : context;
+		List<E> list = get(model, context);
+		checkListIndexing(list, context, false, false);
+		int index = list.indexOf(element);
+		if (index == -1) {
+			return null;
+		} else {
+			list.remove(index);
+			return index;
+		}
+	}
 
 	private boolean checkListIndexing(List<E> list, IndexContext context, boolean indexRequired, boolean allowNull) {
 		if (list == null) {

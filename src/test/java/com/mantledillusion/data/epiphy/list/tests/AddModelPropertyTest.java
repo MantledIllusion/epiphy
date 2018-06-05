@@ -15,11 +15,11 @@ public class AddModelPropertyTest extends AbstractListModelPropertyTest {
 	
 	@Test
 	public void testAddIndexedPropertyAtEnd() {
-		ListModelProperties.MODEL.add(model, Arrays.asList("newElem"));
+		ListModelProperties.MODEL.add(this.model, Arrays.asList("newElem"));
 		DefaultIndexContext context = DefaultIndexContext.of(
 				PropertyIndex.of(ListModelProperties.MODEL, 2),
 				PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0));
-		assertEquals("newElem", ListModelProperties.ELEMENT.get(model, context));
+		assertEquals("newElem", ListModelProperties.ELEMENT.get(this.model, context));
 	}
 	
 	@Test
@@ -27,11 +27,11 @@ public class AddModelPropertyTest extends AbstractListModelPropertyTest {
 		DefaultIndexContext context = DefaultIndexContext.of(
 				PropertyIndex.of(ListModelProperties.MODEL, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENTLIST, 1));
-		ListModelProperties.ELEMENTLIST.add(model, "newElem", context);
-		assertEquals("newElem", ListModelProperties.ELEMENT.get(model, context));
+		ListModelProperties.ELEMENTLIST.add(this.model, "newElem", context);
+		assertEquals("newElem", ListModelProperties.ELEMENT.get(this.model, context));
 		DefaultIndexContext context2 = DefaultIndexContext.of(
 				PropertyIndex.of(ListModelProperties.MODEL, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENTLIST, 2));
-		assertEquals("e1b", ListModelProperties.ELEMENT.get(model, context2));
+		assertEquals("e1b", ListModelProperties.ELEMENT.get(this.model, context2));
 	}
 }

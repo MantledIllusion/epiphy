@@ -12,7 +12,8 @@ import com.mantledillusion.data.epiphy.index.IndexContext;
 import com.mantledillusion.data.epiphy.index.PropertyIndex;
 
 /**
- * Interface for types that define a listed multi instance {@link ReadableProperty}.
+ * Interface for types that define a listed multi instance
+ * {@link ReadableProperty}.
  * <p>
  * On a {@link ListedProperty} instance, the {@link Method}s...<br>
  * - {@link #defineElementAsChild()}<br>
@@ -162,8 +163,11 @@ public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>> {
 	public void add(M model, E element, IndexContext context);
 
 	/**
-	 * Removes the given element from the list represented by this
+	 * Removes the element from its list that is represented by this
 	 * {@link ListedProperty} in the given model.
+	 * <p>
+	 * The element is removed by index; since this method does not retrieve an
+	 * {@link IndexContext}, the last element in the list is removed.
 	 * <p>
 	 * Note that this is a writing operation, so the property has to
 	 * {@link #exists(Object)} in the model.
@@ -180,12 +184,43 @@ public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>> {
 	 *             path.
 	 */
 	public default E remove(M model) {
-		return remove(model, null);
+		return remove(model, (IndexContext) null);
 	}
 
 	/**
-	 * Removes the given element from the list represented by this
+	 * Removes the element from its list that is represented by this
 	 * {@link ListedProperty} in the given model.
+	 * <p>
+	 * The element is removed by equality; the equality is determined in relation to
+	 * the given element.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object)} in the model.
+	 * 
+	 * @param model
+	 *            The model to remove the element from; might <b>NOT</b> be null.
+	 * @param element
+	 *            The element to remove. If it is contained by the list multiple
+	 *            times, the first occurrence is removed; might be null.
+	 * @return The element that has been removed; might be null if the removed
+	 *         element was null
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ListedProperty} is
+	 *             null.
+	 * @throws UnindexedPropertyPathException
+	 *             If there is any listed property in this {@link ListedProperty}'s
+	 *             path.
+	 */
+	public default Integer remove(M model, E element) {
+		return remove(model, element, null);
+	}
+
+	/**
+	 * Removes the element from its list that is represented by this
+	 * {@link ListedProperty} in the given model.
+	 * <p>
+	 * The element is removed by index; the index is determined by the given
+	 * {@link IndexContext}.
 	 * <p>
 	 * Note that this is a writing operation, so the property has to
 	 * {@link #exists(Object, IndexContext)} in the model.
@@ -214,4 +249,42 @@ public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>> {
 	 *             represents.
 	 */
 	public E remove(M model, IndexContext context);
+
+	/**
+	 * Removes the element from its list that is represented by this
+	 * {@link ListedProperty} in the given model.
+	 * <p>
+	 * The element is removed by equality; the equality is determined in relation to
+	 * the given element.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to
+	 * {@link #exists(Object, IndexContext)} in the model.
+	 * 
+	 * @param model
+	 *            The model to remove the element from; might <b>NOT</b> be null.
+	 * @param element
+	 *            The element to remove. If it is contained by the list multiple
+	 *            times, the first occurrence is removed; might be null.
+	 * @param context
+	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            properties from the root property to this {@link ListedProperty};
+	 *            might be null. If a {@link PropertyIndex} is provided for this
+	 *            {@link ListedProperty}, it is used to specify at which index to
+	 *            remove the element. If there is none, the element is removed from
+	 *            the end.
+	 * @return The element that has been removed; might be null if the removed
+	 *         element was null
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ListedProperty} is
+	 *             null.
+	 * @throws UnindexedPropertyPathException
+	 *             If there is any listed property in this {@link ListedProperty}'s
+	 *             path that does not have a {@link PropertyIndex} included in the
+	 *             given {@link IndexContext}.
+	 * @throws OutboundPropertyPathException
+	 *             If the index provided by the given {@link IndexContext} is out of
+	 *             bounds on the given model's list this {@link ListedProperty}
+	 *             represents.
+	 */
+	public Integer remove(M model, E element, IndexContext context);
 }
