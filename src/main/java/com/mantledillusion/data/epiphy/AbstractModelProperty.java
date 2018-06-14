@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.mantledillusion.data.epiphy.index.IndexContext;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.Setter;
@@ -66,6 +66,10 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 		this.context = Collections.unmodifiableSet(new HashSet<>(this.path));
 	}
 
+	// ###########################################################################################################
+	// ############################################### INTERNAL ##################################################
+	// ###########################################################################################################
+
 	private <T2> void addChild(String id, AbstractModelProperty<M, T2> child) {
 		String path = this.id + '.' + id;
 
@@ -80,6 +84,10 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 			this.parent.addChild(path, child);
 		}
 	}
+
+	// ###########################################################################################################
+	// ############################################ FUNCTIONALITY ################################################
+	// ###########################################################################################################
 
 	@Override
 	public String getId() {
@@ -156,7 +164,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final boolean exists(M model, IndexContext context) {
+	public final boolean exists(M model, Context context) {
 		if (this.parent == null) {
 			return true;
 		} else if (this.parent.exists(model, context)) {
@@ -206,6 +214,10 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	public final String toString() {
 		return this.name;
 	}
+
+	// ###########################################################################################################
+	// ############################################### CHILDREN ##################################################
+	// ###########################################################################################################
 
 	/**
 	 * Creates a new model property root to start building a property tree with.

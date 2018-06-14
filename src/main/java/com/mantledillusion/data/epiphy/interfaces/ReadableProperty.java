@@ -3,15 +3,15 @@ package com.mantledillusion.data.epiphy.interfaces;
 import java.util.List;
 import java.util.Set;
 
+import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
-import com.mantledillusion.data.epiphy.exception.UnindexedPropertyPathException;
-import com.mantledillusion.data.epiphy.index.IndexContext;
-import com.mantledillusion.data.epiphy.index.PropertyIndex;
-import com.mantledillusion.data.epiphy.index.impl.DefaultIndexContext;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
+import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
+import com.mantledillusion.data.epiphy.interfaces.function.IdentifyableProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 
 /**
- * Interface for types identifying a readable {@link ReadableProperty} to a model.
+ * Interface for properties representing a readable property of a model.
  * 
  * @param <M>
  *            The root model type of this {@link ReadableProperty}'s property
@@ -19,47 +19,20 @@ import com.mantledillusion.data.epiphy.io.IndexedGetter;
  * @param <T>
  *            The type of the property this {@link ReadableProperty} represents.
  */
-public interface ReadableProperty<M, T> {
-
-	public IndexedGetter<?, T> getter();
+public interface ReadableProperty<M, T> extends IdentifyableProperty {
 
 	/**
-	 * The id this {@link ReadableProperty} is identified by in relation to its direct
-	 * parent.
-	 * <p>
-	 * If not set to a specific value (or null) upon creation, this method returns
-	 * this {@link ReadableProperty}'s objectId as provided by the JVM.
+	 * Returns whether this {@link ReadableProperty} is the root of a property model
+	 * (that is, the root of a tree structure of {@link ReadableProperty}s).
 	 * 
-	 * @return This {@link ReadableProperty}'s id; never null
-	 */
-	public String getId();
-
-	/**
-	 * The name this {@link ReadableProperty} is identified by in relation to the model's
-	 * root property.
-	 * <p>
-	 * The name of a property is the {@link ReadableProperty}'s path from the model root
-	 * property to the property itself.
-	 * <p>
-	 * A property path is a properties' id, appended to the id's of 0-n of it's
-	 * parents, separated by the '.' character.
-	 * 
-	 * @return This {@link ReadableProperty}'s name; never null
-	 */
-	public String getName();
-
-	/**
-	 * Returns whether this {@link ReadableProperty} is the root of a property model (that
-	 * is, the root of a tree structure of {@link ReadableProperty}s).
-	 * 
-	 * @return True if this {@link ReadableProperty} instance if a root to a property tree;
-	 *         false if not
+	 * @return True if this {@link ReadableProperty} instance if a root to a
+	 *         property tree; false if not
 	 */
 	public boolean isRoot();
 
 	/**
-	 * Returns whether this {@link ReadableProperty} instance represents a property that is
-	 * a {@link List} of other properties, or in other words, a
+	 * Returns whether this {@link ReadableProperty} instance represents a property
+	 * that is a {@link List} of other properties, or in other words, a
 	 * {@link ListedProperty}.
 	 * 
 	 * @return True if this {@link ReadableProperty} represents a {@link List} of
@@ -69,16 +42,17 @@ public interface ReadableProperty<M, T> {
 
 	/**
 	 * Returns whether this {@link ReadableProperty} is a listed property (or put
-	 * differently; whether this {@link ReadableProperty}'s instances are nested in a
-	 * {@link List}, so the parent property is a {@link ListedProperty}.
+	 * differently; whether this {@link ReadableProperty}'s instances are nested in
+	 * a {@link List}, so the parent property is a {@link ListedProperty}.
 	 * 
-	 * @return True if this {@link ReadableProperty} is a listed property; false if not
+	 * @return True if this {@link ReadableProperty} is a listed property; false if
+	 *         not
 	 */
 	public boolean isListed();
 
 	/**
-	 * Returns whether this {@link ReadableProperty} is reachable, so the property itself
-	 * might be null, but all of its parents aren't.
+	 * Returns whether this {@link ReadableProperty} is reachable, so the property
+	 * itself might be null, but all of its parents aren't.
 	 * 
 	 * @param model
 	 *            The model to lookup the property from; might be null.
@@ -89,17 +63,17 @@ public interface ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns whether this {@link ReadableProperty} is reachable, so the property itself
-	 * might be null, but all of its parents aren't.
+	 * Returns whether this {@link ReadableProperty} is reachable, so the property
+	 * itself might be null, but all of its parents aren't.
 	 * 
 	 * @param model
 	 *            The model to lookup the property from; might be null.
 	 * @param context
-	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to his {@link ReadableProperty};
 	 * @return True if all of this {@link ReadableProperty}'s parents
 	 */
-	public boolean exists(M model, IndexContext context);
+	public boolean exists(M model, Context context);
 
 	/**
 	 * Returns the parent of this {@link ReadableProperty}.
@@ -136,13 +110,13 @@ public interface ReadableProperty<M, T> {
 	 * @param model
 	 *            The model to retrieve the property from; might <b>NOT</b> be null.
 	 * @param context
-	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to this
 	 *            {@link ReadableProperty}; might be null.
 	 * @return True if this property is not null and has any children in the given
 	 *         model.
 	 */
-	public boolean hasChildrenIn(M model, IndexContext context);
+	public boolean hasChildrenIn(M model, Context context);
 
 	/**
 	 * Returns the child of this {@link ReadableProperty} with the given path.
@@ -150,9 +124,9 @@ public interface ReadableProperty<M, T> {
 	 * A property path is a properties' id, appended to the id's of 0-n of it's
 	 * parents, separated by the '.' character.
 	 * <p>
-	 * A property path is always relative to the {@link ReadableProperty} it is used on. For
-	 * example, in a property tree with a hierarchy of A-&gt;B-&gt;C-&gt;D;, the
-	 * property path from B to D is B.C.D, as B is the property to begin at.
+	 * A property path is always relative to the {@link ReadableProperty} it is used
+	 * on. For example, in a property tree with a hierarchy of A-&gt;B-&gt;C-&gt;D;,
+	 * the property path from B to D is B.C.D, as B is the property to begin at.
 	 * 
 	 * @param propertyPath
 	 *            The property path to return the child for; might be null, although
@@ -224,7 +198,7 @@ public interface ReadableProperty<M, T> {
 	 * <p>
 	 * That being said, when applying this {@link ReadableProperty} on a model
 	 * instance, all of the returned properties have to be included in a
-	 * {@link PropertyIndex} of the {@link IndexContext} delivered to the operation.
+	 * {@link PropertyIndex} of the {@link Context} delivered to the operation.
 	 * 
 	 * @return An unmodifiable {@link Set} of all properties from the property
 	 *         tree's root to this {@link ReadableProperty} that are listed; never
@@ -252,13 +226,13 @@ public interface ReadableProperty<M, T> {
 	 * @param model
 	 *            The model to lookup the property from; might be null.
 	 * @param context
-	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to his {@link ReadableProperty};
 	 *            might be null.
 	 * @return True if this {@link ReadableProperty} or any of its parents is null,
 	 *         false if it has a non-null value
 	 */
-	public default boolean isNull(M model, IndexContext context) {
+	public default boolean isNull(M model, Context context) {
 		return get(model, context, true) == null;
 	}
 
@@ -271,7 +245,7 @@ public interface ReadableProperty<M, T> {
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ReadableProperty} is
 	 *             null.
-	 * @throws UnindexedPropertyPathException
+	 * @throws UncontextedPropertyPathException
 	 *             If there is any listed property in this
 	 *             {@link ReadableProperty}'s path.
 	 */
@@ -295,7 +269,7 @@ public interface ReadableProperty<M, T> {
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ReadableProperty} is
 	 *             null and allowNull is set to false.
-	 * @throws UnindexedPropertyPathException
+	 * @throws UncontextedPropertyPathException
 	 *             If there is any listed property in this
 	 *             {@link ReadableProperty}'s path.
 	 */
@@ -305,36 +279,36 @@ public interface ReadableProperty<M, T> {
 
 	/**
 	 * Retrieves this {@link ReadableProperty}'s property out of the given model,
-	 * using the given {@link IndexContext}.
+	 * using the given {@link Context}.
 	 * 
 	 * @param model
 	 *            The model to retrieve the property from; might <b>NOT</b> be null.
 	 * @param context
-	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to this
 	 *            {@link ReadableProperty}; might be null.
 	 * @return The retrieved property; might return null if the property is null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ReadableProperty} is
 	 *             null.
-	 * @throws UnindexedPropertyPathException
+	 * @throws UncontextedPropertyPathException
 	 *             If there is any listed property in this
 	 *             {@link ReadableProperty}'s path that does not have a
-	 *             {@link PropertyIndex} included in the given {@link IndexContext}.
+	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 */
-	public default T get(M model, IndexContext context) {
+	public default T get(M model, Context context) {
 		return get(model, context, false);
 	}
 
 	/**
 	 * Retrieves this {@link ReadableProperty}'s property out of the given model,
-	 * using the given {@link IndexContext}.
+	 * using the given {@link Context}.
 	 * 
 	 * @param model
 	 *            The model to retrieve the property from; might be null if
 	 *            allowNull is set to true.
 	 * @param context
-	 *            The {@link IndexContext} that should be used to satisfy the listed
+	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to this
 	 *            {@link ReadableProperty}; might be null.
 	 * @param allowNull
@@ -347,18 +321,10 @@ public interface ReadableProperty<M, T> {
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ReadableProperty} is
 	 *             null and allowNull is set to false.
-	 * @throws UnindexedPropertyPathException
+	 * @throws UncontextedPropertyPathException
 	 *             If there is any listed property in this
 	 *             {@link ReadableProperty}'s path that does not have a
-	 *             {@link PropertyIndex} included in the given {@link IndexContext}.
+	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 */
-	@SuppressWarnings("unchecked")
-	public default T get(M model, IndexContext context, boolean allowNull) {
-		if (getParent() == null) {
-			return (T) model;
-		} else {
-			context = context == null ? DefaultIndexContext.EMPTY : context;
-			return PropertyUtils.castAndGet(this, model, context, allowNull);
-		}
-	}
+	public T get(M model, Context context, boolean allowNull);
 }

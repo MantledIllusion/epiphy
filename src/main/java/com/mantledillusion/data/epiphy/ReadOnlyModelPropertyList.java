@@ -2,8 +2,9 @@ package com.mantledillusion.data.epiphy;
 
 import java.util.List;
 
-import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 
 /**
@@ -21,7 +22,7 @@ public final class ReadOnlyModelPropertyList<M, E> extends ListedModelProperty<M
 
 	private final IndexedGetter<?, List<E>> getter;
 
-	<P> ReadOnlyModelPropertyList(String id) {
+	ReadOnlyModelPropertyList(String id) {
 		this(id, null, null);
 	}
 
@@ -30,8 +31,12 @@ public final class ReadOnlyModelPropertyList<M, E> extends ListedModelProperty<M
 		this.getter = getter;
 	}
 
+	// ###########################################################################################################
+	// ############################################## OPERATIONS #################################################
+	// ###########################################################################################################
+
 	@Override
-	public IndexedGetter<?, List<E>> getter() {
-		return this.getter;
+	public List<E> get(M model, Context context, boolean allowNull) {
+		return PropertyUtils.castAndGet(model, context, allowNull, this.parent, this.getter);
 	}
 }

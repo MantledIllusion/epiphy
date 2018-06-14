@@ -1,7 +1,8 @@
 package com.mantledillusion.data.epiphy;
 
-import com.mantledillusion.data.epiphy.interfaces.DefiniteProperty;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 
 /**
@@ -28,8 +29,12 @@ public final class ReadOnlyModelProperty<M, T> extends DefiniteModelProperty<M, 
 		this.getter = getter;
 	}
 
+	// ###########################################################################################################
+	// ############################################## OPERATIONS #################################################
+	// ###########################################################################################################
+
 	@Override
-	public IndexedGetter<?, T> getter() {
-		return this.getter;
+	public T get(M model, Context context, boolean allowNull) {
+		return PropertyUtils.castAndGet(model, context, allowNull, this.parent, this.getter);
 	}
 }

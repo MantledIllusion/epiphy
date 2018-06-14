@@ -6,7 +6,7 @@ import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.ReadOnlyModelPropertyList;
 
-public class ListModelProperties {
+public interface ListModelProperties {
 	
 	public static final ReadOnlyModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootChildList();
 	

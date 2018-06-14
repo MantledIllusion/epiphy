@@ -2,9 +2,9 @@ package com.mantledillusion.data.epiphy;
 
 import java.util.List;
 
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
-import com.mantledillusion.data.epiphy.index.IndexContext;
-import com.mantledillusion.data.epiphy.interfaces.DefiniteProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
@@ -14,16 +14,16 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 
 	private final class IndexedDefiniteGetter<P, C> implements IndexedGetter<P, C> {
 
-		private final Getter<P, C> setter;
+		private final Getter<P, C> getter;
 
 		private IndexedDefiniteGetter(Getter<P, C> setter) {
-			this.setter = setter;
+			this.getter = setter;
 		}
 
 		@Override
-		public C get(P source, IndexContext context, boolean allowNull) {
+		public C get(P source, Context context, boolean allowNull) {
 			if (checkParent(source, allowNull)) {
-				return this.setter.get(source);
+				return this.getter.get(source);
 			} else {
 				return null;
 			}
@@ -39,13 +39,13 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 		}
 
 		@Override
-		public void set(P target, C value, IndexContext context) {
+		public void set(P target, C value, Context context) {
 			checkParent(target, false);
 			this.setter.set(target, value);
 		}
 	}
 
-	<P> DefiniteModelProperty(String id) {
+	DefiniteModelProperty(String id) {
 		super(id, null, false);
 	}
 
@@ -53,10 +53,33 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 		super(id, parent, false);
 	}
 
+	// ###########################################################################################################
+	// ############################################### INTERNAL ##################################################
+	// ###########################################################################################################
+
+	private <P> boolean checkParent(P parent, boolean allowNull) {
+		if (parent == null) {
+			if (allowNull) {
+				return false;
+			} else {
+				throw new InterruptedPropertyPathException(DefiniteModelProperty.this);
+			}
+		}
+		return true;
+	}
+
+	// ###########################################################################################################
+	// ############################################ FUNCTIONALITY ################################################
+	// ###########################################################################################################
+
 	@Override
-	public final boolean hasChildrenIn(M model, IndexContext context) {
+	public final boolean hasChildrenIn(M model, Context context) {
 		return !isNull(model, context) && hasChildren();
 	}
+
+	// ###########################################################################################################
+	// ############################################### CHILDREN ##################################################
+	// ###########################################################################################################
 
 	@Override
 	public <C> ReadOnlyModelProperty<M, C> registerChild(String id, Getter<T, C> getter) {
@@ -97,14 +120,28 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 				new IndexedDefiniteSetter<T, List<C>>(setter));
 	}
 
-	private <P> boolean checkParent(P parent, boolean allowNull) {
-		if (parent == null) {
-			if (allowNull) {
-				return false;
-			} else {
-				throw new InterruptedPropertyPathException(DefiniteModelProperty.this);
-			}
+	@Override
+	public <C> ReadOnlyModelPropertyNode<M, C> registerChildNode(String id, Getter<T, C> getter,
+			Getter<C, List<C>> leafGetter) {
+		if (getter == null) {
+			throw new IllegalArgumentException("Cannot build a noded child property with a null getter.");
+		} else if (leafGetter == null) {
+			throw new IllegalArgumentException("Cannot build a noded child property with a null leaf getter.");
 		}
-		return true;
+		return new ReadOnlyModelPropertyNode<M, C>(id, this, new IndexedDefiniteGetter<>(getter), leafGetter);
+	}
+
+	@Override
+	public <C> ModelPropertyNode<M, C> registerChildNode(String id, Getter<T, C> getter, Setter<T, C> setter,
+			Getter<C, List<C>> leafGetter) {
+		if (getter == null) {
+			throw new IllegalArgumentException("Cannot build a noded child property with a null getter.");
+		} else if (setter == null) {
+			throw new IllegalArgumentException("Cannot build a noded child property with a null setter.");
+		} else if (leafGetter == null) {
+			throw new IllegalArgumentException("Cannot build a noded child property with a null leaf getter.");
+		}
+		return new ModelPropertyNode<M, C>(id, this, new IndexedDefiniteGetter<>(getter),
+				new IndexedDefiniteSetter<>(setter), leafGetter);
 	}
 }

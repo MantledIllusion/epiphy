@@ -13,7 +13,7 @@ public class SetTreeModelPropertyTest extends AbstractTreeModelPropertyTest {
 	@Test
 	public void testSetProperty() {
 		TreeModelProperties.MODELID.set(this.model, "reset");
-		assertEquals("reset", TreeModelProperties.MODELID.get(this.model));
+		assertEquals(this.model.modelId, TreeModelProperties.MODELID.get(this.model));
 	}
 
 	@Test(expected=InterruptedPropertyPathException.class)

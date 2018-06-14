@@ -2,8 +2,9 @@ package com.mantledillusion.data.epiphy;
 
 import java.util.List;
 
-import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
 
@@ -34,13 +35,17 @@ public final class ModelPropertyList<M, E> extends ListedModelProperty<M, E> imp
 		this.setter = setter;
 	}
 
-	@Override
-	public IndexedGetter<?, List<E>> getter() {
-		return this.getter;
-	}
+	// ###########################################################################################################
+	// ############################################## OPERATIONS #################################################
+	// ###########################################################################################################
 
 	@Override
-	public IndexedSetter<?, List<E>> setter() {
-		return this.setter;
+	public List<E> get(M model, Context context, boolean allowNull) {
+		return PropertyUtils.castAndGet(model, context, allowNull, this.parent, this.getter);
+	}
+	
+	@Override
+	public void set(M model, List<E> value, Context context) {
+		PropertyUtils.castAndSet(model, value, context, this.parent, this.setter);
 	}
 }

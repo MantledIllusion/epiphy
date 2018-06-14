@@ -1,48 +1,26 @@
-package com.mantledillusion.data.epiphy.index;
+package com.mantledillusion.data.epiphy.context;
 
-import com.mantledillusion.data.epiphy.interfaces.ListedProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 
 /**
  * Represents a single property index, which is basically an
- * {@link ListedProperty}-&gt;{@link Integer} pair.
+ * {@link ListedProperty}-&gt;int pair.
  * <p>
  * {@link PropertyIndex}es can be created using the
  * {@link #of(ListedProperty, int)} method.
  */
-public final class PropertyIndex {
+public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integer> {
 
-	private final ListedProperty<?, ?> key;
-	private final Integer value;
-
-	private PropertyIndex(ListedProperty<?, ?> key, Integer value) {
-		this.key = key;
-		this.value = value;
-	}
-
-	/**
-	 * Returns the property of this {@link PropertyIndex}.
-	 * 
-	 * @return The property; never null
-	 */
-	public ListedProperty<?, ?> getProperty() {
-		return key;
-	}
-
-	/**
-	 * Returns the index of this {@link PropertyIndex}.
-	 * 
-	 * @return The index; never null
-	 */
-	public Integer getIndex() {
-		return value;
+	private PropertyIndex(ListedProperty<?, ?> property, int key) {
+		super(property, key);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((key == null) ? 0 : key.hashCode());
-		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		result = prime * result + getKey();
+		result = prime * result + ((getProperty() == null) ? 0 : getProperty().hashCode());
 		return result;
 	}
 
@@ -55,22 +33,19 @@ public final class PropertyIndex {
 		if (getClass() != obj.getClass())
 			return false;
 		PropertyIndex other = (PropertyIndex) obj;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
+		if (getKey() != other.getKey())
 			return false;
-		if (value == null) {
-			if (other.value != null)
+		if (getProperty() == null) {
+			if (other.getProperty() != null)
 				return false;
-		} else if (!value.equals(other.value))
+		} else if (!getProperty().equals(other.getProperty()))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "PropertyIndex [key=" + key + ", value=" + value + "]";
+		return "PropertyIndex [key=" + getProperty() + ", index=" + this.getKey() + "]";
 	}
 
 	/**

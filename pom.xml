@@ -5,7 +5,7 @@
 
 	<groupId>com.mantledillusion.data</groupId>
 	<artifactId>epiphy</artifactId>
-	<version>2.2.0-SNAPSHOT</version>
+	<version>3.0.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Epiphy</name>
@@ -72,6 +72,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+    			<version>3.7.0</version>
 				<configuration>
 					<source>${java.compiler.version}</source>
 					<target>${java.compiler.version}</target>
@@ -80,6 +81,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+    			<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -92,6 +94,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+    			<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>

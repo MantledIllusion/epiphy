@@ -1,7 +1,8 @@
 package com.mantledillusion.data.epiphy;
 
-import com.mantledillusion.data.epiphy.interfaces.DefiniteProperty;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
+import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
 import com.mantledillusion.data.epiphy.io.IndexedGetter;
 import com.mantledillusion.data.epiphy.io.IndexedSetter;
 
@@ -30,13 +31,17 @@ public final class ModelProperty<M, T> extends DefiniteModelProperty<M, T> imple
 		this.setter = setter;
 	}
 
+	// ###########################################################################################################
+	// ############################################## OPERATIONS #################################################
+	// ###########################################################################################################
+
 	@Override
-	public IndexedGetter<?, T> getter() {
-		return this.getter;
+	public T get(M model, Context context, boolean allowNull) {
+		return PropertyUtils.castAndGet(model, context, allowNull, this.parent, this.getter);
 	}
 
 	@Override
-	public IndexedSetter<?, T> setter() {
-		return this.setter;
+	public void set(M model, T value, Context context) {
+		PropertyUtils.castAndSet(model, value, context, this.parent, this.setter);
 	}
 }
