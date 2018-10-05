@@ -18,11 +18,9 @@ public class BasicModelPropertyFunctionTest {
 		assertTrue(MixedModelProperties.MODEL.isRoot());
 		assertFalse(MixedModelProperties.SUB.isRoot());
 		
-		assertTrue(MixedModelProperties.SUBLIST.isList());
-		assertFalse(MixedModelProperties.SUB.isList());
-		
-		assertTrue(MixedModelProperties.SUB.isListed());
-		assertFalse(MixedModelProperties.MODELID.isListed());
+		assertTrue(MixedModelProperties.SUBLIST.isContexted());
+		assertTrue(MixedModelProperties.SUB.isContexted());
+		assertFalse(MixedModelProperties.MODELID.isContexted());
 
 		assertTrue(MixedModelProperties.MODEL.getParent() == null);
 		assertTrue(MixedModelProperties.SUBLIST.getParent() == MixedModelProperties.MODEL);
@@ -40,13 +38,7 @@ public class BasicModelPropertyFunctionTest {
 				MixedModelProperties.SUBID)));
 		
 		assertTrue(MixedModelProperties.SUBID.getContext().equals(new HashSet<>(Arrays.asList(
-				MixedModelProperties.MODEL,
-				MixedModelProperties.SUBLIST,
-				MixedModelProperties.SUB,
-				MixedModelProperties.SUBID))));
-		
-		assertTrue(MixedModelProperties.SUBID.getIndices().equals(new HashSet<>(Arrays.asList(
-				MixedModelProperties.SUBLIST))));
+				MixedModelProperties.SUBLIST, MixedModelProperties.SUB))));
 	}
 	
 	@Test

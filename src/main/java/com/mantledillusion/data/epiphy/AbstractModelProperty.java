@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
+import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
@@ -27,10 +28,11 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	protected final Map<ReadableProperty<M, ?>, String> pathsByChildren = new IdentityHashMap<>();
 
 	private final List<ReadableProperty<M, ?>> path;
-	private final Set<ReadableProperty<M, ?>> context;
-	private final boolean isList;
-	private final Set<ReadableProperty<M, ?>> indices;
+	private final Set<ReadableProperty<M, ?>> parents;
+	private final boolean isContexted;
+	private final Set<ContextableProperty<M, ?, ?, ?>> context;
 
+	@SuppressWarnings("unchecked")
 	<P> AbstractModelProperty(String id, AbstractModelProperty<M, P> parent, boolean isListed) {
 		id = id == null ? String.valueOf(System.identityHashCode(this)) : id;
 		if (!id.matches(PROPERTY_ID_PATTERN)) {
@@ -40,30 +42,32 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 
 		this.parent = parent;
 
-		this.isList = isListed;
-
+		Set<ContextableProperty<M, ?, ?, ?>> context;
 		if (this.parent == null) {
 			this.id = id;
 			this.name = id;
 			this.path = Collections.singletonList(this);
+			this.parents = Collections.singleton(this);
 
-			this.indices = Collections.emptySet();
+			context = new HashSet<>();
 		} else {
 			this.id = id;
 			this.name = parent.getName() + '.' + id;
 			List<ReadableProperty<M, ?>> path = new ArrayList<>(this.parent.path);
 			path.addAll(Collections.singletonList(this));
 			this.path = Collections.unmodifiableList(path);
+			this.parents = Collections.unmodifiableSet(new HashSet<>(path));
 
 			this.parent.addChild(id, this);
 
-			Set<ReadableProperty<M, ?>> indices = new HashSet<>(this.parent.indices);
-			if (this.parent.isList()) {
-				indices.add(this.parent);
-			}
-			this.indices = Collections.unmodifiableSet(indices);
+			context = new HashSet<>(this.parent.context);
 		}
-		this.context = Collections.unmodifiableSet(new HashSet<>(this.path));
+
+		this.isContexted = ContextableProperty.class.isAssignableFrom(getClass());
+		if (this.isContexted) {
+			context.add((ContextableProperty<M, ?, ?, ?>) this);
+		}
+		this.context = Collections.unmodifiableSet(context);
 	}
 
 	// ###########################################################################################################
@@ -105,16 +109,6 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final boolean isList() {
-		return isList;
-	}
-
-	@Override
-	public final boolean isListed() {
-		return parent.isList();
-	}
-
-	@Override
 	public final AbstractModelProperty<M, ?> getParent() {
 		return this.parent;
 	}
@@ -152,15 +146,25 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	public final List<ReadableProperty<M, ?>> getPath() {
 		return this.path;
 	}
-
+	
 	@Override
-	public final Set<ReadableProperty<M, ?>> getContext() {
-		return this.context;
+	public Set<ReadableProperty<M, ?>> getParents() {
+		return this.parents;
 	}
-
+	
 	@Override
-	public final Set<ReadableProperty<M, ?>> getIndices() {
-		return this.indices;
+	public boolean isParent(ReadableProperty<M, ?> property) {
+		return this.parents.contains(property);
+	}
+	
+	@Override
+	public boolean isContexted() {
+		return this.isContexted;
+	}
+	
+	@Override
+	public Set<ContextableProperty<M, ?, ?, ?>> getContext() {
+		return this.context;
 	}
 
 	@Override

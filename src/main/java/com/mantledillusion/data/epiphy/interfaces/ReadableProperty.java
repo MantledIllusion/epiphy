@@ -5,10 +5,11 @@ import java.util.Set;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
+import com.mantledillusion.data.epiphy.context.PropertyKey;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
+import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 import com.mantledillusion.data.epiphy.interfaces.function.IdentifyableProperty;
-import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 
 /**
  * Interface for properties representing a readable property of a model.
@@ -29,26 +30,6 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 *         property tree; false if not
 	 */
 	public boolean isRoot();
-
-	/**
-	 * Returns whether this {@link ReadableProperty} instance represents a property
-	 * that is a {@link List} of other properties, or in other words, a
-	 * {@link ListedProperty}.
-	 * 
-	 * @return True if this {@link ReadableProperty} represents a {@link List} of
-	 *         properties; false if not
-	 */
-	public boolean isList();
-
-	/**
-	 * Returns whether this {@link ReadableProperty} is a listed property (or put
-	 * differently; whether this {@link ReadableProperty}'s instances are nested in
-	 * a {@link List}, so the parent property is a {@link ListedProperty}.
-	 * 
-	 * @return True if this {@link ReadableProperty} is a listed property; false if
-	 *         not
-	 */
-	public boolean isListed();
 
 	/**
 	 * Returns whether this {@link ReadableProperty} is reachable, so the property
@@ -180,31 +161,53 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	public List<ReadableProperty<M, ?>> getPath();
 
 	/**
-	 * Returns a collapsed {@link Set} of this {@link ReadableProperty}'s parent
-	 * properties.
+	 * Returns an unordered {@link Set} of this {@link ReadableProperty}'s parent
+	 * properties, including this {@link ReadableProperty}.
 	 * 
-	 * @return An unmodifiable {@link Set} of all properties from the property
-	 *         tree's root to this {@link ReadableProperty}; never null
+	 * @return An unmodifiable, unordered {@link Set} of all properties from the
+	 *         property tree's root to this {@link ReadableProperty}; never null
 	 */
-	public Set<ReadableProperty<M, ?>> getContext();
+	public Set<ReadableProperty<M, ?>> getParents();
+
+	/**
+	 * Returns whether the given {@link ReadableProperty} is this
+	 * {@link ReadableProperty} or one of its parents, up to this property tree's
+	 * root property.
+	 * 
+	 * @param property
+	 *            The property to check; might be null.
+	 * @return True if the given {@link ReadableProperty} is this
+	 *         {@link ReadableProperty} or one of its parents, false otherwise
+	 */
+	public boolean isParent(ReadableProperty<M, ?> property);
+
+	/**
+	 * Returns whether this {@link ReadableProperty} is a
+	 * {@link ContextableProperty}, so its elements require an {@link PropertyKey}
+	 * to be reached.
+	 * 
+	 * @return True if this {@link ReadableProperty} implements
+	 *         {@link ContextableProperty}, false otherwise.
+	 */
+	public boolean isContexted();
 
 	/**
 	 * Returns a collapsed {@link Set} of this {@link ReadableProperty}'s parent
-	 * properties that are listed.
+	 * properties that are {@link ContextableProperty}s.
 	 * <p>
 	 * In order words, all of the returned {@link ReadableProperty}s would need to
-	 * be indexed so this {@link ReadableProperty} could be used to successfully
-	 * identify the property in a model.
+	 * be contexted by {@link PropertyKey}s so this {@link ReadableProperty} could
+	 * be used to successfully identify the property in a model.
 	 * <p>
 	 * That being said, when applying this {@link ReadableProperty} on a model
 	 * instance, all of the returned properties have to be included in a
-	 * {@link PropertyIndex} of the {@link Context} delivered to the operation.
+	 * {@link PropertyKey} of the {@link Context} delivered to the operation.
 	 * 
 	 * @return An unmodifiable {@link Set} of all properties from the property
 	 *         tree's root to this {@link ReadableProperty} that are listed; never
 	 *         null
 	 */
-	public Set<ReadableProperty<M, ?>> getIndices();
+	public Set<ContextableProperty<M, ?, ?, ?>> getContext();
 
 	/**
 	 * Returns whether this {@link ReadableProperty}'s property is null, including
