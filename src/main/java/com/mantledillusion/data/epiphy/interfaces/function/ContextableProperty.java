@@ -25,6 +25,153 @@ import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 public interface ContextableProperty<M, E, K, O> extends IdentifyableProperty {
 
 	/**
+	 * Returns the key at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the key at; might <b>NOT</b> be null.
+	 * @return The key at the specified context, might be null if the property does
+	 *         not exist in the given model
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public default K keyAt(M model) {
+		return keyAt(model, null, null);
+	}
+
+	/**
+	 * Returns the key at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the key at; might <b>NOT</b> be null.
+	 * @param operator
+	 *            The operator; might be null
+	 * @return The key at the specified context, might be null if the property does
+	 *         not exist in the given model
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public default K keyAt(M model, O operator) {
+		return keyAt(model, operator, null);
+	}
+
+	/**
+	 * Returns the key at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the key at; might <b>NOT</b> be null.
+	 * @param operator
+	 *            The operator; might be null
+	 * @param context
+	 *            The {@link Context} that should be used to satisfy the contexted
+	 *            properties from the root property to this
+	 *            {@link ContextableProperty}; might be null.
+	 * @return The key at the specified context, might be null if the property does
+	 *         not exist in the given model
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public K keyAt(M model, O operator, Context context);
+
+	/**
+	 * Returns the element at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the element from; might <b>NOT</b> be null.
+	 * @return The element at the given context; might be null
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public default E elementAt(M model) {
+		return elementAt(model, null, null);
+	}
+
+	/**
+	 * Returns the element at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the element from; might <b>NOT</b> be null.
+	 * @param operator
+	 *            The operator; might be null
+	 * @return The element at the given context; might be null
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public default E elementAt(M model, O operator) {
+		return elementAt(model, operator, null);
+	}
+
+	/**
+	 * Returns the element at the specified context.
+	 * 
+	 * @param model
+	 *            The model to get the element from; might <b>NOT</b> be null.
+	 * @param operator
+	 *            The operator; might be null
+	 * @param context
+	 *            The {@link Context} that should be used to satisfy the contexted
+	 *            properties from the root property to this
+	 *            {@link ContextableProperty}; might be null.
+	 * @return The element at the given context; might be null
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ContextableProperty}
+	 *             is null.
+	 * @throws UncontextedPropertyPathException
+	 *             If there is any uncontexted property in this
+	 *             {@link ContextableProperty}'s path that does not have a
+	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 *             If the key provided by the given {@link Context} is out of bounds
+	 *             on the given model's elements this {@link ContextableProperty}
+	 *             represents.
+	 */
+	public E elementAt(M model, O operator, Context context);
+
+	/**
 	 * Adds the given element to the elements represented by this
 	 * {@link ContextableProperty} in the given model.
 	 * <p>
@@ -86,9 +233,9 @@ public interface ContextableProperty<M, E, K, O> extends IdentifyableProperty {
 	 *            The model to add the element to; might <b>NOT</b> be null.
 	 * @param element
 	 *            The element to add; might be null.
-	 * @param key
-	 *            Specifies at which key to add the element; might be null, then the
-	 *            element is added at the end.
+	 * @param operator
+	 *            Specifies at which operator to add the element; might be null,
+	 *            then the element is added at the end.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this
@@ -105,7 +252,7 @@ public interface ContextableProperty<M, E, K, O> extends IdentifyableProperty {
 	 *             on the given model's elements this {@link ContextableProperty}
 	 *             represents.
 	 */
-	public void addAt(M model, E element, O key, Context context);
+	public void addAt(M model, E element, O operator, Context context);
 
 	/**
 	 * Removes the element from its elements that is represented by this
@@ -231,9 +378,9 @@ public interface ContextableProperty<M, E, K, O> extends IdentifyableProperty {
 	 * 
 	 * @param model
 	 *            The model to remove the element from; might <b>NOT</b> be null.
-	 * @param key
-	 *            Specifies at which key to remove the element; might be null, then
-	 *            the element is removed from the end.
+	 * @param operator
+	 *            Specifies at which operator to remove the element; might be null,
+	 *            then the element is removed from the end.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this
@@ -252,7 +399,7 @@ public interface ContextableProperty<M, E, K, O> extends IdentifyableProperty {
 	 *             on the given model's elements this {@link ContextableProperty}
 	 *             represents.
 	 */
-	public E removeAt(M model, O key, Context context);
+	public E removeAt(M model, O operator, Context context);
 
 	/**
 	 * Removes the element from its elements that is represented by this

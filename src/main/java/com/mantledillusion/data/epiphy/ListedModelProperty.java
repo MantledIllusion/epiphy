@@ -78,7 +78,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 		}
 		return true;
 	}
-	
+
 	private boolean checkIndex(int listSize, int idx, boolean allowNull, boolean harshBounds) {
 		if (idx < 0 || (harshBounds ? idx >= listSize : idx > listSize)) {
 			if (allowNull) {
@@ -131,7 +131,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 		this.element = (AbstractModelProperty<M, E>) childList;
 		return childList;
 	}
-	
+
 	@Override
 	public ModelPropertyNode<M, E> defineElementAsChildNode(String elementId, Getter<E, List<E>> leafGetter) {
 		if (this.element != null) {
@@ -148,23 +148,49 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	// ###########################################################################################################
 
 	@Override
+	public Integer keyAt(M model, Integer operator, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<E> list = get(model, context);
+		checkListIndexing(list, context, false, false);
+		if (operator == null) {
+			return list.size();
+		} else {
+			checkIndex(list.size(), operator, false, false);
+			return operator;
+		}
+	}
+	
+	@Override
+	public E elementAt(M model, Integer operator, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<E> list = get(model, context);
+		checkListIndexing(list, context, false, false);
+		if (operator == null) {
+			return list.isEmpty() ? null : list.get(list.size() - 1);
+		} else {
+			checkIndex(list.size(), operator, false, false);
+			return list.get(operator);
+		}
+	}
+
+	@Override
 	public void add(M model, E element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
 		checkListIndexing(list, context, false, false);
 		list.add(element);
 	}
-	
+
 	@Override
-	public void addAt(M model, E element, Integer index, Context context) {
-		if (index == null) {
+	public void addAt(M model, E element, Integer operator, Context context) {
+		if (operator == null) {
 			add(model, element, context);
 		} else {
 			context = context == null ? DefaultContext.EMPTY : context;
 			List<E> list = get(model, context);
 			checkListIndexing(list, context, false, false);
-			checkIndex(list.size(), index, false, false);
-			list.add(index, element);
+			checkIndex(list.size(), operator, false, false);
+			list.add(operator, element);
 		}
 	}
 
@@ -179,17 +205,17 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 			return list.remove((int) list.size() - 1);
 		}
 	}
-	
+
 	@Override
-	public E removeAt(M model, Integer index, Context context) {
-		if (index == null) {
+	public E removeAt(M model, Integer operator, Context context) {
+		if (operator == null) {
 			return remove(model, context);
 		} else {
 			context = context == null ? DefaultContext.EMPTY : context;
 			List<E> list = get(model, context);
 			checkListIndexing(list, context, false, false);
-			checkIndex(list.size(), index, false, true);
-			return list.remove((int) index);
+			checkIndex(list.size(), operator, false, true);
+			return list.remove((int) operator);
 		}
 	}
 
