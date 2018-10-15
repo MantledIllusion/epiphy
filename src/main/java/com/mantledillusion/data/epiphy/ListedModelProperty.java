@@ -148,29 +148,11 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	// ###########################################################################################################
 
 	@Override
-	public Integer keyAt(M model, Integer operator, Context context) {
+	public int size(M model, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
 		checkListIndexing(list, context, false, false);
-		if (operator == null) {
-			return list.size();
-		} else {
-			checkIndex(list.size(), operator, false, false);
-			return operator;
-		}
-	}
-	
-	@Override
-	public E elementAt(M model, Integer operator, Context context) {
-		context = context == null ? DefaultContext.EMPTY : context;
-		List<E> list = get(model, context);
-		checkListIndexing(list, context, false, false);
-		if (operator == null) {
-			return list.isEmpty() ? null : list.get(list.size() - 1);
-		} else {
-			checkIndex(list.size(), operator, false, false);
-			return list.get(operator);
-		}
+		return list.size();
 	}
 
 	@Override
