@@ -52,7 +52,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @return The instantiated child property; never null
 	 */
 	public default <C> ReadOnlyModelProperty<M, C> registerChild(Getter<T, C> getter) {
@@ -68,11 +68,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @return The instantiated child property; never null
 	 */
 	public default <C> ModelProperty<M, C> registerChild(Getter<T, C> getter, Setter<T, C> setter) {
@@ -92,7 +92,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @return The instantiated child property; never null
 	 */
 	public <C> ReadOnlyModelProperty<M, C> registerChild(String id, Getter<T, C> getter);
@@ -110,11 +110,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the child property; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @return The instantiated child property; never null
 	 */
 	public <C> ModelProperty<M, C> registerChild(String id, Getter<T, C> getter, Setter<T, C> setter);
@@ -128,7 +128,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
+	 *            property; might <b>not</b> be null.
 	 * @return The instantiated listed child property; never null
 	 */
 	public default <C> ReadOnlyModelPropertyList<M, C> registerChildList(Getter<T, List<C>> getter) {
@@ -144,11 +144,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
+	 *            property; might <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the listed child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @return The instantiated listed child property; never null
 	 */
 	public default <C> ModelPropertyList<M, C> registerChildList(Getter<T, List<C>> getter, Setter<T, List<C>> setter) {
@@ -168,7 +168,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
+	 *            property; might <b>not</b> be null.
 	 * @return The instantiated listed child property; never null
 	 */
 	public <C> ReadOnlyModelPropertyList<M, C> registerChildList(String id, Getter<T, List<C>> getter);
@@ -186,11 +186,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the listed child
-	 *            property; might <b>NOT</b> be null.
+	 *            property; might <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the listed child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @return The instantiated listed child property; never null
 	 */
 	public <C> ModelPropertyList<M, C> registerChildList(String id, Getter<T, List<C>> getter,
@@ -205,7 +205,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param leafGetter
 	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
 	 *            {@link ModelPropertyNode}; might <b>not</b> be null.
@@ -225,11 +225,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param leafGetter
 	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
 	 *            {@link ModelPropertyNode}; might <b>not</b> be null.
@@ -253,7 +253,7 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param leafGetter
 	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
 	 *            {@link ModelPropertyNode}; might <b>not</b> be null.
@@ -275,11 +275,11 @@ public interface PopulateableProperty<M, T> {
 	 * @param getter
 	 *            The {@link Getter} that can be applied onto this
 	 *            {@link PopulateableProperty} to retrieve the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param setter
 	 *            The {@link Setter} that can be applied onto this
 	 *            {@link PopulateableProperty} to set the noded child property;
-	 *            might <b>NOT</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param leafGetter
 	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
 	 *            {@link ModelPropertyNode}; might <b>not</b> be null.

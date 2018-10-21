@@ -16,7 +16,7 @@ public interface Setter<P, T> {
 	 * 
 	 * @param target
 	 *            The parent value that is the target to set the value to; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @param value
 	 *            The value to set; might be null.
 	 */

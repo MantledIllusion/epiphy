@@ -11,7 +11,7 @@ import com.mantledillusion.data.epiphy.interfaces.type.NodedProperty;
  * {@link PropertyRoute}es can be created using the
  * {@link #of(NodedProperty, int[])} method.
  */
-public final class PropertyRoute extends PropertyKey<NodedProperty<?, ?>, int[]>{
+public final class PropertyRoute extends PropertyReference<NodedProperty<?, ?>, int[]> {
 
 	private PropertyRoute(NodedProperty<?, ?> property, int[] key) {
 		super(property, key);
@@ -21,7 +21,7 @@ public final class PropertyRoute extends PropertyKey<NodedProperty<?, ?>, int[]>
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(getKey());
+		result = prime * result + Arrays.hashCode(getReference());
 		result = prime * result + ((getProperty() == null) ? 0 : getProperty().hashCode());
 		return result;
 	}
@@ -35,7 +35,7 @@ public final class PropertyRoute extends PropertyKey<NodedProperty<?, ?>, int[]>
 		if (getClass() != obj.getClass())
 			return false;
 		PropertyRoute other = (PropertyRoute) obj;
-		if (!Arrays.equals(getKey(), other.getKey()))
+		if (!Arrays.equals(getReference(), other.getReference()))
 			return false;
 		if (getProperty() == null) {
 			if (other.getProperty() != null)
@@ -47,7 +47,7 @@ public final class PropertyRoute extends PropertyKey<NodedProperty<?, ?>, int[]>
 
 	@Override
 	public String toString() {
-		return "PropertyRoute [property=" + getProperty() + ", indices=" + Arrays.toString(getKey()) + "]";
+		return "PropertyRoute [property=" + getProperty() + ", indices=" + Arrays.toString(getReference()) + "]";
 	}
 
 	/**
@@ -55,15 +55,19 @@ public final class PropertyRoute extends PropertyKey<NodedProperty<?, ?>, int[]>
 	 * 
 	 * @param nodedProperty
 	 *            The noded property this {@link PropertyRoute} indexes; might
-	 *            <b>NOT</b> be null.
-	 * @param indices
+	 *            <b>not</b> be null.
+	 * @param index
 	 *            The index the given property has to have.
+	 * @param indices
+	 *            Additional indices the given property has to have.
 	 * @return A new {@link PropertyRoute}; never null
 	 */
-	public static PropertyRoute of(NodedProperty<?, ?> nodedProperty, int... indices) {
+	public static PropertyRoute of(NodedProperty<?, ?> nodedProperty, int index, int... indices) {
 		if (nodedProperty == null) {
 			throw new IllegalArgumentException("Cannot create a route for a null noded property.");
 		}
-		return new PropertyRoute(nodedProperty, indices);
+		int[] path = new int[indices.length + 1];
+		Arrays.setAll(path, i -> i == 0 ? index : indices[i - 1]);
+		return new PropertyRoute(nodedProperty, path);
 	}
 }

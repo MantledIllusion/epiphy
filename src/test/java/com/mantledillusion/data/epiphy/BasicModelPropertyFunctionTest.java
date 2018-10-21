@@ -15,8 +15,8 @@ public class BasicModelPropertyFunctionTest {
 	
 	@Test
 	public void testPropertySpec() {
-		assertTrue(MixedModelProperties.MODEL.isRoot());
-		assertFalse(MixedModelProperties.SUB.isRoot());
+		assertTrue(MixedModelProperties.MODEL.isModelRoot());
+		assertFalse(MixedModelProperties.SUB.isModelRoot());
 		
 		assertTrue(MixedModelProperties.SUBLIST.isContexted());
 		assertTrue(MixedModelProperties.SUB.isContexted());

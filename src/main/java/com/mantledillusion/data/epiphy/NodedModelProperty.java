@@ -1,20 +1,23 @@
 package com.mantledillusion.data.epiphy;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.ContextedValue;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
-import com.mantledillusion.data.epiphy.exception.InterruptedPropertyNodeException;
-import com.mantledillusion.data.epiphy.exception.OutboundPropertyNodeException;
+import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
 import com.mantledillusion.data.epiphy.interfaces.type.NodedProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
-import com.mantledillusion.data.epiphy.io.IndexedSetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedSetter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
 public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, T> implements NodedProperty<M, T> {
 
-	private final class IndexedNodedGetter<P, C> implements IndexedGetter<P, C> {
+	private final class IndexedNodedGetter<P, C> implements ContextedGetter<P, C> {
 
 		private final Getter<P, C> getter;
 
@@ -33,7 +36,7 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 		}
 	}
 
-	private final class IndexedNodedSetter<P, C> implements IndexedSetter<P, C> {
+	private final class IndexedNodedSetter<P, C> implements ContextedSetter<P, C> {
 		
 		private final Setter<P, C> setter;
 
@@ -73,19 +76,37 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 				if (allowNull) {
 					return null;
 				} else {
-					throw new InterruptedPropertyNodeException(this);
+					throw new InterruptedPropertyPathException(this);
 				}
 			} else {
 				List<T> leaves = this.leafGetter.get(rootNode);
-				checkIndex(leaves.size(), nodeIndeces[currentIndex], true);
+				checkIndex(leaves.size(), nodeIndeces, currentIndex, true);
 				return locate(leaves.get(nodeIndeces[currentIndex]), nodeIndeces, currentIndex + 1, allowNull);
 			}
 		}
 	}
 	
-	private void checkIndex(int leafCount, int index, boolean harshBounds) {
+	private List<T> checkNodeIndexing(M model, Context context, boolean harshBounds) {
+		if (context.containsKey(this)) {
+			T node = getNodeRoot(model, context, false);
+			int[] path = context.getKey(this);
+			int[] parentPath = Arrays.copyOfRange(path, 0, path.length-1);
+			node = locate(node, parentPath, 0, false);
+			if (node == null) {
+				throw new InterruptedPropertyPathException(this);
+			}
+			List<T> leaves = this.leafGetter.get(node);
+			checkIndex(leaves.size(), path, path.length-1, harshBounds);
+			return leaves;
+		} else {
+			throw new UncontextedPropertyPathException(this);
+		}
+	}
+	
+	private void checkIndex(int leafCount, int[] nodeIndeces, int currentIndex, boolean harshBounds) {
+		int index = nodeIndeces[currentIndex];
 		if (index < 0 || (harshBounds ? index >= leafCount : index > leafCount)) {
-			throw new OutboundPropertyNodeException(this, index, leafCount);
+			throw new OutboundPropertyPathException(this, nodeIndeces);
 		}
 	}
 
@@ -94,7 +115,7 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 			if (allowNull) {
 				return false;
 			} else {
-				throw new InterruptedPropertyNodeException(this);
+				throw new InterruptedPropertyPathException(this);
 			}
 		}
 		return true;
@@ -191,29 +212,29 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 	}
 	
 	@Override
-	public void add(M model, T element, Context context) {
+	public int[] append(M model, T element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		T value = get(model, context);
 		checkParent(value, false);
-		this.leafGetter.get(value).add(element);
+		List<T> leaves = this.leafGetter.get(value);
+		leaves.add(element);
+		int[] path = context.containsKey(this) ? context.getKey(this) : new int[0];
+		path = Arrays.copyOf(path, path.length+1);
+		path[path.length-1] = leaves.size();
+		return path;
 	}
 	
 	@Override
-	public void addAt(M model, T element, Integer operator, Context context) {
-		if (operator == null) {
-			add(model, element, context);
-		} else {
-			context = context == null ? DefaultContext.EMPTY : context;
-			T value = get(model, context);
-			checkParent(value, false);
-			List<T> leaves = this.leafGetter.get(value);
-			checkIndex(leaves.size(), operator, false);
-			leaves.add(operator, element);
-		}
+	public int[] addAt(M model, T element, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<T> leaves = checkNodeIndexing(model, context, false);
+		int[] path = context.getKey(this);
+		leaves.add(path[path.length-1], element);
+		return path;
 	}
-
+	
 	@Override
-	public T remove(M model, Context context) {
+	public ContextedValue<int[], T> strip(M model, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		T value = get(model, context);
 		checkParent(value, false);
@@ -221,26 +242,23 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 		if (leaves.isEmpty()) {
 			return null;
 		} else {
-			return leaves.remove(leaves.size()-1);
-		}
-	}
-	
-	@Override
-	public T removeAt(M model, Integer operator, Context context) {
-		if (operator == null) {
-			return remove(model, context);
-		} else {
-			context = context == null ? DefaultContext.EMPTY : context;
-			T value = get(model, context);
-			checkParent(value, false);
-			List<T> leaves = this.leafGetter.get(value);
-			checkIndex(leaves.size(), operator, true);
-			return leaves.remove((int) operator);
+			int[] path = context.containsKey(this) ? context.getKey(this) : new int[0];
+			path = Arrays.copyOf(path, path.length+1);
+			path[path.length-1] = leaves.size();
+			return ContextedValue.of(path, leaves.remove(leaves.size()-1));
 		}
 	}
 
 	@Override
-	public Integer remove(M model, T element, Context context) {
+	public T removeAt(M model, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<T> leaves = checkNodeIndexing(model, context, true);
+		int[] path = context.getKey(this);
+		return leaves.remove(path[path.length-1]);
+	}
+	
+	@Override
+	public int[] remove(M model, T element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		T value = get(model, context);
 		checkParent(value, false);
@@ -250,7 +268,10 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 			return null;
 		} else {
 			leaves.remove(index);
-			return index;
+			int[] path = context.containsKey(this) ? context.getKey(this) : new int[1];
+			path = Arrays.copyOf(path, path.length+1);
+			path[path.length-1] = index;
+			return path;
 		}
 	}
 }

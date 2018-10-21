@@ -1,12 +1,13 @@
 package com.mantledillusion.data.epiphy.exception;
 
-import com.mantledillusion.data.epiphy.context.PropertyIndex;
+import com.mantledillusion.data.epiphy.context.PropertyReference;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
+import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 
 /**
- * Exception that might be thrown if a {@link PropertyIndex} is provided for a
- * {@link ReadableProperty}, but that index is out of bound for the property
- * list value.
+ * Exception that might be thrown if a {@link PropertyReference} is provided for
+ * a {@link ReadableProperty}, but its reference is out of bound for the
+ * property list value.
  */
 public class OutboundPropertyPathException extends IndexOutOfBoundsException {
 
@@ -15,15 +16,13 @@ public class OutboundPropertyPathException extends IndexOutOfBoundsException {
 	/**
 	 * Constructor.
 	 * 
-	 * @param indexedProperty
-	 *            The {@link ReadableProperty} whose index was out of bounds for;
-	 *            might be null
-	 * @param index
-	 *            The index that was out of bounds
-	 * @param length
-	 *            The length of the actual property index value
+	 * @param property
+	 *            The {@link ContextableProperty} whose reference was out of bounds;
+	 *            might <b<not</b> be null.
+	 * @param reference
+	 *            The reference that was out of bounds; might <b<not</b> be null.
 	 */
-	public OutboundPropertyPathException(ReadableProperty<?, ?> indexedProperty, int index, int length) {
-		super("Index " + index + " is out of bounds (0|" + (length - 1) + ") for indexed property " + indexedProperty);
+	public <R> OutboundPropertyPathException(ContextableProperty<?, ?, R> property, R reference) {
+		super("The property reference " + reference + " is out of bounds for the property " + property);
 	}
 }

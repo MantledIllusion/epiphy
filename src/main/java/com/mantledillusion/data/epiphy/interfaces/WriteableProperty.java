@@ -25,7 +25,7 @@ public interface WriteableProperty<M, T> extends ReadableProperty<M, T> {
 	 * {@link #exists(Object)} in the model.
 	 * 
 	 * @param model
-	 *            The model to set the property on; might <b>NOT</b> be null.
+	 *            The model to set the property on; might <b>not</b> be null.
 	 * @param value
 	 *            The value to set; might be null.
 	 * @throws InterruptedPropertyPathException
@@ -47,7 +47,7 @@ public interface WriteableProperty<M, T> extends ReadableProperty<M, T> {
 	 * {@link #exists(Object, Context)} in the model.
 	 * 
 	 * @param model
-	 *            The model to set the property on; might <b>NOT</b> be null.
+	 *            The model to set the property on; might <b>not</b> be null.
 	 * @param value
 	 *            The value to set; might be null.
 	 * @param context

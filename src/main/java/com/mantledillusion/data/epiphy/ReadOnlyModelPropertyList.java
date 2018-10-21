@@ -5,7 +5,7 @@ import java.util.List;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
 
 /**
  * Implementation of {@link ListedProperty} and {@link ReadableProperty} that
@@ -20,13 +20,13 @@ import com.mantledillusion.data.epiphy.io.IndexedGetter;
  */
 public final class ReadOnlyModelPropertyList<M, E> extends ListedModelProperty<M, E> implements ReadableProperty<M, List<E>> {
 
-	private final IndexedGetter<?, List<E>> getter;
+	private final ContextedGetter<?, List<E>> getter;
 
 	ReadOnlyModelPropertyList(String id) {
 		this(id, null, null);
 	}
 
-	<P> ReadOnlyModelPropertyList(String id, AbstractModelProperty<M, P> parent, IndexedGetter<P, List<E>> getter) {
+	<P> ReadOnlyModelPropertyList(String id, AbstractModelProperty<M, P> parent, ContextedGetter<P, List<E>> getter) {
 		super(id, parent);
 		this.getter = getter;
 	}

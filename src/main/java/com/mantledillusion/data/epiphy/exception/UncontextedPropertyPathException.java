@@ -1,11 +1,12 @@
 package com.mantledillusion.data.epiphy.exception;
 
-import com.mantledillusion.data.epiphy.context.PropertyIndex;
-import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
+import com.mantledillusion.data.epiphy.context.PropertyReference;
+import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 
 /**
- * Exception that might be thrown if an indexed property occurs on a property path
- * during an execution, but there is no {@link PropertyIndex} provided for it.
+ * Exception that might be thrown if a contexted property occurs on a property
+ * path during an execution, but there is no {@link PropertyReference} provided
+ * for it.
  */
 public final class UncontextedPropertyPathException extends RuntimeException {
 
@@ -14,11 +15,11 @@ public final class UncontextedPropertyPathException extends RuntimeException {
 	/**
 	 * Constructor.
 	 * 
-	 * @param indexedProperty
-	 *            The index property that no {@link PropertyIndex} was provided
-	 *            for; might be null.
+	 * @param property
+	 *            The {@link ContextableProperty} that no {@link PropertyReference}
+	 *            was provided for; might <b>not</b> be null.
 	 */
-	public UncontextedPropertyPathException(ReadableProperty<?, ?> indexedProperty) {
-		super("No index given for indexed property '" + indexedProperty + "'");
+	public UncontextedPropertyPathException(ContextableProperty<?, ?, ?> property) {
+		super("No reference given for contexted property '" + property + "'");
 	}
 }

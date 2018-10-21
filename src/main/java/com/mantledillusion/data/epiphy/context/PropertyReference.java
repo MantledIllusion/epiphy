@@ -5,7 +5,7 @@ import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 import com.mantledillusion.data.epiphy.interfaces.type.NodedProperty;
 
 /**
- * Base type for keys of {@link ContextableProperty} implementations.
+ * Base type for references to {@link ContextableProperty} implementations.
  * <p>
  * Implementations are:<br>
  * - {@link PropertyIndex} for {@link ListedProperty}s<br>
@@ -13,37 +13,37 @@ import com.mantledillusion.data.epiphy.interfaces.type.NodedProperty;
  *
  * @param <P>
  *            The property type, which is the {@link ContextableProperty}
- *            implementation this key is meant for.
- * @param <K>
- *            The key type, which is the type the {@link ContextableProperty}
- *            implementation requires as key.
+ *            implementation this reference is meant for.
+ * @param <R>
+ *            The reference type, which is the type the
+ *            {@link ContextableProperty} implementation requires as reference.
  */
-public abstract class PropertyKey<P extends ContextableProperty<?, ?, K, ?>, K> {
+public abstract class PropertyReference<P extends ContextableProperty<?, ?, R>, R> {
 
 	private final P property;
-	private final K key;
+	private final R reference;
 
-	PropertyKey(P property, K key) {
+	PropertyReference(P property, R reference) {
 		this.property = property;
-		this.key = key;
+		this.reference = reference;
 	}
 
 	/**
-	 * Returns the property of this {@link PropertyKey}.
+	 * Returns the property of this {@link PropertyReference}.
 	 * 
-	 * @return The property; never null
+	 * @return The property, never null
 	 */
 	public P getProperty() {
 		return this.property;
 	}
 
 	/**
-	 * Returns the key of this {@link PropertyKey}.
+	 * Returns the reference of this {@link PropertyReference}.
 	 * 
-	 * @return The key, never null
+	 * @return The reference, never null
 	 */
-	public K getKey() {
-		return this.key;
+	public R getReference() {
+		return reference;
 	}
 
 	@Override

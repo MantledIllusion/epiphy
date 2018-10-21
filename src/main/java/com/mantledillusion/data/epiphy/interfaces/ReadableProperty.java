@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
-import com.mantledillusion.data.epiphy.context.PropertyKey;
+import com.mantledillusion.data.epiphy.context.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
 import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
@@ -29,7 +29,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * @return True if this {@link ReadableProperty} instance if a root to a
 	 *         property tree; false if not
 	 */
-	public boolean isRoot();
+	public boolean isModelRoot();
 
 	/**
 	 * Returns whether this {@link ReadableProperty} is reachable, so the property
@@ -76,7 +76,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * model.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might <b>not</b> be null.
 	 * @return True if this property is not null and has any children in the given
 	 *         model.
 	 */
@@ -89,7 +89,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * model.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might <b>not</b> be null.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to this
@@ -170,7 +170,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	public Set<ReadableProperty<M, ?>> getParents();
 
 	/**
-	 * Returns whether the given {@link ReadableProperty} is this
+	 * Returns whether the given {@link IdentifyableProperty} is this
 	 * {@link ReadableProperty} or one of its parents, up to this property tree's
 	 * root property.
 	 * 
@@ -179,11 +179,11 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * @return True if the given {@link ReadableProperty} is this
 	 *         {@link ReadableProperty} or one of its parents, false otherwise
 	 */
-	public boolean isParent(ReadableProperty<M, ?> property);
+	public boolean isParent(IdentifyableProperty property);
 
 	/**
 	 * Returns whether this {@link ReadableProperty} is a
-	 * {@link ContextableProperty}, so its elements require an {@link PropertyKey}
+	 * {@link ContextableProperty}, so its elements require an {@link PropertyReference}
 	 * to be reached.
 	 * 
 	 * @return True if this {@link ReadableProperty} implements
@@ -196,18 +196,18 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * properties that are {@link ContextableProperty}s.
 	 * <p>
 	 * In order words, all of the returned {@link ReadableProperty}s would need to
-	 * be contexted by {@link PropertyKey}s so this {@link ReadableProperty} could
+	 * be contexted by {@link PropertyReference}s so this {@link ReadableProperty} could
 	 * be used to successfully identify the property in a model.
 	 * <p>
 	 * That being said, when applying this {@link ReadableProperty} on a model
 	 * instance, all of the returned properties have to be included in a
-	 * {@link PropertyKey} of the {@link Context} delivered to the operation.
+	 * {@link PropertyReference} of the {@link Context} delivered to the operation.
 	 * 
 	 * @return An unmodifiable {@link Set} of all properties from the property
 	 *         tree's root to this {@link ReadableProperty} that are listed; never
 	 *         null
 	 */
-	public Set<ContextableProperty<M, ?, ?, ?>> getContext();
+	public Set<ContextableProperty<M, ?, ?>> getContext();
 
 	/**
 	 * Returns whether this {@link ReadableProperty}'s property is null, including
@@ -243,7 +243,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * Retrieves this {@link ReadableProperty}'s property out of the given model.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might <b>not</b> be null.
 	 * @return The retrieved property; might return null if the property is null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ReadableProperty} is
@@ -285,7 +285,7 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * using the given {@link Context}.
 	 * 
 	 * @param model
-	 *            The model to retrieve the property from; might <b>NOT</b> be null.
+	 *            The model to retrieve the property from; might <b>not</b> be null.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the listed
 	 *            properties from the root property to this

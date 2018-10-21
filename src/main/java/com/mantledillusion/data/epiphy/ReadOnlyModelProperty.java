@@ -3,7 +3,7 @@ package com.mantledillusion.data.epiphy;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
 
 /**
  * Implementation of {@link DefiniteProperty} and {@link ReadableProperty} that
@@ -18,13 +18,13 @@ import com.mantledillusion.data.epiphy.io.IndexedGetter;
  */
 public final class ReadOnlyModelProperty<M, T> extends DefiniteModelProperty<M, T> implements ReadableProperty<M, T> {
 
-	private final IndexedGetter<?, T> getter;
+	private final ContextedGetter<?, T> getter;
 
 	ReadOnlyModelProperty(String id) {
 		this(id, null, null);
 	}
 
-	<P> ReadOnlyModelProperty(String id, AbstractModelProperty<M, P> parent, IndexedGetter<P, T> getter) {
+	<P> ReadOnlyModelProperty(String id, AbstractModelProperty<M, P> parent, ContextedGetter<P, T> getter) {
 		super(id, parent);
 		this.getter = getter;
 	}

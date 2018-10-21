@@ -7,7 +7,7 @@ import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.ModelPropertyNode;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
-import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
+import com.mantledillusion.data.epiphy.interfaces.function.EnumerableProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 
 /**
@@ -31,7 +31,7 @@ import com.mantledillusion.data.epiphy.io.Getter;
  *            The type of the property element this {@link ListedProperty}
  *            represents.
  */
-public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>>, ContextableProperty<M, E, Integer, Integer> {
+public interface ListedProperty<M, E> extends ReadableProperty<M, List<E>>, EnumerableProperty<M, E, Integer> {
 
 	/**
 	 * Defines the element of this {@link ListedProperty} to be a

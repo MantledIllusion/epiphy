@@ -6,10 +6,10 @@ import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 
 /**
- * Interface for {@link PropertyKey} contexts.
+ * Interface for {@link PropertyReference} contexts.
  * <p>
- * Contexts of {@link PropertyKey}s would basically contain a {@link Map} of
- * {@link ContextableProperty}-&gt;{@link PropertyKey} pairs, where the key's
+ * Contexts of {@link PropertyReference}s would basically contain a {@link Map} of
+ * {@link ContextableProperty}-&gt;{@link PropertyReference} pairs, where the key's
  * type is the one of the respective {@link ContextableProperty}.
  * <p>
  * Note that {@link ContextableProperty}s (like all properties) only equal when
@@ -29,7 +29,7 @@ public interface Context {
 	 *            this will cause the method always to return false.
 	 * @return True if there is a key existing, false otherwise.
 	 */
-	public <K> boolean containsKey(ContextableProperty<?, ?, K, ?> property);
+	public <K> boolean containsKey(ContextableProperty<?, ?, K> property);
 
 	/**
 	 * Returns the key of the given property.
@@ -42,5 +42,5 @@ public interface Context {
 	 * @return The key if this {@link Context} contains one for the given property,
 	 *         null otherwise
 	 */
-	public <K> K getKey(ContextableProperty<?, ?, K, ?> property);
+	public <K> K getKey(ContextableProperty<?, ?, K> property);
 }

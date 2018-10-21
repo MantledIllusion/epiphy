@@ -3,18 +3,19 @@ package com.mantledillusion.data.epiphy;
 import java.util.List;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.ContextedValue;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
 import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
-import com.mantledillusion.data.epiphy.io.IndexedSetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedSetter;
 
 abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E>> implements ListedProperty<M, E> {
 
-	private static final class IndexedListedGetter<E> implements IndexedGetter<List<E>, E> {
+	private static final class IndexedListedGetter<E> implements ContextedGetter<List<E>, E> {
 
 		private final ListedModelProperty<?, E> list;
 
@@ -24,7 +25,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 
 		@Override
 		public E get(List<E> source, Context context, boolean allowNull) {
-			if (this.list.checkListIndexing(source, context, true, allowNull)) {
+			if (this.list.checkListIndexing(source, context, true, true, allowNull)) {
 				return source.get(context.getKey(this.list));
 			} else {
 				return null;
@@ -32,7 +33,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 		}
 	}
 
-	private static final class IndexedListedSetter<E> implements IndexedSetter<List<E>, E> {
+	private static final class IndexedListedSetter<E> implements ContextedSetter<List<E>, E> {
 
 		private final ListedModelProperty<?, E> list;
 
@@ -43,7 +44,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 
 		@Override
 		public void set(List<E> target, E value, Context context) {
-			this.list.checkListIndexing(target, context, true, false);
+			this.list.checkListIndexing(target, context, true, true, false);
 			target.set(context.getKey(this.list), value);
 		}
 	}
@@ -62,7 +63,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	// ############################################### INTERNAL ##################################################
 	// ###########################################################################################################
 
-	private boolean checkListIndexing(List<E> list, Context context, boolean indexRequired, boolean allowNull) {
+	private boolean checkListIndexing(List<E> list, Context context, boolean indexRequired, boolean harshBounds, boolean allowNull) {
 		if (list == null) {
 			if (allowNull) {
 				return false;
@@ -71,7 +72,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 		} else if (indexRequired) {
 			if (context.containsKey(this)) {
 				Integer idx = context.getKey(this);
-				return checkIndex(list.size(), idx, allowNull, true);
+				return checkIndex(list.size(), idx, allowNull, harshBounds);
 			} else {
 				throw new UncontextedPropertyPathException(this);
 			}
@@ -84,7 +85,7 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 			if (allowNull) {
 				return false;
 			} else {
-				throw new OutboundPropertyPathException(this, idx, listSize);
+				throw new OutboundPropertyPathException(this, idx);
 			}
 		}
 		return true;
@@ -151,61 +152,54 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	public int size(M model, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false, false);
+		checkListIndexing(list, context, false, false, false);
 		return list.size();
 	}
-
+	
 	@Override
-	public void add(M model, E element, Context context) {
+	public Integer append(M model, E element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false, false);
+		checkListIndexing(list, context, false, false, false);
 		list.add(element);
+		return list.size()-1;
 	}
 
 	@Override
-	public void addAt(M model, E element, Integer operator, Context context) {
-		if (operator == null) {
-			add(model, element, context);
-		} else {
-			context = context == null ? DefaultContext.EMPTY : context;
-			List<E> list = get(model, context);
-			checkListIndexing(list, context, false, false);
-			checkIndex(list.size(), operator, false, false);
-			list.add(operator, element);
-		}
-	}
-
-	@Override
-	public E remove(M model, Context context) {
+	public Integer addAt(M model, E element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false, false);
+		checkListIndexing(list, context, true, false, false);
+		Integer idx = context.getKey(this);
+		list.add(idx, element);
+		return idx;
+	}
+	
+	@Override
+	public ContextedValue<Integer, E> strip(M model, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<E> list = get(model, context);
+		checkListIndexing(list, context, false, false, false);
 		if (list.isEmpty()) {
 			return null;
 		} else {
-			return list.remove((int) list.size() - 1);
+			return ContextedValue.of(list.size()-1, list.remove(list.size()-1));
 		}
 	}
 
 	@Override
-	public E removeAt(M model, Integer operator, Context context) {
-		if (operator == null) {
-			return remove(model, context);
-		} else {
-			context = context == null ? DefaultContext.EMPTY : context;
-			List<E> list = get(model, context);
-			checkListIndexing(list, context, false, false);
-			checkIndex(list.size(), operator, false, true);
-			return list.remove((int) operator);
-		}
+	public E removeAt(M model, Context context) {
+		context = context == null ? DefaultContext.EMPTY : context;
+		List<E> list = get(model, context);
+		checkListIndexing(list, context, true, true, false);
+		return list.remove((int) context.getKey(this));
 	}
-
+	
 	@Override
 	public Integer remove(M model, E element, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;
 		List<E> list = get(model, context);
-		checkListIndexing(list, context, false, false);
+		checkListIndexing(list, context, false, false, false);
 		int index = list.indexOf(element);
 		if (index == -1) {
 			return null;

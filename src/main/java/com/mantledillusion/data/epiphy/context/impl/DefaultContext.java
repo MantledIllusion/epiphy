@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.PropertyKey;
+import com.mantledillusion.data.epiphy.context.PropertyReference;
 import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 
 /**
  * Default implementation of {@link Context}.
  * <p>
  * {@link DefaultContext}s can be created using the
- * {@link #of(PropertyKey...)} method.
+ * {@link #of(PropertyReference...)} method.
  */
 public class DefaultContext implements Context {
 
@@ -20,21 +20,21 @@ public class DefaultContext implements Context {
 	 */
 	public static final DefaultContext EMPTY = new DefaultContext();
 
-	private final Map<ContextableProperty<?, ?, ?, ?>, PropertyKey<?, ?>> keys;
+	private final Map<ContextableProperty<?, ?, ?>, PropertyReference<?, ?>> keys;
 
 	private DefaultContext() {
 		this.keys = new HashMap<>();
 	}
 
 	@Override
-	public <K> boolean containsKey(ContextableProperty<?, ?, K, ?> property) {
+	public <K> boolean containsKey(ContextableProperty<?, ?, K> property) {
 		return this.keys.containsKey(property);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <K> K getKey(ContextableProperty<?, ?, K, ?> property) {
-		return this.keys.containsKey(property) ? (K) this.keys.get(property).getKey() : null;
+	public <K> K getKey(ContextableProperty<?, ?, K> property) {
+		return this.keys.containsKey(property) ? (K) this.keys.get(property).getReference() : null;
 	}
 
 	@Override
@@ -76,12 +76,12 @@ public class DefaultContext implements Context {
 	 * @return A new {@link DefaultContext} of the given keys; never null
 	 */
 	@SafeVarargs
-	public static DefaultContext of(PropertyKey<?, ?>... keys) {
+	public static DefaultContext of(PropertyReference<?, ?>... keys) {
 		if (keys == null || keys.length == 0) {
 			return EMPTY;
 		} else {
 			DefaultContext context = new DefaultContext();
-			for (PropertyKey<?, ?> key : keys) {
+			for (PropertyReference<?, ?> key : keys) {
 				if (key != null) {
 					context.keys.put(key.getProperty(), key);
 				}

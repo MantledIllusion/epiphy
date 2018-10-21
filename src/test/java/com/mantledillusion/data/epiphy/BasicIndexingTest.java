@@ -25,7 +25,7 @@ public class BasicIndexingTest {
 	public void testCreateIndex() {
 		PropertyIndex i = PropertyIndex.of(ListModelProperties.MODEL, 5);
 		assertTrue(i.getProperty() == ListModelProperties.MODEL);
-		assertEquals(i.getKey(), Integer.valueOf(5));
+		assertEquals(i.getReference(), Integer.valueOf(5));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)

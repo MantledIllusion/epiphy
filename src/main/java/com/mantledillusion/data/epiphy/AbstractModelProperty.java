@@ -12,6 +12,7 @@ import java.util.Set;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
+import com.mantledillusion.data.epiphy.interfaces.function.IdentifyableProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
@@ -30,7 +31,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	private final List<ReadableProperty<M, ?>> path;
 	private final Set<ReadableProperty<M, ?>> parents;
 	private final boolean isContexted;
-	private final Set<ContextableProperty<M, ?, ?, ?>> context;
+	private final Set<ContextableProperty<M, ?, ?>> context;
 
 	@SuppressWarnings("unchecked")
 	<P> AbstractModelProperty(String id, AbstractModelProperty<M, P> parent, boolean isListed) {
@@ -42,7 +43,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 
 		this.parent = parent;
 
-		Set<ContextableProperty<M, ?, ?, ?>> context;
+		Set<ContextableProperty<M, ?, ?>> context;
 		if (this.parent == null) {
 			this.id = id;
 			this.name = id;
@@ -65,7 +66,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 
 		this.isContexted = ContextableProperty.class.isAssignableFrom(getClass());
 		if (this.isContexted) {
-			context.add((ContextableProperty<M, ?, ?, ?>) this);
+			context.add((ContextableProperty<M, ?, ?>) this);
 		}
 		this.context = Collections.unmodifiableSet(context);
 	}
@@ -104,7 +105,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public final boolean isRoot() {
+	public final boolean isModelRoot() {
 		return this.parent == null;
 	}
 
@@ -146,24 +147,24 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	public final List<ReadableProperty<M, ?>> getPath() {
 		return this.path;
 	}
-	
+
 	@Override
 	public Set<ReadableProperty<M, ?>> getParents() {
 		return this.parents;
 	}
-	
+
 	@Override
-	public boolean isParent(ReadableProperty<M, ?> property) {
+	public boolean isParent(IdentifyableProperty property) {
 		return this.parents.contains(property);
 	}
-	
+
 	@Override
 	public boolean isContexted() {
 		return this.isContexted;
 	}
-	
+
 	@Override
-	public Set<ContextableProperty<M, ?, ?, ?>> getContext() {
+	public Set<ContextableProperty<M, ?, ?>> getContext() {
 		return this.context;
 	}
 
@@ -179,8 +180,8 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns the hash code of this {@link ReadableProperty}, which is the hash code of its
-	 * id.
+	 * Returns the hash code of this {@link ReadableProperty}, which is the hash
+	 * code of its id.
 	 * 
 	 * @return The hash code of this {@link ReadableProperty}'s id.
 	 */
@@ -190,18 +191,18 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns whether this {@link ReadableProperty} is the exact same instance as the given
-	 * {@link Object}.
+	 * Returns whether this {@link ReadableProperty} is the exact same instance as
+	 * the given {@link Object}.
 	 * <p>
 	 * The reason to handle this so strictly is that due to the generic nature and
-	 * the {@link Getter}/{@link Setter} mechanic of {@link ReadableProperty}s it can never
-	 * be determined whether 2 {@link ReadableProperty} instances actually refer to the same
-	 * property in the same parent type.
+	 * the {@link Getter}/{@link Setter} mechanic of {@link ReadableProperty}s it
+	 * can never be determined whether 2 {@link ReadableProperty} instances actually
+	 * refer to the same property in the same parent type.
 	 * 
 	 * @param obj
 	 *            The {@link Object} to check against; might be null.
-	 * @return True if the given object is the exact same as this {@link ReadableProperty};
-	 *         false if not
+	 * @return True if the given object is the exact same as this
+	 *         {@link ReadableProperty}; false if not
 	 */
 	@Override
 	public final boolean equals(Object obj) {
@@ -209,8 +210,8 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	/**
-	 * Returns the id of this {@link ReadableProperty}, as that is the {@link String} an
-	 * {@link ReadableProperty} is identified by.
+	 * Returns the id of this {@link ReadableProperty}, as that is the
+	 * {@link String} an {@link ReadableProperty} is identified by.
 	 * 
 	 * @return This {@link ReadableProperty}'s id
 	 */

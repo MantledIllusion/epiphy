@@ -16,7 +16,7 @@ public interface Getter<P, T> {
 	 * 
 	 * @param source
 	 *            The parent value that is the source to retrieve from; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @return The retrieved value.
 	 */
 	T get(P source);

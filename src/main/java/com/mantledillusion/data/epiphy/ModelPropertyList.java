@@ -5,8 +5,8 @@ import java.util.List;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
 import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
-import com.mantledillusion.data.epiphy.io.IndexedSetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedSetter;
 
 /**
  * Implementation of {@link ListedProperty} and {@link WriteableProperty} that
@@ -21,15 +21,15 @@ import com.mantledillusion.data.epiphy.io.IndexedSetter;
  */
 public final class ModelPropertyList<M, E> extends ListedModelProperty<M, E> implements WriteableProperty<M, List<E>> {
 
-	private final IndexedGetter<?, List<E>> getter;
-	private final IndexedSetter<?, List<E>> setter;
+	private final ContextedGetter<?, List<E>> getter;
+	private final ContextedSetter<?, List<E>> setter;
 
 	<P> ModelPropertyList(String id) {
 		this(id, null, null, null);
 	}
 
-	<P> ModelPropertyList(String id, AbstractModelProperty<M, P> parent, IndexedGetter<P, List<E>> getter,
-			IndexedSetter<P, List<E>> setter) {
+	<P> ModelPropertyList(String id, AbstractModelProperty<M, P> parent, ContextedGetter<P, List<E>> getter,
+			ContextedSetter<P, List<E>> setter) {
 		super(id, parent);
 		this.getter = getter;
 		this.setter = setter;

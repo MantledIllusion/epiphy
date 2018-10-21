@@ -9,7 +9,7 @@ import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
  * {@link PropertyIndex}es can be created using the
  * {@link #of(ListedProperty, int)} method.
  */
-public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integer> {
+public final class PropertyIndex extends PropertyReference<ListedProperty<?, ?>, Integer> {
 
 	private PropertyIndex(ListedProperty<?, ?> property, int key) {
 		super(property, key);
@@ -19,7 +19,7 @@ public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integ
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + getKey();
+		result = prime * result + getReference();
 		result = prime * result + ((getProperty() == null) ? 0 : getProperty().hashCode());
 		return result;
 	}
@@ -33,7 +33,7 @@ public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integ
 		if (getClass() != obj.getClass())
 			return false;
 		PropertyIndex other = (PropertyIndex) obj;
-		if (getKey() != other.getKey())
+		if (getReference() != other.getReference())
 			return false;
 		if (getProperty() == null) {
 			if (other.getProperty() != null)
@@ -45,7 +45,7 @@ public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integ
 
 	@Override
 	public String toString() {
-		return "PropertyIndex [key=" + getProperty() + ", index=" + this.getKey() + "]";
+		return "PropertyIndex [key=" + getProperty() + ", index=" + this.getReference() + "]";
 	}
 
 	/**
@@ -53,10 +53,10 @@ public final class PropertyIndex extends PropertyKey<ListedProperty<?, ?>, Integ
 	 * 
 	 * @param listedProperty
 	 *            The listed property this {@link PropertyIndex} indexes; might
-	 *            <b>NOT</b> be null.
+	 *            <b>not</b> be null.
 	 * @param index
 	 *            The index the given property has to have.
-	 * @return A new {@link PropertyIndex}; never null
+	 * @return A new {@link PropertyIndex}, never null
 	 */
 	public static PropertyIndex of(ListedProperty<?, ?> listedProperty, int index) {
 		if (listedProperty == null) {

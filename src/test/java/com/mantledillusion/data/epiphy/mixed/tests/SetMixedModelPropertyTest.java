@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.PropertyRoute;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
-import com.mantledillusion.data.epiphy.exception.OutboundPropertyNodeException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
 import com.mantledillusion.data.epiphy.mixed.AbstractMixedModelPropertyTest;
@@ -50,7 +49,7 @@ public class SetMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 		MixedModelProperties.SUBID.set(this.model, newId, context);
 	}
 	
-	@Test(expected=OutboundPropertyNodeException.class)
+	@Test(expected=OutboundPropertyPathException.class)
 	public void testSetIndexPropertyWithOutOfBoundNodeIndex() {
 		String newId = "newId";
 		DefaultContext context = DefaultContext.of(

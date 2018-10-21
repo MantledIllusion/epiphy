@@ -6,13 +6,13 @@ import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
 import com.mantledillusion.data.epiphy.io.Getter;
-import com.mantledillusion.data.epiphy.io.IndexedGetter;
-import com.mantledillusion.data.epiphy.io.IndexedSetter;
+import com.mantledillusion.data.epiphy.io.ContextedGetter;
+import com.mantledillusion.data.epiphy.io.ContextedSetter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
 abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> implements DefiniteProperty<M, T> {
 
-	private final class IndexedDefiniteGetter<P, C> implements IndexedGetter<P, C> {
+	private final class IndexedDefiniteGetter<P, C> implements ContextedGetter<P, C> {
 
 		private final Getter<P, C> getter;
 
@@ -30,7 +30,7 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 		}
 	}
 
-	private final class IndexedDefiniteSetter<P, C> implements IndexedSetter<P, C> {
+	private final class IndexedDefiniteSetter<P, C> implements ContextedSetter<P, C> {
 
 		private final Setter<P, C> setter;
 
