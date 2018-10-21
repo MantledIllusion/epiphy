@@ -18,9 +18,9 @@ public class OutboundPropertyPathException extends IndexOutOfBoundsException {
 	 * 
 	 * @param property
 	 *            The {@link ContextableProperty} whose reference was out of bounds;
-	 *            might <b<not</b> be null.
+	 *            might <b>not</b> be null.
 	 * @param reference
-	 *            The reference that was out of bounds; might <b<not</b> be null.
+	 *            The reference that was out of bounds; might <b>not</b> be null.
 	 */
 	public <R> OutboundPropertyPathException(ContextableProperty<?, ?, R> property, R reference) {
 		super("The property reference " + reference + " is out of bounds for the property " + property);

@@ -2,6 +2,11 @@ package com.mantledillusion.data.epiphy.context;
 
 /**
  * Defines a value that is contexted by a property key.
+ * 
+ * @param <K>
+ *            The reference type of the {@link ContextedValue}.
+ * @param <V>
+ *            The value type of the {@link ContextedValue}.
  */
 public final class ContextedValue<K, V> {
 
@@ -34,6 +39,10 @@ public final class ContextedValue<K, V> {
 	/**
 	 * Creates a new {@link ContextedValue}.
 	 * 
+	 * @param <K>
+	 *            The reference type of the {@link ContextedValue}.
+	 * @param <V>
+	 *            The value type of the {@link ContextedValue}.
 	 * @param propertyKey
 	 *            The property key to create the value for; might <b>not</b> be
 	 *            null.

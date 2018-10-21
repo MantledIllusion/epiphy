@@ -9,7 +9,7 @@ import com.mantledillusion.data.epiphy.interfaces.type.NodedProperty;
  * {@link NodedProperty}-&gt;int[] pair.
  * <p>
  * {@link PropertyRoute}es can be created using the
- * {@link #of(NodedProperty, int[])} method.
+ * {@link #of(NodedProperty, int, int...)} method.
  */
 public final class PropertyRoute extends PropertyReference<NodedProperty<?, ?>, int[]> {
 

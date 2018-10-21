@@ -21,7 +21,7 @@ import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
  * @param <R>
  *            The type of the context reference.
  */
-public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
+public interface ContextableProperty<M, E, R> extends IdentifyableProperty<M> {
 
 	/**
 	 * Returns the size of the contextable property without context.
@@ -59,9 +59,9 @@ public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
 	 *             {@link ContextableProperty}'s path that does not have a
 	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 * @throws OutboundPropertyPathException
-	 *             If the property reference provided by the given {@link Context} is out of bounds
-	 *             on the given model's elements this {@link ContextableProperty}
-	 *             represents.
+	 *             If the property reference provided by the given {@link Context}
+	 *             is out of bounds on the given model's elements this
+	 *             {@link ContextableProperty} represents.
 	 */
 	public int size(M model, Context context);
 
@@ -83,6 +83,7 @@ public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this
 	 *            {@link ContextableProperty}; might <b>not</b> be null.
+	 * @return The property reference where the element was appended, never null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ContextableProperty}
 	 *             is null.
@@ -91,9 +92,9 @@ public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
 	 *             {@link ContextableProperty}'s path that does not have a
 	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 * @throws OutboundPropertyPathException
-	 *             If the property reference provided by the given {@link Context} is out of bounds
-	 *             on the given model's elements this {@link ContextableProperty}
-	 *             represents.
+	 *             If the property reference provided by the given {@link Context}
+	 *             is out of bounds on the given model's elements this
+	 *             {@link ContextableProperty} represents.
 	 */
 	public R addAt(M model, E element, Context context);
 
@@ -124,9 +125,9 @@ public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
 	 *             {@link ContextableProperty}'s path that does not have a
 	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 * @throws OutboundPropertyPathException
-	 *             If the property reference provided by the given {@link Context} is out of bounds
-	 *             on the given model's elements this {@link ContextableProperty}
-	 *             represents.
+	 *             If the property reference provided by the given {@link Context}
+	 *             is out of bounds on the given model's elements this
+	 *             {@link ContextableProperty} represents.
 	 */
 	public E removeAt(M model, Context context);
 
@@ -145,8 +146,8 @@ public interface ContextableProperty<M, E, R> extends IdentifyableProperty {
 	 * @param element
 	 *            The element to remove. If it is contained by the elements multiple
 	 *            times, the first occurrence is removed; might be null.
-	 * @return The property reference of the element that has been removed; might be null if the
-	 *         given element was not included in its element
+	 * @return The property reference of the element that has been removed; might be
+	 *         null if the given element was not included in its element
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link ContextableProperty}
 	 *             is null.

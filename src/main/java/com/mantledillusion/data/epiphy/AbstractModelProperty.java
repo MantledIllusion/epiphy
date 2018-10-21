@@ -154,7 +154,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	}
 
 	@Override
-	public boolean isParent(IdentifyableProperty property) {
+	public boolean isParent(IdentifyableProperty<M> property) {
 		return this.parents.contains(property);
 	}
 

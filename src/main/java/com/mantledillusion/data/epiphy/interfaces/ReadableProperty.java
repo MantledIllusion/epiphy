@@ -5,10 +5,8 @@ import java.util.Set;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
-import com.mantledillusion.data.epiphy.context.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
-import com.mantledillusion.data.epiphy.interfaces.function.ContextableProperty;
 import com.mantledillusion.data.epiphy.interfaces.function.IdentifyableProperty;
 
 /**
@@ -20,16 +18,7 @@ import com.mantledillusion.data.epiphy.interfaces.function.IdentifyableProperty;
  * @param <T>
  *            The type of the property this {@link ReadableProperty} represents.
  */
-public interface ReadableProperty<M, T> extends IdentifyableProperty {
-
-	/**
-	 * Returns whether this {@link ReadableProperty} is the root of a property model
-	 * (that is, the root of a tree structure of {@link ReadableProperty}s).
-	 * 
-	 * @return True if this {@link ReadableProperty} instance if a root to a
-	 *         property tree; false if not
-	 */
-	public boolean isModelRoot();
+public interface ReadableProperty<M, T> extends IdentifyableProperty<M> {
 
 	/**
 	 * Returns whether this {@link ReadableProperty} is reachable, so the property
@@ -55,14 +44,6 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 * @return True if all of this {@link ReadableProperty}'s parents
 	 */
 	public boolean exists(M model, Context context);
-
-	/**
-	 * Returns the parent of this {@link ReadableProperty}.
-	 * 
-	 * @return The parent of this {@link ReadableProperty}; might return null if
-	 *         this {@link ReadableProperty} is a root
-	 */
-	public ReadableProperty<M, ?> getParent();
 
 	/**
 	 * Returns whether this {@link ReadableProperty} has any registered children.
@@ -168,46 +149,6 @@ public interface ReadableProperty<M, T> extends IdentifyableProperty {
 	 *         property tree's root to this {@link ReadableProperty}; never null
 	 */
 	public Set<ReadableProperty<M, ?>> getParents();
-
-	/**
-	 * Returns whether the given {@link IdentifyableProperty} is this
-	 * {@link ReadableProperty} or one of its parents, up to this property tree's
-	 * root property.
-	 * 
-	 * @param property
-	 *            The property to check; might be null.
-	 * @return True if the given {@link ReadableProperty} is this
-	 *         {@link ReadableProperty} or one of its parents, false otherwise
-	 */
-	public boolean isParent(IdentifyableProperty property);
-
-	/**
-	 * Returns whether this {@link ReadableProperty} is a
-	 * {@link ContextableProperty}, so its elements require an {@link PropertyReference}
-	 * to be reached.
-	 * 
-	 * @return True if this {@link ReadableProperty} implements
-	 *         {@link ContextableProperty}, false otherwise.
-	 */
-	public boolean isContexted();
-
-	/**
-	 * Returns a collapsed {@link Set} of this {@link ReadableProperty}'s parent
-	 * properties that are {@link ContextableProperty}s.
-	 * <p>
-	 * In order words, all of the returned {@link ReadableProperty}s would need to
-	 * be contexted by {@link PropertyReference}s so this {@link ReadableProperty} could
-	 * be used to successfully identify the property in a model.
-	 * <p>
-	 * That being said, when applying this {@link ReadableProperty} on a model
-	 * instance, all of the returned properties have to be included in a
-	 * {@link PropertyReference} of the {@link Context} delivered to the operation.
-	 * 
-	 * @return An unmodifiable {@link Set} of all properties from the property
-	 *         tree's root to this {@link ReadableProperty} that are listed; never
-	 *         null
-	 */
-	public Set<ContextableProperty<M, ?, ?>> getContext();
 
 	/**
 	 * Returns whether this {@link ReadableProperty}'s property is null, including

@@ -2,7 +2,9 @@ package com.mantledillusion.data.epiphy.interfaces.function;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.ContextedValue;
+import com.mantledillusion.data.epiphy.context.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UncontextedPropertyPathException;
 import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 
@@ -37,6 +39,7 @@ public interface EnumerableProperty<M, E, R> extends ContextableProperty<M, E, R
 	 *            The model to add the element to; might <b>not</b> be null.
 	 * @param element
 	 *            The element to add; might be null.
+	 * @return The property reference where the element was appended, never null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link EnumerableProperty} is
 	 *             null.
@@ -66,13 +69,14 @@ public interface EnumerableProperty<M, E, R> extends ContextableProperty<M, E, R
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this
 	 *            {@link EnumerableProperty}; might be null.
+	 * @return The property reference where the element was appended, never null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link EnumerableProperty} is
 	 *             null.
 	 * @throws UncontextedPropertyPathException
 	 *             If there is any uncontexted property in this
 	 *             {@link EnumerableProperty}'s path that does not have a
-	 *             {@link PropertyIndex} included in the given {@link Context}.
+	 *             {@link PropertyReference} included in the given {@link Context}.
 	 * @throws OutboundPropertyPathException
 	 *             If the property reference provided by the given {@link Context}
 	 *             is out of bounds on the given model's elements this
