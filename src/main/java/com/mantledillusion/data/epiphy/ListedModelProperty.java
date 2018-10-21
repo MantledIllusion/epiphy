@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.ContextedValue;
+import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -147,6 +148,11 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	// ###########################################################################################################
 	// ############################################## OPERATIONS #################################################
 	// ###########################################################################################################
+	
+	@Override
+	public PropertyIndex referenceOf(Integer reference) {
+		return PropertyIndex.of(this, reference);
+	}
 
 	@Override
 	public int size(M model, Context context) {

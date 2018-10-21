@@ -7,7 +7,7 @@ import com.mantledillusion.data.epiphy.interfaces.type.ListedProperty;
  * {@link ListedProperty}-&gt;int pair.
  * <p>
  * {@link PropertyIndex}es can be created using the
- * {@link #of(ListedProperty, int)} method.
+ * {@link #of(ListedProperty, Integer)} method.
  */
 public final class PropertyIndex extends PropertyReference<ListedProperty<?, ?>, Integer> {
 
@@ -58,9 +58,11 @@ public final class PropertyIndex extends PropertyReference<ListedProperty<?, ?>,
 	 *            The index the given property has to have.
 	 * @return A new {@link PropertyIndex}, never null
 	 */
-	public static PropertyIndex of(ListedProperty<?, ?> listedProperty, int index) {
+	public static PropertyIndex of(ListedProperty<?, ?> listedProperty, Integer index) {
 		if (listedProperty == null) {
 			throw new IllegalArgumentException("Cannot create an index for a null listed property.");
+		} else if (index == null) {
+			throw new IllegalArgumentException("Cannot create an index for a null index.");
 		}
 		return new PropertyIndex(listedProperty, index);
 	}

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.ContextedValue;
+import com.mantledillusion.data.epiphy.context.PropertyRoute;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -202,6 +203,11 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 	// ############################################## OPERATIONS #################################################
 	// ###########################################################################################################
 
+	@Override
+	public PropertyRoute referenceOf(int[] reference) {
+		return PropertyRoute.of(this, reference);
+	}
+	
 	@Override
 	public int size(M model, Context context) {
 		context = context == null ? DefaultContext.EMPTY : context;

@@ -24,6 +24,16 @@ import com.mantledillusion.data.epiphy.interfaces.ReadableProperty;
 public interface ContextableProperty<M, E, R> extends IdentifyableProperty<M> {
 
 	/**
+	 * Creates a {@link PropertyReference} referencing this
+	 * {@link ContextableProperty} with the given reference.
+	 * 
+	 * @param reference
+	 *            The reference to refer to; might<b>not</b> be null.
+	 * @return A new {@link PropertyReference} instance, never null
+	 */
+	public PropertyReference<? extends ContextableProperty<?, ?, R>, R> referenceOf(R reference);
+
+	/**
 	 * Returns the size of the contextable property without context.
 	 * 
 	 * @param model

@@ -70,4 +70,23 @@ public final class PropertyRoute extends PropertyReference<NodedProperty<?, ?>, 
 		Arrays.setAll(path, i -> i == 0 ? index : indices[i - 1]);
 		return new PropertyRoute(nodedProperty, path);
 	}
+
+	/**
+	 * Creates a new {@link PropertyRoute}.
+	 * 
+	 * @param nodedProperty
+	 *            The noded property this {@link PropertyRoute} indexes; might
+	 *            <b>not</b> be null.
+	 * @param indices
+	 *            The indices the given property has to have.
+	 * @return A new {@link PropertyRoute}; never null
+	 */
+	public static PropertyRoute of(NodedProperty<?, ?> nodedProperty, int[] indices) {
+		if (nodedProperty == null) {
+			throw new IllegalArgumentException("Cannot create a route for a null noded property.");
+		} else if (indices == null || indices.length == 0) {
+			throw new IllegalArgumentException("Cannot create a route for a null or empty route.");
+		}
+		return new PropertyRoute(nodedProperty, indices);
+	}
 }

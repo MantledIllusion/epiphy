@@ -16,6 +16,8 @@ public class OutboundPropertyPathException extends IndexOutOfBoundsException {
 	/**
 	 * Constructor.
 	 * 
+	 * @param <R>
+	 *            The reference type.
 	 * @param property
 	 *            The {@link ContextableProperty} whose reference was out of bounds;
 	 *            might <b>not</b> be null.
