@@ -8,7 +8,7 @@ import com.mantledillusion.data.epiphy.node.model.NodeModelNodeType;
 
 public interface NodeModelProperties {
 
-	public static final ReadOnlyModelProperty<NodeModel, NodeModel> MODEL = ModelProperty.rootChild("model");
+	public static final ReadOnlyModelProperty<NodeModel, NodeModel> MODEL = ModelProperty.root("model");
 
 	public static final ModelPropertyNode<NodeModel, NodeModelNodeType> NODE = MODEL
 			.registerChildNode(model -> model.rootNode, (model, node) -> model.rootNode = node, node -> node.leaves);

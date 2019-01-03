@@ -13,7 +13,7 @@ public class BasicModelPropertyCreationTest {
 	
 	@Before
 	public void before() {
-		this.root = ModelProperty.rootChild();
+		this.root = ModelProperty.root();
 		this.subList = this.root.registerChildList(model -> model.subList, (model, value) -> model.subList = value);
 	}
 

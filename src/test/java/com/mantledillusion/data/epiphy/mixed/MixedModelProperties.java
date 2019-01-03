@@ -10,7 +10,7 @@ import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
 public interface MixedModelProperties {
 
 	public static final String ID_MODEL = "model";
-	public static final ReadOnlyModelProperty<MixedModel, MixedModel> MODEL = ModelProperty.rootChild(ID_MODEL);
+	public static final ReadOnlyModelProperty<MixedModel, MixedModel> MODEL = ModelProperty.root(ID_MODEL);
 
 	public static final String ID_MODELID = "modelId";
 	public static final ModelProperty<MixedModel, String> MODELID = MODEL.registerChild(ID_MODELID, sub -> sub.modelId, (sub, modelId) -> sub.modelId = modelId);

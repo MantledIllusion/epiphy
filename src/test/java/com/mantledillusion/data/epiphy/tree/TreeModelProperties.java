@@ -8,7 +8,7 @@ import com.mantledillusion.data.epiphy.tree.model.TreeSubType;
 
 public class TreeModelProperties {
 
-	public static final ReadOnlyModelProperty<TreeModel, TreeModel> MODEL = ModelProperty.rootChild("model");
+	public static final ReadOnlyModelProperty<TreeModel, TreeModel> MODEL = ModelProperty.root("model");
 
 	public static final ModelProperty<TreeModel, String> MODELID = MODEL.registerChild("modelId", model -> model.modelId, (model, value) -> model.modelId = value);
 	

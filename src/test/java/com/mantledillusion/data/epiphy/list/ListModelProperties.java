@@ -8,7 +8,7 @@ import com.mantledillusion.data.epiphy.ReadOnlyModelPropertyList;
 
 public interface ListModelProperties {
 	
-	public static final ReadOnlyModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootChildList();
+	public static final ReadOnlyModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootList();
 	
 	public static final ModelPropertyList<List<List<String>>, String> ELEMENTLIST = MODEL.defineElementAsChildList("elementList");
 	

@@ -236,7 +236,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	 * @return A new {@link ReadOnlyModelProperty} without any parent that may
 	 *         function as property tree root; never null
 	 */
-	public static <M> ReadOnlyModelProperty<M, M> rootChild() {
+	public static <M> ReadOnlyModelProperty<M, M> root() {
 		return new ReadOnlyModelProperty<>(null);
 	}
 
@@ -256,7 +256,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	 * @return A new {@link ReadOnlyModelProperty} without any parent that may
 	 *         function as property tree root; never null
 	 */
-	public static <M> ReadOnlyModelProperty<M, M> rootChild(String id) {
+	public static <M> ReadOnlyModelProperty<M, M> root(String id) {
 		return new ReadOnlyModelProperty<>(id);
 	}
 
@@ -273,7 +273,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	 * @return A new {@link ReadOnlyModelPropertyList} without any parent that may
 	 *         function as property tree root; never null
 	 */
-	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootChildList() {
+	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootList() {
 		return new ReadOnlyModelPropertyList<>(null);
 	}
 
@@ -293,7 +293,56 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	 * @return A new {@link ReadOnlyModelPropertyList} without any parent that may
 	 *         function as property tree root; never null
 	 */
-	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootChildList(String id) {
+	public static <M> ReadOnlyModelPropertyList<List<M>, M> rootList(String id) {
 		return new ReadOnlyModelPropertyList<>(id);
+	}
+
+	/**
+	 * Creates a new model property node root to start building a property tree
+	 * with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
+	 * 
+	 * @param <M>
+	 *            The root model type of the property tree the created
+	 *            {@link ReadOnlyModelProperty} represents.
+	 * @param leafGetter
+	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
+	 *            {@link ModelPropertyNode}; might <b>not</b> be null.
+	 * @return A new {@link ReadOnlyModelPropertyNode} without any parent that may
+	 *         function as property tree root; never null
+	 */
+	public static <M> ReadOnlyModelPropertyNode<M, M> rootNode(Getter<M, List<M>> leafGetter) {
+		if (leafGetter == null) {
+			throw new IllegalArgumentException("Cannot build a noded root property with a null leaf getter.");
+		}
+		return new ReadOnlyModelPropertyNode<>(null, leafGetter);
+	}
+
+	/**
+	 * Creates a new model property node root to start building a property tree
+	 * with.
+	 * <p>
+	 * Is read-only because the model is always given to a property upon function
+	 * execution, hence the root property representing the model cannot set it.
+	 * 
+	 * @param <M>
+	 *            The root model type of the property tree the created
+	 *            {@link ReadOnlyModelProperty} represents.
+	 * @param id
+	 *            The id the returned root {@link ReadOnlyModelPropertyNode} will be
+	 *            identified by; might be null.
+	 * @param leafGetter
+	 *            The {@link Getter} that is able to retrieve the leaf nodes of the
+	 *            {@link ModelPropertyNode}; might <b>not</b> be null.
+	 * @return A new {@link ReadOnlyModelPropertyNode} without any parent that may
+	 *         function as property tree root; never null
+	 */
+	public static <M> ReadOnlyModelPropertyNode<M, M> rootNode(String id, Getter<M, List<M>> leafGetter) {
+		if (leafGetter == null) {
+			throw new IllegalArgumentException("Cannot build a noded root property with a null leaf getter.");
+		}
+		return new ReadOnlyModelPropertyNode<>(id, leafGetter);
 	}
 }
