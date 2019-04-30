@@ -1,5 +1,7 @@
 package com.mantledillusion.data.epiphy.interfaces.type;
 
+import java.util.List;
+
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
@@ -114,4 +116,15 @@ public interface NodedProperty<M, T>
 	 *             {@link PropertyIndex} included in the given {@link Context}.
 	 */
 	T getNodeRoot(M model, Context context, boolean allowNull);
+	
+	/**
+	 * Returns all leaf elements of a parent node element.
+	 * 
+	 * @param parent The parent node element; may <b>not</b> be null.
+	 * @return The leaf elements, may be null if the parent has no leaves
+	 * @throws InterruptedPropertyPathException
+	 *             If any property on the path to this {@link ReadableProperty} is
+	 *             null and allowNull is set to false.
+	 */
+	List<T> getLeaves(T parent);
 }

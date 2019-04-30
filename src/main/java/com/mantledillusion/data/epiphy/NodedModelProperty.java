@@ -130,6 +130,14 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 	public final boolean hasChildrenIn(M model, Context context) {
 		return !isNull(model, context) && hasChildren();
 	}
+	
+	@Override
+	public List<T> getLeaves(T parent) {
+		if (parent == null) {
+			throw new InterruptedPropertyPathException(this);
+		}
+		return this.leafGetter.get(parent);
+	}
 
 	// ###########################################################################################################
 	// ############################################### CHILDREN ##################################################
