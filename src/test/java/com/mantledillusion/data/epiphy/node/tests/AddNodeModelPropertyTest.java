@@ -1,8 +1,9 @@
 package com.mantledillusion.data.epiphy.node.tests;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyRoute;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
@@ -29,11 +30,13 @@ public class AddNodeModelPropertyTest extends AbstractNodeModelPropertyTest {
 		assertSame(newNode, this.model.rootNode.leaves.get(1).leaves.get(0));
 	}
 
-	@Test(expected = InterruptedPropertyPathException.class)
+	@Test
 	public void testAddNodedPropertyIntermediateNull() {
 		this.model.rootNode.leaves.add(null);
 		NodeModelNodeType newNode = new NodeModelNodeType();
 		DefaultContext context = DefaultContext.of(PropertyRoute.of(NodeModelProperties.NODE, 2, 0));
-		NodeModelProperties.NODE.addAt(this.model, newNode, context);
+		assertThrows(InterruptedPropertyPathException.class, () -> {
+			NodeModelProperties.NODE.addAt(this.model, newNode, context);
+		});
 	}
 }

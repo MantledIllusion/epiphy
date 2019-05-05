@@ -1,8 +1,9 @@
 package com.mantledillusion.data.epiphy.tree.tests;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.tree.AbstractTreeModelPropertyTest;
@@ -16,9 +17,11 @@ public class SetTreeModelPropertyTest extends AbstractTreeModelPropertyTest {
 		assertEquals(this.model.modelId, TreeModelProperties.MODELID.get(this.model));
 	}
 
-	@Test(expected=InterruptedPropertyPathException.class)
+	@Test
 	public void testSetPropertyIntermediateNull() {
 		this.model.sub.subSub = null;
-		TreeModelProperties.SUBSUBID.set(this.model, "newId");
+		assertThrows(InterruptedPropertyPathException.class, () -> {
+			TreeModelProperties.SUBSUBID.set(this.model, "newId");
+		});
 	}
 }

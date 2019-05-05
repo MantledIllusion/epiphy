@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.tree;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.mantledillusion.data.epiphy.tree.model.TreeModel;
 import com.mantledillusion.data.epiphy.tree.model.TreeSubSubType;
@@ -10,7 +10,7 @@ public abstract class AbstractTreeModelPropertyTest {
 	
 	protected TreeModel model;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		model = new TreeModel();
 		model.modelId = "model";

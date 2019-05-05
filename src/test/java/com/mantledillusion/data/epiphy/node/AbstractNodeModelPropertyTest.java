@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.node;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.mantledillusion.data.epiphy.node.model.NodeModel;
 import com.mantledillusion.data.epiphy.node.model.NodeModelNodeType;
@@ -14,7 +14,7 @@ public abstract class AbstractNodeModelPropertyTest {
 
 	protected NodeModel model;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.model = new NodeModel();
 		
