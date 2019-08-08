@@ -53,11 +53,11 @@ abstract class ListedModelProperty<M, E> extends AbstractModelProperty<M, List<E
 	private AbstractModelProperty<M, E> element;
 
 	ListedModelProperty(String id) {
-		super(id, null, true);
+		super(id, null);
 	}
 
 	<P> ListedModelProperty(String id, AbstractModelProperty<M, P> parent) {
-		super(id, parent, true);
+		super(id, parent);
 	}
 
 	// ###########################################################################################################

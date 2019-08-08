@@ -56,12 +56,12 @@ public abstract class NodedModelProperty<M, T> extends AbstractModelProperty<M, 
 	protected final Getter<T, List<T>> leafGetter;
 
 	NodedModelProperty(String id, Getter<T, List<T>> leafGetter) {
-		super(id, null, false);
+		super(id, null);
 		this.leafGetter = leafGetter;
 	}
 
 	<P> NodedModelProperty(String id, AbstractModelProperty<M, P> parent, Getter<T, List<T>> leafGetter) {
-		super(id, parent, false);
+		super(id, parent);
 		this.leafGetter = leafGetter;
 	}
 

@@ -46,11 +46,11 @@ abstract class DefiniteModelProperty<M, T> extends AbstractModelProperty<M, T> i
 	}
 
 	DefiniteModelProperty(String id) {
-		super(id, null, false);
+		super(id, null);
 	}
 
 	<P> DefiniteModelProperty(String id, AbstractModelProperty<M, P> parent) {
-		super(id, parent, false);
+		super(id, parent);
 	}
 
 	// ###########################################################################################################

@@ -34,7 +34,7 @@ abstract class AbstractModelProperty<M, T> implements ReadableProperty<M, T> {
 	private final Set<ContextableProperty<M, ?, ?>> context;
 
 	@SuppressWarnings("unchecked")
-	<P> AbstractModelProperty(String id, AbstractModelProperty<M, P> parent, boolean isListed) {
+	<P> AbstractModelProperty(String id, AbstractModelProperty<M, P> parent) {
 		id = id == null ? String.valueOf(System.identityHashCode(this)) : id;
 		if (!id.matches(PROPERTY_ID_PATTERN)) {
 			throw new IllegalArgumentException("The property id '" + id + "' does not match the pattern '"
