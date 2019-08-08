@@ -1,16 +1,15 @@
 package com.mantledillusion.data.epiphy.mixed.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.mixed.AbstractMixedModelPropertyTest;
 import com.mantledillusion.data.epiphy.mixed.MixedModelProperties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class NameMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 
@@ -32,9 +31,9 @@ public class NameMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 		assertSame(MixedModelProperties.SUBID, MixedModelProperties.MODEL.getChild(SUBID_NAME));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testGetChildForInvalidPath() {
-		MixedModelProperties.MODEL.getChild("model modelId");
+		assertThrows(IllegalArgumentException.class, () -> MixedModelProperties.MODEL.getChild("model modelId"));
 	}
 	
 	@Test

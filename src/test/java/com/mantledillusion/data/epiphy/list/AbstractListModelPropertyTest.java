@@ -3,7 +3,7 @@ package com.mantledillusion.data.epiphy.list;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 public abstract class AbstractListModelPropertyTest {
 
@@ -13,7 +13,7 @@ public abstract class AbstractListModelPropertyTest {
 	
 	protected List<List<String>> model;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.model = new ArrayList<>();
 		

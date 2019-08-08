@@ -1,8 +1,9 @@
 package com.mantledillusion.data.epiphy.node.tests;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyRoute;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
@@ -19,16 +20,20 @@ public class GetNodeModelPropertyTest extends AbstractNodeModelPropertyTest {
 		assertSame(this.model.rootNode.leaves.get(1).leaves.get(0), NodeModelProperties.NODE.get(this.model, context));
 	}
 
-	@Test(expected = InterruptedPropertyPathException.class)
+	@Test
 	public void testGetNodedPropertyIntermediateNull() {
 		this.model.rootNode.leaves.add(null);
 		DefaultContext context = DefaultContext.of(PropertyRoute.of(NodeModelProperties.NODE, 2, 0));
-		NodeModelProperties.NODE.get(this.model, context);
+		assertThrows(InterruptedPropertyPathException.class, () -> {
+			NodeModelProperties.NODE.get(this.model, context);
+		});
 	}
 
-	@Test(expected = OutboundPropertyPathException.class)
+	@Test
 	public void testGetNodedPropertyOutOfBounds() {
 		DefaultContext context = DefaultContext.of(PropertyRoute.of(NodeModelProperties.NODE, 2, 0));
-		NodeModelProperties.NODE.get(this.model, context);
+		assertThrows(OutboundPropertyPathException.class, () -> {
+			NodeModelProperties.NODE.get(this.model, context);
+		});
 	}
 }

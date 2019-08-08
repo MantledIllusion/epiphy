@@ -1,15 +1,14 @@
 package com.mantledillusion.data.epiphy.list.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertSame;
-
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.list.AbstractListModelPropertyTest;
 import com.mantledillusion.data.epiphy.list.ListModelProperties;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RemoveListModelPropertyTest extends AbstractListModelPropertyTest {
 
@@ -50,10 +49,12 @@ public class RemoveListModelPropertyTest extends AbstractListModelPropertyTest {
 		assertEquals(null, ListModelProperties.ELEMENTLIST.remove(this.model, ELEMENT_0_ELEMENT_0, context));
 	}
 
-	@Test(expected = InterruptedPropertyPathException.class)
+	@Test
 	public void testRemoveIndexedPropertyIntermediateNull() {
 		this.model.set(0, null);
 		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.MODEL, 0));
-		ListModelProperties.ELEMENTLIST.removeAt(this.model, context);
+		assertThrows(InterruptedPropertyPathException.class, () -> {
+			ListModelProperties.ELEMENTLIST.removeAt(this.model, context);
+		});
 	}
 }

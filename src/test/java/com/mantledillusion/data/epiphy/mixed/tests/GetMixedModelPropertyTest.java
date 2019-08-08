@@ -1,8 +1,9 @@
 package com.mantledillusion.data.epiphy.mixed.tests;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.PropertyRoute;
@@ -22,11 +23,13 @@ public class GetMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 		assertSame(ELEMENT_1_NODE_1_NODE_0, MixedModelProperties.SUBID.get(this.model, context));
 	}
 
-	@Test(expected=UncontextedPropertyPathException.class)
+	@Test
 	public void testGetIndexedPropertyWithoutListIndex() {
 		DefaultContext context = DefaultContext.of(
 				PropertyRoute.of(MixedModelProperties.SUB, 1, 0));
-		MixedModelProperties.SUBID.get(this.model, context);
+		assertThrows(UncontextedPropertyPathException.class, () -> {
+			MixedModelProperties.SUBID.get(this.model, context);
+		});
 	}
 	
 	@Test
@@ -36,19 +39,23 @@ public class GetMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 		assertSame(ELEMENT_1, MixedModelProperties.SUBID.get(this.model, context));
 	}
 	
-	@Test(expected=OutboundPropertyPathException.class)
+	@Test
 	public void testGetIndexPropertyWithOutOfBoundListIndex() {
 		DefaultContext context = DefaultContext.of(
 				PropertyIndex.of(MixedModelProperties.SUBLIST, -1),
 				PropertyRoute.of(MixedModelProperties.SUB, 1, 0));
-		MixedModelProperties.SUBID.get(this.model, context);
+		assertThrows(OutboundPropertyPathException.class, () -> {
+			MixedModelProperties.SUBID.get(this.model, context);
+		});
 	}
 	
-	@Test(expected=OutboundPropertyPathException.class)
+	@Test
 	public void testGetIndexPropertyWithOutOfBoundNodeIndex() {
 		DefaultContext context = DefaultContext.of(
 				PropertyIndex.of(MixedModelProperties.SUBLIST, 1),
 				PropertyRoute.of(MixedModelProperties.SUB, 2, 0));
-		MixedModelProperties.SUBID.get(this.model, context);
+		assertThrows(OutboundPropertyPathException.class, () -> {
+			MixedModelProperties.SUBID.get(this.model, context);
+		});
 	}
 }

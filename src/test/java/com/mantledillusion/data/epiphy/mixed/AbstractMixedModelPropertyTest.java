@@ -2,7 +2,7 @@ package com.mantledillusion.data.epiphy.mixed;
 
 import java.util.ArrayList;
 
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 
 import com.mantledillusion.data.epiphy.mixed.model.MixedModel;
 import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
@@ -17,7 +17,7 @@ public class AbstractMixedModelPropertyTest {
 
 	protected MixedModel model;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.model = new MixedModel();
 		this.model.subList = new ArrayList<>();

@@ -1,11 +1,12 @@
 package com.mantledillusion.data.epiphy.list.tests;
 
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
@@ -25,18 +26,22 @@ public class SetListModelPropertyTest extends AbstractListModelPropertyTest {
 		assertSame(newElementList, ListModelProperties.ELEMENTLIST.get(this.model, context));
 	}
 
-	@Test(expected = InterruptedPropertyPathException.class)
+	@Test
 	public void testSetIndexedPropertyIntermediateNull() {
 		this.model.set(0, null);
 		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.MODEL, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0));
-		ListModelProperties.ELEMENT.set(this.model, "newElem", context);
+		assertThrows(InterruptedPropertyPathException.class, () -> {
+			ListModelProperties.ELEMENT.set(this.model, "newElem", context);
+		});
 	}
 
-	@Test(expected = OutboundPropertyPathException.class)
+	@Test
 	public void testSetIndexedPropertyOutOfBounds() {
 		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.MODEL, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENTLIST, 2));
-		ListModelProperties.ELEMENT.set(this.model, "newElem", context);
+		assertThrows(OutboundPropertyPathException.class, () -> {
+			ListModelProperties.ELEMENT.set(this.model, "newElem", context);
+		});
 	}
 }

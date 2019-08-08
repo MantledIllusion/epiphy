@@ -1,22 +1,19 @@
 package com.mantledillusion.data.epiphy;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mantledillusion.data.epiphy.context.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.impl.DefaultContext;
 import com.mantledillusion.data.epiphy.list.ListModelProperties;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class BasicIndexingTest {
 
 	private DefaultContext a;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.a = DefaultContext.of(PropertyIndex.of(ListModelProperties.MODEL, 0));
 	}
@@ -28,9 +25,9 @@ public class BasicIndexingTest {
 		assertEquals(i.getReference(), Integer.valueOf(5));
 	}
 	
-	@Test(expected=IllegalArgumentException.class)
+	@Test
 	public void testCreateIndexWithoutProperty() {
-		PropertyIndex.of(null, 0);
+		assertThrows(IllegalArgumentException.class, () -> PropertyIndex.of(null, 0));
 	}
 	
 	@Test

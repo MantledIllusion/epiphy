@@ -5,7 +5,7 @@
 
 	<groupId>com.mantledillusion.data</groupId>
 	<artifactId>epiphy</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0.ALPHA2</version>
 	<packaging>jar</packaging>
 
 	<name>Epiphy</name>
@@ -37,7 +37,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<!-- maven dependency versions -->
-		<junit.version>4.12</junit.version>
+		<junit.version>5.4.2</junit.version>
 	</properties>
 
 	<scm>
@@ -60,8 +60,8 @@
 	<dependencies>
 		<!-- testing dependencies -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
 			<version>${junit.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -103,6 +103,11 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.22.1</version>
 			</plugin>
 		</plugins>
 	</build>
