@@ -9,18 +9,32 @@ import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 /**
  * Interface for {@link PropertyReference} contexts.
  * <p>
- * Contexts of {@link PropertyReference}s would basically contain a {@link Map} of
- * {@link ExtractableProperties}-&gt;{@link PropertyReference} pairs, where the key's
- * type is the one of the respective {@link ExtractableProperties}.
+ * Contexts are basically a {@link Map} of {@link Property}-&gt;reference pairs, represented by implementations of
+ * {@link PropertyReference}.
  * <p>
- * Note that {@link ExtractableProperties}s (like all properties) only equal when
- * they are the same instance.
+ * Note that two {@link Property}s are only equal when they are the exact same {@link Object} instance.
  * <p>
- * The default implementation of this interface is {@link DefaultContext}.
+ * {@link DefaultContext} provides a default implementation for this interface.
  */
 public interface Context {
 
-	<R extends PropertyReference<?, K>, K> boolean containsReference(Property<?, ?> property, Class<R> referenceType);
+	/**
+	 * Returns whether this {@link Context} contains a reference for the given {@link Property}.
+	 *
+	 * @param <R> The {@link PropertyReference} implementation type.
+	 * @param property The {@link Property}; might be null.
+	 * @param referenceType The {@link PropertyReference} implementation {@link Class}; migth <b>not</b> be null.
+	 * @return True if there is a reference, false otherwise
+	 */
+	<R extends PropertyReference<?, ?>> boolean containsReference(Property<?, ?> property, Class<R> referenceType);
 
-	<R extends PropertyReference<?, K>, K> R getReference(Property<?, ?> property, Class<R> referenceType);
+	/**
+	 * Returns The {@link PropertyReference} contained by this {@link Context} for the given {@link Property}.
+	 *
+	 * @param <R> The {@link PropertyReference} implementation type.
+	 * @param property The {@link Property}; might be null.
+	 * @param referenceType The {@link PropertyReference} implementation {@link Class}; migth <b>not</b> be null.
+	 * @return The reference, might be null
+	 */
+	<R extends PropertyReference<?, ?>> R getReference(Property<?, ?> property, Class<R> referenceType);
 }

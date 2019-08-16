@@ -14,6 +14,10 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
         super(id, getter, setter);
     }
 
+    // ###########################################################################################################
+    // ################################################ PATHING ##################################################
+    // ###########################################################################################################
+
     @Override
     public <S> ModelProperty<S, V> prepend(Property<S, O> parent) {
         return new ModelProperty<>(parent.getId()+'.'+getId(),

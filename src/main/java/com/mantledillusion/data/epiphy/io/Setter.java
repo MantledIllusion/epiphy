@@ -1,10 +1,10 @@
 package com.mantledillusion.data.epiphy.io;
 
 /**
- * Functional interface for setting a value to a parent value.
+ * Functional interface for writing a value to an object.
  *
  * @param <O>
- *            The parent value type.
+ *            The object type.
  * @param <V>
  *            The value type.
  */
@@ -12,13 +12,12 @@ package com.mantledillusion.data.epiphy.io;
 public interface Setter<O, V> {
 
 	/**
-	 * Sets the value to the parent value.
-	 * 
-	 * @param instance
-	 *            The parent value that is the target to set the value to; might
-	 *            <b>not</b> be null.
+	 * Writes the value to the object.
+	 *
+	 * @param object
+	 *            The object instance to write the value to; might <b>not</b> be null.
 	 * @param value
-	 *            The value to set; might be null.
+	 *            The value to write; might be null.
 	 */
-	void set(O instance, V value);
+	void set(O object, V value);
 }

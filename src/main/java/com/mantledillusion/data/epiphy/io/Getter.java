@@ -1,10 +1,10 @@
 package com.mantledillusion.data.epiphy.io;
 
 /**
- * Functional interface for retrieving a value from a parent value.
+ * Functional interface for retrieving a value from an object.
  *
  * @param <O>
- *            The parent value type.
+ *            The object type.
  * @param <V>
  *            The value type.
  */
@@ -12,12 +12,11 @@ package com.mantledillusion.data.epiphy.io;
 public interface Getter<O, V> {
 
 	/**
-	 * Retrieves the value from the parent value.
+	 * Retrieves the value from the object.
 	 * 
-	 * @param instance
-	 *            The parent value that is the source to retrieve from; might
-	 *            <b>not</b> be null.
+	 * @param object
+	 *            The object instance to retrieve the value from; might <b>not</b> be null.
 	 * @return The retrieved value.
 	 */
-	V get(O instance);
+	V get(O object);
 }

@@ -9,8 +9,7 @@ import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 /**
  * Default implementation of {@link Context}.
  * <p>
- * {@link DefaultContext}s can be created using the
- * {@link #of(PropertyReference...)} method.
+ * {@link DefaultContext}s can be created using the {@link #of(PropertyReference...)} method.
  */
 public class DefaultContext implements Context {
 
@@ -69,9 +68,8 @@ public class DefaultContext implements Context {
 	 * Creates a new {@link DefaultContext} using the given indices.
 	 * 
 	 * @param keys
-	 *            The property keys to create a new context from; might be null or
-	 *            contain null values.
-	 * @return A new {@link DefaultContext} of the given keys; never null
+	 *            The {@link PropertyReference}s to create a new context from; might be null or contain null values.
+	 * @return A new {@link DefaultContext} of the given references, never null
 	 */
 	@SafeVarargs
 	public static DefaultContext of(PropertyReference<?, ?>... keys) {

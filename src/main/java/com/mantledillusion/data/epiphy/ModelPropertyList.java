@@ -25,6 +25,10 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
         super(id, getter, setter);
     }
 
+    // ###########################################################################################################
+    // ################################################ CONTEXT ##################################################
+    // ###########################################################################################################
+
     private List<E> elements(O object, Context context) {
         List<E> elements = get(object, context, false);
         if (elements == null) {
@@ -51,14 +55,14 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     @Override
-    public E extract(O object, Integer reference, Context context) {
-        return elements(object, context).remove((int) reference);
-    }
-
-    @Override
     public ReferencedValue<Integer, E> strip(O object, Context context) {
         List<E> elements = elements(object, context);
         return elements.isEmpty() ? null : ReferencedValue.of(elements.size()-1, elements.remove(elements.size()-1));
+    }
+
+    @Override
+    public E extract(O object, Integer reference, Context context) {
+        return elements(object, context).remove((int) reference);
     }
 
     @Override
@@ -71,6 +75,10 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
         elements.remove(element);
         return index;
     }
+
+    // ###########################################################################################################
+    // ################################################ PATHING ##################################################
+    // ###########################################################################################################
 
     @Override
     public <S> ModelPropertyList<S, E> prepend(Property<S, O> parent) {
