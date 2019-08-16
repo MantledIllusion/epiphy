@@ -1,47 +1,51 @@
 package com.mantledillusion.data.epiphy;
 
-import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.interfaces.WriteableProperty;
-import com.mantledillusion.data.epiphy.interfaces.type.DefiniteProperty;
-import com.mantledillusion.data.epiphy.io.ContextedGetter;
-import com.mantledillusion.data.epiphy.io.ContextedSetter;
+import com.mantledillusion.data.epiphy.context.io.*;
+import com.mantledillusion.data.epiphy.io.Getter;
+import com.mantledillusion.data.epiphy.io.ReferencedGetter;
+import com.mantledillusion.data.epiphy.io.ReferencedSetter;
+import com.mantledillusion.data.epiphy.io.Setter;
 
-/**
- * Implementation of {@link DefiniteProperty} and {@link WriteableProperty} that
- * represents a definite, writable model property.
- * 
- * @param <M>
- *            The root model type of this {@link ModelProperty}'s property tree.
- * @param <T>
- *            The type of the property this {@link ModelProperty} represents.
- */
-public final class ModelProperty<M, T> extends DefiniteModelProperty<M, T> implements WriteableProperty<M, T> {
+import java.util.List;
 
-	private final ContextedGetter<?, T> getter;
-	private final ContextedSetter<?, T> setter;
+public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
 
-	ModelProperty(String id) {
-		this(id, null, null, null);
-	}
+    private ModelProperty(String id, ReferencedGetter<O, V> getter, ReferencedSetter<O, V> setter) {
+        super(id, getter, setter);
+    }
 
-	<P> ModelProperty(String id, AbstractModelProperty<M, P> parent, ContextedGetter<P, T> getter,
-			ContextedSetter<P, T> setter) {
-		super(id, parent);
-		this.getter = getter;
-		this.setter = setter;
-	}
+    @Override
+    public <S> ModelProperty<S, V> prepend(Property<S, O> parent) {
+        return new ModelProperty<>(parent.getId()+'.'+getId(),
+                PathReferencedGetter.from(parent, this, getGetter()),
+                PathReferencedSetter.from(parent, this, getSetter()));
+    }
 
-	// ###########################################################################################################
-	// ############################################## OPERATIONS #################################################
-	// ###########################################################################################################
+    // ###########################################################################################################
+    // ################################################ FACTORY ##################################################
+    // ###########################################################################################################
 
-	@Override
-	public T get(M model, Context context, boolean allowNull) {
-		return PropertyUtils.castAndGet(model, context, allowNull, this.parent, this.getter);
-	}
+    public static <O, V> ModelProperty<O, V> fromObject(Getter<O, V> getter) {
+        return fromObject(null, getter);
+    }
 
-	@Override
-	public void set(M model, T value, Context context) {
-		PropertyUtils.castAndSet(model, value, context, this.parent, this.setter);
-	}
+    public static <O, V> ModelProperty<O, V> fromObject(String id, Getter<O, V> getter) {
+        return new ModelProperty<>(id, ObjectReferencedGetter.from(getter), ReadonlyReferencedSetter.from());
+    }
+
+    public static <O, V> ModelProperty<O, V> fromObject(Getter<O, V> getter, Setter<O, V> setter) {
+        return fromObject(null, getter, setter);
+    }
+
+    public static <O, V> ModelProperty<O, V> fromObject(String id, Getter<O, V> getter, Setter<O, V> setter) {
+        return new ModelProperty<>(id, ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter));
+    }
+
+    public static <E> ModelProperty<List<E>, E> fromList() {
+        return new ModelProperty<>(null, ListReferencedGetter.from(), ListReferencedSetter.from());
+    }
+
+    public static <E> ModelProperty<List<E>, E> fromList(String id) {
+        return new ModelProperty<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
+    }
 }

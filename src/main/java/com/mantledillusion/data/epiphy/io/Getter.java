@@ -3,21 +3,21 @@ package com.mantledillusion.data.epiphy.io;
 /**
  * Functional interface for retrieving a value from a parent value.
  *
- * @param <P>
+ * @param <O>
  *            The parent value type.
- * @param <T>
+ * @param <V>
  *            The value type.
  */
 @FunctionalInterface
-public interface Getter<P, T> {
+public interface Getter<O, V> {
 
 	/**
 	 * Retrieves the value from the parent value.
 	 * 
-	 * @param source
+	 * @param instance
 	 *            The parent value that is the source to retrieve from; might
 	 *            <b>not</b> be null.
 	 * @return The retrieved value.
 	 */
-	T get(P source);
+	V get(O instance);
 }

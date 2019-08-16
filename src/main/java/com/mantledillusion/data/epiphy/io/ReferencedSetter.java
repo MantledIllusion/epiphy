@@ -1,7 +1,11 @@
 package com.mantledillusion.data.epiphy.io;
 
+import com.mantledillusion.data.epiphy.Property;
+import com.mantledillusion.data.epiphy.context.Context;
+
 /**
- * Functional interface for setting a value to a parent value.
+ * Functional interface for setting a value to a parent value requiring a
+ * {@link Context}.
  *
  * @param <O>
  *            The parent value type.
@@ -9,7 +13,7 @@ package com.mantledillusion.data.epiphy.io;
  *            The value type.
  */
 @FunctionalInterface
-public interface Setter<O, V> {
+public interface ReferencedSetter<O, V> {
 
 	/**
 	 * Sets the value to the parent value.
@@ -19,6 +23,8 @@ public interface Setter<O, V> {
 	 *            <b>not</b> be null.
 	 * @param value
 	 *            The value to set; might be null.
+	 * @param context
+	 *            The {@link Context} to use; might <b>not</b> be null.
 	 */
-	void set(O instance, V value);
+	void set(Property<O, V> property, O instance, V value, Context context);
 }

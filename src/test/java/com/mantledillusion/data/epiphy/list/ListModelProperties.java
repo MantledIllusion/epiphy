@@ -1,16 +1,15 @@
 package com.mantledillusion.data.epiphy.list;
 
-import java.util.List;
-
 import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
-import com.mantledillusion.data.epiphy.ReadOnlyModelPropertyList;
+
+import java.util.List;
 
 public interface ListModelProperties {
-	
-	public static final ReadOnlyModelPropertyList<List<List<String>>, List<String>> MODEL = ModelProperty.rootList();
-	
-	public static final ModelPropertyList<List<List<String>>, String> ELEMENTLIST = MODEL.defineElementAsChildList("elementList");
-	
-	public static final ModelProperty<List<List<String>>, String> ELEMENT = ELEMENTLIST.defineElementAsChild("element");
+
+    ModelPropertyList<List<List<String>>, String> ELEMENTLIST = ModelPropertyList.fromList();
+
+    ModelProperty<List<String>, String> ELEMENT = ModelProperty.fromList();
+
+    ModelProperty<List<List<String>>, String> ELEMENTLIST_TO_ELEMENT = ELEMENTLIST.append(ELEMENT);
 }
