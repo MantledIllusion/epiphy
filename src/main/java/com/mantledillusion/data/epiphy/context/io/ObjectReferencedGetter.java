@@ -15,15 +15,15 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
     }
 
     @Override
-    public V get(Property<O, V> property, O instance, Context context, boolean allowNull) {
-        if (instance == null) {
+    public V get(Property<O, V> property, O object, Context context, boolean allowNull) {
+        if (object == null) {
             if (allowNull) {
                 return null;
             } else {
                 throw new InterruptedPropertyPathException(property);
             }
         } else {
-            return this.getter.get(instance);
+            return this.getter.get(object);
         }
     }
 

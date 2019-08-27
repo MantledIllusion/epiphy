@@ -19,8 +19,8 @@ public class PathReferencedSetter<S, O, V> implements ReferencedSetter<S, V> {
     }
 
     @Override
-    public void set(Property<S, V> property, S instance, V value, Context context) {
-        O intermediate = this.parent.get(instance, context, false);
+    public void set(Property<S, V> property, S object, V value, Context context) {
+        O intermediate = this.parent.get(object, context, false);
         if (intermediate == null) {
             throw new InterruptedPropertyPathException(this.child);
         }

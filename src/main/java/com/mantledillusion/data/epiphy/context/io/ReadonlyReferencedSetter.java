@@ -12,7 +12,7 @@ public class ReadonlyReferencedSetter<O, V> implements ReferencedSetter<O, V> {
     }
 
     @Override
-    public void set(Property<O, V> property, O instance, V value, Context context) {
+    public void set(Property<O, V> property, O object, V value, Context context) {
         throw new ReadonlyPropertyException(property);
     }
 

@@ -17,8 +17,8 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
-    public V get(Property<S, V> property, S instance, Context context, boolean allowNull) {
-        return this.getter.get(this.child, this.parent.get(instance, context, allowNull), context, allowNull);
+    public V get(Property<S, V> property, S object, Context context, boolean allowNull) {
+        return this.getter.get(this.child, this.parent.get(object, context, allowNull), context, allowNull);
     }
 
     public static <S, O, V> PathReferencedGetter<S, O, V> from(Property<S, O> parent, Property<O, V> child, ReferencedGetter<O, V> getter) {

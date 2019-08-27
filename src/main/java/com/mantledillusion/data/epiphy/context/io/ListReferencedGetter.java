@@ -15,10 +15,10 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
     private ListReferencedGetter() {}
 
     @Override
-    public E get(Property<List<E>, E> property, List<E> instance, Context context, boolean allowNull) {
+    public E get(Property<List<E>, E> property, List<E> object, Context context, boolean allowNull) {
         if (!context.containsReference(property, PropertyIndex.class)) {
             throw new UnreferencedPropertyPathException(property);
-        } else if (instance == null) {
+        } else if (object == null) {
             if (allowNull) {
                 return null;
             } else {
@@ -27,10 +27,10 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
         } else {
             PropertyIndex reference = context.getReference(property, PropertyIndex.class);
             int index = reference.getReference();
-            if (index < 0 || index >= instance.size()) {
+            if (index < 0 || index >= object.size()) {
                 throw new OutboundPropertyPathException(property, reference);
             } else {
-                return instance.get(index);
+                return object.get(index);
             }
         }
     }

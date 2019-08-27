@@ -15,11 +15,11 @@ public class ObjectReferencedSetter<O, V> implements ReferencedSetter<O, V> {
     }
 
     @Override
-    public void set(Property<O, V> property, O instance, V value, Context context) {
-        if (instance == null) {
+    public void set(Property<O, V> property, O object, V value, Context context) {
+        if (object == null) {
             throw new InterruptedPropertyPathException(property);
         }
-        this.setter.set(instance, value);
+        this.setter.set(object, value);
     }
 
     public static <O, V> ObjectReferencedSetter<O, V> from(Setter<O, V> setter) {

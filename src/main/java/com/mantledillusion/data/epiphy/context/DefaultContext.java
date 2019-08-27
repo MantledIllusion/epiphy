@@ -25,12 +25,12 @@ public class DefaultContext implements Context {
 	}
 
 	@Override
-	public <R extends PropertyReference<?, K>, K> boolean containsReference(Property<?, ?> property, Class<R> referenceType) {
+	public <R extends PropertyReference<?, ?>> boolean containsReference(Property<?, ?> property, Class<R> referenceType) {
 		return this.keys.containsKey(property) && this.keys.get(property).containsKey(referenceType);
 	}
 
 	@Override
-	public <R extends PropertyReference<?, K>, K> R getReference(Property<?, ?> property, Class<R> referenceType) {
+	public <R extends PropertyReference<?, ?>> R getReference(Property<?, ?> property, Class<R> referenceType) {
 		return containsReference(property, referenceType) ? (R) this.keys.get(property).get(referenceType) : null;
 	}
 
@@ -67,17 +67,17 @@ public class DefaultContext implements Context {
 	/**
 	 * Creates a new {@link DefaultContext} using the given indices.
 	 * 
-	 * @param keys
+	 * @param references
 	 *            The {@link PropertyReference}s to create a new context from; might be null or contain null values.
 	 * @return A new {@link DefaultContext} of the given references, never null
 	 */
 	@SafeVarargs
-	public static DefaultContext of(PropertyReference<?, ?>... keys) {
-		if (keys == null || keys.length == 0) {
+	public static DefaultContext of(PropertyReference<?, ?>... references) {
+		if (references == null || references.length == 0) {
 			return EMPTY;
 		} else {
 			DefaultContext context = new DefaultContext();
-			for (PropertyReference<?, ?> key : keys) {
+			for (PropertyReference<?, ?> key : references) {
 				if (key != null) {
 					context.keys.computeIfAbsent(key.getProperty(), p -> new HashMap<>()).put(key.getClass(), key);
 				}

@@ -15,18 +15,18 @@ public class ListReferencedSetter<E> implements ReferencedSetter<List<E>, E> {
     private ListReferencedSetter() {};
 
     @Override
-    public void set(Property<List<E>, E> property, List<E> instance, E value, Context context) {
+    public void set(Property<List<E>, E> property, List<E> object, E value, Context context) {
         if (!context.containsReference(property, PropertyIndex.class)) {
             throw new UnreferencedPropertyPathException(property);
-        } else if (instance == null) {
+        } else if (object == null) {
             throw new InterruptedPropertyPathException(property);
         } else {
             PropertyIndex reference = context.getReference(property, PropertyIndex.class);
             int index = reference.getReference();
-            if (index < 0 || index >= instance.size()) {
+            if (index < 0 || index >= object.size()) {
                 throw new OutboundPropertyPathException(property, reference);
             } else {
-                instance.set(index, value);
+                object.set(index, value);
             }
         }
     }
