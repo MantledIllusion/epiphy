@@ -32,8 +32,8 @@ public class NodeReferencedSetter<O, N> implements ReferencedSetter<O, N> {
     }
 
     public static <N> NodeReferencedSetter<N, N> from(Property<N, N> nodeRetriever) {
-        return from((property, object, context, allowNull) -> nodeRetriever.get(object, context, allowNull),
-                (property, object, value, context) -> nodeRetriever.set(object, value, context), nodeRetriever);
+        return from((property, object, context, allowNull) -> object,
+                ReadonlyReferencedSetter.from(), nodeRetriever);
     }
 
     public static <O, N> NodeReferencedSetter<O, N> from(ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter, Property<N, N> nodeRetriever) {

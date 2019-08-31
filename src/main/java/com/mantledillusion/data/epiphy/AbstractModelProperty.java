@@ -4,6 +4,8 @@ import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 
+import java.util.Collection;
+
 abstract class AbstractModelProperty<O, V> implements Property<O, V> {
 
     private final String id;
@@ -42,5 +44,15 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     @Override
     public void set(O instance, V value, Context context) {
         this.setter.set(this, instance, value, context);
+    }
+
+    @Override
+    public Collection<Context> contextualize(O object) {
+        return this.getter.contextualize(this, object);
+    }
+
+    @Override
+    public String toString() {
+        return getId();
     }
 }

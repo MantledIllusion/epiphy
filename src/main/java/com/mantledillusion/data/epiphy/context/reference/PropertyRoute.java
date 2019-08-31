@@ -4,6 +4,7 @@ import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> {
@@ -58,23 +59,9 @@ public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> 
      * @param property
      *            The listed property this {@link PropertyIndex} indexes; might
      *            <b>not</b> be null.
-     * @param context
-     *            The context the given property has to have.
-     * @return A new {@link PropertyIndex}, never null
-     */
-    public static PropertyRoute of(Property<?, ?> property, Context context) {
-        return of(property, new Context[] {context});
-    }
-
-    /**
-     * Creates a new {@link PropertyRoute}.
-     *
-     * @param property
-     *            The listed property this {@link PropertyIndex} indexes; might
-     *            <b>not</b> be null.
      * @param contexts
      *            The contexts the given property has to have.
-     * @return A new {@link PropertyIndex}, never null
+     * @return A new {@link PropertyRoute}, never null
      */
     public static PropertyRoute of(Property<?, ?> property, Context... contexts) {
         if (property == null) {

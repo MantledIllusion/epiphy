@@ -1,5 +1,6 @@
 package com.mantledillusion.data.epiphy.context;
 
+import java.util.Iterator;
 import java.util.Map;
 
 import com.mantledillusion.data.epiphy.Property;
@@ -37,4 +38,8 @@ public interface Context {
 	 * @return The reference, might be null
 	 */
 	<R extends PropertyReference<?, ?>> R getReference(Property<?, ?> property, Class<R> referenceType);
+
+	Iterator<? extends PropertyReference<?, ?>> iterator();
+
+	Context merge(Context context);
 }

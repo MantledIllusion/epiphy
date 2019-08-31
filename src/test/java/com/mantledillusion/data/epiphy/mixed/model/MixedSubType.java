@@ -5,6 +5,18 @@ import java.util.List;
 
 public class MixedSubType {
 
-	public String subId;
-	public final List<MixedSubType> leaves = new ArrayList<>();
+	private String subId;
+	private final List<MixedModelNode> subNodes = new ArrayList<>();
+
+	public String getSubId() {
+		return subId;
+	}
+
+	public void setSubId(String subId) {
+		this.subId = subId;
+	}
+
+	public List<MixedModelNode> getSubNodes() {
+		return subNodes;
+	}
 }

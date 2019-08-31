@@ -1,10 +1,14 @@
 package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
+
+import java.util.Collection;
+import java.util.Collections;
 
 public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
 
@@ -25,6 +29,11 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
         } else {
             return this.getter.get(object);
         }
+    }
+
+    @Override
+    public Collection<Context> contextualize(Property<O, V> property, O object) {
+        return property.isNull(object) ? Collections.emptySet() : Collections.singleton(DefaultContext.EMPTY);
     }
 
     public static <O, V> ObjectReferencedGetter<O, V> from(Getter<O, V> getter) {

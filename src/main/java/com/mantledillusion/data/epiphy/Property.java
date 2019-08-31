@@ -6,6 +6,8 @@ import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.ReadonlyPropertyException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
+import java.util.Collection;
+
 /**
  * Interface for a value that resides in an object.
  *
@@ -265,4 +267,6 @@ public interface Property<O, V> {
      * never null
      */
     <S> Property<S, V> prepend(Property<S, O> parent);
+
+    Collection<Context> contextualize(O object);
 }

@@ -15,7 +15,6 @@ import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathExcepti
  * @param <V>
  *            The value type.
  */
-@FunctionalInterface
 public interface ReferencedSetter<O, V> {
 
 	/**

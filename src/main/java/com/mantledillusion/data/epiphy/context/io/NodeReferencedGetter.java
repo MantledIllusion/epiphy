@@ -2,11 +2,16 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
+
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
 
@@ -30,8 +35,32 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
         return node;
     }
 
+    @Override
+    public Collection<Context> contextualize(Property<O, N> property, O object) {
+        N node = this.getter.get(property, object, DefaultContext.EMPTY, false);
+        Set<Context> contexts = new HashSet<>();
+        if (node != null) {
+            PropertyRoute baseRoute = PropertyRoute.of(property);
+            contexts.add(DefaultContext.of(baseRoute));
+            contexts.addAll(subContextualize(node, baseRoute).collect(Collectors.toSet()));
+        }
+        return contexts;
+    }
+
+    private Stream<Context> subContextualize(N node, PropertyRoute route) {
+        return this.property.contextualize(node).parallelStream().
+                flatMap(subContext -> {
+                    PropertyRoute appendedRoute = route.append(subContext);
+                    N child = this.property.get(node, subContext, false);
+                    return Stream.concat(
+                            Stream.of(DefaultContext.of(appendedRoute)),
+                            subContextualize(child, appendedRoute)
+                    );
+                });
+    }
+
     public static <N> NodeReferencedGetter<N, N> from(Property<N, N> nodeRetriever) {
-        return new NodeReferencedGetter<>(((property, object, context, allowNull) -> object), nodeRetriever);
+        return from((property, object, context, allowNull) -> object, nodeRetriever);
     }
 
     public static <O, N> NodeReferencedGetter<O, N> from(ReferencedGetter<O, N> getter, Property<N, N> nodeRetriever) {

@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy.context;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import com.mantledillusion.data.epiphy.Property;
@@ -32,6 +33,28 @@ public class DefaultContext implements Context {
 	@Override
 	public <R extends PropertyReference<?, ?>> R getReference(Property<?, ?> property, Class<R> referenceType) {
 		return containsReference(property, referenceType) ? (R) this.keys.get(property).get(referenceType) : null;
+	}
+
+	@Override
+	public Iterator<? extends PropertyReference<?, ?>> iterator() {
+		return this.keys.entrySet().stream().
+				flatMap(entry -> entry.getValue().entrySet().stream()).
+				map(entry -> entry.getValue()).
+				iterator();
+	}
+
+	@Override
+	public Context merge(Context other) {
+		DefaultContext context = new DefaultContext();
+		this.keys.entrySet().forEach(entry -> context.keys.put(entry.getKey(), new HashMap<>(entry.getValue())));
+
+		Iterator<? extends PropertyReference<?, ?>> iter = other.iterator();
+		while (iter.hasNext()) {
+			PropertyReference<?, ?> reference = iter.next();
+			context.keys.computeIfAbsent(reference.getProperty(), r -> new HashMap<>()).put(reference.getClass(), reference);
+		}
+
+		return context;
 	}
 
 	@Override
