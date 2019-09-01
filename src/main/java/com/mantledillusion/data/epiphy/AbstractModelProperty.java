@@ -18,22 +18,26 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
         this.setter = setter;
     }
 
-    protected ReferencedGetter<O, V> getGetter() {
-        return getter;
-    }
-
-    protected ReferencedSetter<O, V> getSetter() {
-        return setter;
-    }
-
     @Override
     public String getId() {
         return this.id;
     }
 
+    // ###########################################################################################################
+    // ############################################### EXISTENCE #################################################
+    // ###########################################################################################################
+
     @Override
     public boolean exists(O instance, Context context) {
         return instance != null;
+    }
+
+    // ###########################################################################################################
+    // ################################################ GETTING ##################################################
+    // ###########################################################################################################
+
+    protected ReferencedGetter<O, V> getGetter() {
+        return getter;
     }
 
     @Override
@@ -41,10 +45,22 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
         return this.getter.get(this, instance, context, allowNull);
     }
 
+    // ###########################################################################################################
+    // ################################################ SETTING ##################################################
+    // ###########################################################################################################
+
+    protected ReferencedSetter<O, V> getSetter() {
+        return setter;
+    }
+
     @Override
     public void set(O instance, V value, Context context) {
         this.setter.set(this, instance, value, context);
     }
+
+    // ###########################################################################################################
+    // ############################################## CONTEXTING #################################################
+    // ###########################################################################################################
 
     @Override
     public Collection<Context> contextualize(O object) {

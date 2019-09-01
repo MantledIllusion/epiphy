@@ -28,6 +28,10 @@ public interface Property<O, V> {
      */
     String getId();
 
+    // ###########################################################################################################
+    // ############################################### EXISTENCE #################################################
+    // ###########################################################################################################
+
     /**
      * Returns whether this {@link Property} is reachable, so the property itself might be null, but all the of the
      * objects it is read from aren't.
@@ -97,6 +101,10 @@ public interface Property<O, V> {
             throws UnreferencedPropertyPathException, OutboundPropertyPathException {
         return get(object, context, true) == null;
     }
+
+    // ###########################################################################################################
+    // ################################################ GETTING ##################################################
+    // ###########################################################################################################
 
     /**
      * Retrieves this {@link Property}'s value out of the given object.
@@ -186,6 +194,10 @@ public interface Property<O, V> {
     V get(O object, Context context, boolean allowNull)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 
+    // ###########################################################################################################
+    // ################################################ SETTING ##################################################
+    // ###########################################################################################################
+
     /**
      * Writes the given value to this {@link Property} in the given object.
      * <p>
@@ -238,6 +250,10 @@ public interface Property<O, V> {
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
             ReadonlyPropertyException;
 
+    // ###########################################################################################################
+    // ################################################ PATHING ##################################################
+    // ###########################################################################################################
+
     /**
      * Builds a path with this {@link Property} as the leading and the given {@link Property} as the trailing end.
      * <p>
@@ -267,6 +283,10 @@ public interface Property<O, V> {
      * never null
      */
     <S> Property<S, V> prepend(Property<S, O> parent);
+
+    // ###########################################################################################################
+    // ############################################## CONTEXTING #################################################
+    // ###########################################################################################################
 
     Collection<Context> contextualize(O object);
 }
