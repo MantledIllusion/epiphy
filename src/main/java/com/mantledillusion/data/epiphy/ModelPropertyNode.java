@@ -1,13 +1,11 @@
 package com.mantledillusion.data.epiphy;
 
-import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.io.*;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
-import java.util.Collection;
 import java.util.List;
 
 public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
@@ -24,20 +22,16 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     // ################################################ PATHING ##################################################
     // ###########################################################################################################
 
+    public Property<N, N> getNodeRetriever() {
+        return nodeRetriever;
+    }
+
     @Override
     public <S> Property<S, N> prepend(Property<S, O> parent) {
         return new ModelPropertyNode<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),
                 PathReferencedSetter.from(parent, this, getSetter()),
                 this.nodeRetriever);
-    }
-
-    // ###########################################################################################################
-    // ############################################## CONTEXTING #################################################
-    // ###########################################################################################################
-
-    public Collection<Context> subContextualize(N node) {
-        return this.nodeRetriever.contextualize(node);
     }
 
     // ###########################################################################################################
