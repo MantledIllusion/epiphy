@@ -9,13 +9,13 @@ import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
+
+    private SortedSet<Property<?, ?>> hierarchy;
 
     private ListReferencedGetter() {}
 
@@ -45,6 +45,14 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
         return IntStream.range(0, object.size()).
                 mapToObj(index -> DefaultContext.of(PropertyIndex.of(property, index))).
                 collect(Collectors.toSet());
+    }
+
+    @Override
+    public SortedSet<Property<?, ?>> getHierarchy(Property<List<E>, E> property) {
+        if (this.hierarchy == null) {
+            this.hierarchy = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(property)));
+        }
+        return this.hierarchy;
     }
 
     public static <E> ListReferencedGetter<E> from() {

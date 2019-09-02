@@ -7,8 +7,7 @@ import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 /**
  * Functional interface for retrieving a value from an object using a {@link Context}.
@@ -23,6 +22,7 @@ public interface ReferencedGetter<O, V> {
 	/**
 	 * Retrieves the value from the object.
 	 *
+	 * @param property
 	 * @param object
 	 *            The instance to lookup the value from; might be null.
 	 * @param context
@@ -46,7 +46,7 @@ public interface ReferencedGetter<O, V> {
 	V get(Property<O, V> property, O object, Context context, boolean allowNull)
 			throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 
-	default Collection<Context> contextualize(Property<O, V> property, O object) {
-		return Collections.singleton(DefaultContext.EMPTY);
-	}
+	Collection<Context> contextualize(Property<O, V> property, O object);
+
+	SortedSet<Property<?, ?>> getHierarchy(Property<O, V> property);
 }

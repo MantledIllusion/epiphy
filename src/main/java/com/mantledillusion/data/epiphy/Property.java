@@ -7,6 +7,7 @@ import com.mantledillusion.data.epiphy.exception.ReadonlyPropertyException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
 import java.util.Collection;
+import java.util.SortedSet;
 
 /**
  * Interface for a value that resides in an object.
@@ -289,4 +290,19 @@ public interface Property<O, V> {
     // ###########################################################################################################
 
     Collection<Context> contextualize(O object);
+
+    SortedSet<Property<?, ?>> getHierarchy();
+
+    // ###########################################################################################################
+    // ################################################# MISC ####################################################
+    // ###########################################################################################################
+
+    @Override
+    String toString();
+
+    @Override
+    int hashCode();
+
+    @Override
+    boolean equals(Object obj);
 }

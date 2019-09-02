@@ -7,12 +7,13 @@ import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
 
     private final Getter<O, V> getter;
+
+    private SortedSet<Property<?, ?>> hierarchy;
 
     private ObjectReferencedGetter(Getter<O, V> getter) {
         this.getter = getter;
@@ -34,6 +35,14 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
     @Override
     public Collection<Context> contextualize(Property<O, V> property, O object) {
         return property.isNull(object) ? Collections.emptySet() : Collections.singleton(DefaultContext.EMPTY);
+    }
+
+    @Override
+    public SortedSet<Property<?, ?>> getHierarchy(Property<O, V> property) {
+        if (this.hierarchy == null) {
+            this.hierarchy = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(property)));
+        }
+        return this.hierarchy;
     }
 
     public static <O, V> ObjectReferencedGetter<O, V> from(Getter<O, V> getter) {

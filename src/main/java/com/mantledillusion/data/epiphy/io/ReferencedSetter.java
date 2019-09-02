@@ -20,6 +20,7 @@ public interface ReferencedSetter<O, V> {
 	/**
 	 * Writes the value to the object.
 	 *
+	 * @param property
 	 * @param object
 	 *            The instance to write the value to; might be null.
 	 * @param value

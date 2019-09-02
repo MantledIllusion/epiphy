@@ -18,6 +18,8 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     private final ReferencedGetter<O, N> getter;
     private final Property<N, N> property;
 
+    private SortedSet<Property<?, ?>> hierarchy;
+
     private NodeReferencedGetter(ReferencedGetter<O, N> getter, Property<N, N> property) {
         this.getter = getter;
         this.property = property;
@@ -59,8 +61,18 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
                 });
     }
 
+    @Override
+    public SortedSet<Property<?, ?>> getHierarchy(Property<O, N> property) {
+        if (this.hierarchy == null) {
+            this.hierarchy = new TreeSet<>(this.getter.getHierarchy(property));
+            this.hierarchy.addAll(this.property.getHierarchy());
+            this.hierarchy = Collections.unmodifiableSortedSet(this.hierarchy);
+        }
+        return this.hierarchy;
+    }
+
     public static <N> NodeReferencedGetter<N, N> from(Property<N, N> nodeRetriever) {
-        return from((property, object, context, allowNull) -> object, nodeRetriever);
+        return from(SelfReferencedGetter.from(), nodeRetriever);
     }
 
     public static <O, N> NodeReferencedGetter<O, N> from(ReferencedGetter<O, N> getter, Property<N, N> nodeRetriever) {

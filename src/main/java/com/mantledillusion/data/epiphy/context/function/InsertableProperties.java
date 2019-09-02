@@ -36,11 +36,11 @@ public interface InsertableProperties<C, E, R> {
 	 *            The model to add the element to; might <b>not</b> be null.
 	 * @param element
 	 *            The element to add; might be null.
+	 * @param reference
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this
 	 *            {@link InsertableProperties}; might <b>not</b> be null.
-	 * @return The property reference where the element was appended, never null
 	 * @throws InterruptedPropertyPathException
 	 *             If any property on the path to this {@link InsertableProperties}
 	 *             is null.
