@@ -48,7 +48,8 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 
 	/**
 	 * Creates a new {@link PropertyIndex}.
-	 * 
+	 *
+	 * @param <E> The type of the listed element.
 	 * @param listedProperty
 	 *            The listed property this {@link PropertyIndex} indexes; might
 	 *            <b>not</b> be null.
@@ -56,7 +57,7 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 	 *            The index the given property has to have.
 	 * @return A new {@link PropertyIndex}, never null
 	 */
-	public static PropertyIndex of(Property<? extends List<?>, ?> listedProperty, Integer index) {
+	public static <E> PropertyIndex of(Property<? extends List<E>, E> listedProperty, Integer index) {
 		if (listedProperty == null) {
 			throw new IllegalArgumentException("Cannot create an index for a null listed property.");
 		} else if (index == null) {

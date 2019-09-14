@@ -55,7 +55,10 @@ public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> 
 
     /**
      * Creates a new {@link PropertyRoute}.
+     * <p>
+     * <b>NOTE:</b> The property route is created using the node receiver property, not the node property itself!
      *
+     * @param <N> The node type of
      * @param property
      *            The listed property this {@link PropertyIndex} indexes; might
      *            <b>not</b> be null.
@@ -63,7 +66,7 @@ public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> 
      *            The contexts the given property has to have.
      * @return A new {@link PropertyRoute}, never null
      */
-    public static PropertyRoute of(Property<?, ?> property, Context... contexts) {
+    public static <N> PropertyRoute of(Property<N, N> property, Context... contexts) {
         if (property == null) {
             throw new IllegalArgumentException("Cannot create a route for a null property.");
         } else if (contexts == null || Arrays.stream(contexts).anyMatch(Objects::isNull)) {

@@ -1,5 +1,6 @@
 package com.mantledillusion.data.epiphy.context.io;
 
+import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
@@ -10,33 +11,32 @@ public class NodeReferencedSetter<O, N> implements ReferencedSetter<O, N> {
 
     private final ReferencedGetter<O, N> getter;
     private final ReferencedSetter<O, N> setter;
-    private final Property<N, N> property;
+    private final ModelProperty<N, N> nodeRetriever;
 
-    private NodeReferencedSetter(ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter, Property<N, N> property) {
+    private NodeReferencedSetter(ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter, ModelProperty<N, N> nodeRetriever) {
         this.getter = getter;
         this.setter = setter;
-        this.property = property;
+        this.nodeRetriever = nodeRetriever;
     }
 
     @Override
     public void set(Property<O, N> property, O object, N value, Context context) {
-        if (context.containsReference(property, PropertyRoute.class)) {
+        if (context.containsReference(this.nodeRetriever, PropertyRoute.class)) {
             N node = this.getter.get(property, object, context, false);
-            for (Context routeContext: context.getReference(property, PropertyRoute.class).getReference()) {
-                node = this.property.get(node, routeContext, false);
+            for (Context routeContext: context.getReference(this.nodeRetriever, PropertyRoute.class).getReference()) {
+                node = this.nodeRetriever.get(node, routeContext, false);
             }
-            this.property.set(node, value, context);
+            this.nodeRetriever.set(node, value, context);
         } else {
             this.setter.set(property, object, value, context);
         }
     }
 
-    public static <N> NodeReferencedSetter<N, N> from(Property<N, N> nodeRetriever) {
-        return from((property, object, context, allowNull) -> object,
-                ReadonlyReferencedSetter.from(), nodeRetriever);
+    public static <N> NodeReferencedSetter<N, N> from(ModelProperty<N, N> nodeRetriever) {
+        return from(SelfReferencedGetter.from(), SelfReferencedSetter.from(nodeRetriever), nodeRetriever);
     }
 
-    public static <O, N> NodeReferencedSetter<O, N> from(ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter, Property<N, N> nodeRetriever) {
+    public static <O, N> NodeReferencedSetter<O, N> from(ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter, ModelProperty<N, N> nodeRetriever) {
         if (getter == null) {
             throw new IllegalArgumentException("Cannot create a property from a null getter");
         } else if (setter == null) {

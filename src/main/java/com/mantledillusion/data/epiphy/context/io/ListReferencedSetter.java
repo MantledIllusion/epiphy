@@ -21,7 +21,7 @@ public class ListReferencedSetter<E> implements ReferencedSetter<List<E>, E> {
         } else if (object == null) {
             throw new InterruptedPropertyPathException(property);
         } else {
-            PropertyIndex reference = context.getReference(property, PropertyIndex.class);
+            PropertyIndex reference = context.getReference(property);
             int index = reference.getReference();
             if (index < 0 || index >= object.size()) {
                 throw new OutboundPropertyPathException(property, reference);

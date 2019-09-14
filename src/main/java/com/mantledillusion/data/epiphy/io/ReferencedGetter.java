@@ -1,7 +1,6 @@
 package com.mantledillusion.data.epiphy.io;
 
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -22,7 +21,7 @@ public interface ReferencedGetter<O, V> {
 	/**
 	 * Retrieves the value from the object.
 	 *
-	 * @param property
+	 * @param property The property to get; might <b>not</b> be null.
 	 * @param object
 	 *            The instance to lookup the value from; might be null.
 	 * @param context
@@ -48,5 +47,5 @@ public interface ReferencedGetter<O, V> {
 
 	Collection<Context> contextualize(Property<O, V> property, O object);
 
-	SortedSet<Property<?, ?>> getHierarchy(Property<O, V> property);
+	Set<Property<?, ?>> getHierarchy(Property<O, V> property);
 }

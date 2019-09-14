@@ -2,7 +2,6 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 
 import java.util.*;
@@ -18,12 +17,12 @@ public class SelfReferencedGetter<V> implements ReferencedGetter<V, V> {
 
     @Override
     public Collection<Context> contextualize(Property<V, V> property, V object) {
-        return Collections.singleton(DefaultContext.EMPTY);
+        return Collections.singleton(Context.EMPTY);
     }
 
     @Override
-    public SortedSet<Property<?, ?>> getHierarchy(Property<V, V> property) {
-        return Collections.emptySortedSet();
+    public Set<Property<?, ?>> getHierarchy(Property<V, V> property) {
+        return Collections.emptySet();
     }
 
     public static <V>  SelfReferencedGetter<V> from() {

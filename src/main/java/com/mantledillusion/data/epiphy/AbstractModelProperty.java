@@ -6,6 +6,7 @@ import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 import java.util.SortedSet;
 
 abstract class AbstractModelProperty<O, V> implements Property<O, V> {
@@ -70,8 +71,8 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     }
 
     @Override
-    public SortedSet<Property<?, ?>> getHierarchy() {
-        return Collections.unmodifiableSortedSet(this.getter.getHierarchy(this));
+    public Set<Property<?, ?>> getHierarchy() {
+        return this.getter.getHierarchy(this);
     }
 
     // ###########################################################################################################

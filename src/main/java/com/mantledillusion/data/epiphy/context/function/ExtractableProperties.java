@@ -34,6 +34,7 @@ public interface ExtractableProperties<C, E, R> {
 	 * 
 	 * @param collection
 	 *            The model to remove the element from; might <b>not</b> be null.
+	 * @param reference The reference to extract the element with; might <b>not</b> be null.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this

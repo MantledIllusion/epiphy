@@ -36,7 +36,7 @@ public interface InsertableProperties<C, E, R> {
 	 *            The model to add the element to; might <b>not</b> be null.
 	 * @param element
 	 *            The element to add; might be null.
-	 * @param reference
+	 * @param reference The reference to insert the element with; might <b>not</b> be null.
 	 * @param context
 	 *            The {@link Context} that should be used to satisfy the contexted
 	 *            properties from the root property to this

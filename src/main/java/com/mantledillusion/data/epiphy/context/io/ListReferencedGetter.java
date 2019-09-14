@@ -2,7 +2,6 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -15,7 +14,7 @@ import java.util.stream.IntStream;
 
 public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
 
-    private SortedSet<Property<?, ?>> hierarchy;
+    private Set<Property<?, ?>> hierarchy;
 
     private ListReferencedGetter() {}
 
@@ -30,7 +29,7 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
                 throw new InterruptedPropertyPathException(property);
             }
         } else {
-            PropertyIndex reference = context.getReference(property, PropertyIndex.class);
+            PropertyIndex reference = context.getReference(property);
             int index = reference.getReference();
             if (index < 0 || index >= object.size()) {
                 throw new OutboundPropertyPathException(property, reference);
@@ -43,14 +42,14 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
     @Override
     public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object) {
         return IntStream.range(0, object.size()).
-                mapToObj(index -> DefaultContext.of(PropertyIndex.of(property, index))).
+                mapToObj(index -> Context.of(PropertyIndex.of(property, index))).
                 collect(Collectors.toSet());
     }
 
     @Override
-    public SortedSet<Property<?, ?>> getHierarchy(Property<List<E>, E> property) {
+    public Set<Property<?, ?>> getHierarchy(Property<List<E>, E> property) {
         if (this.hierarchy == null) {
-            this.hierarchy = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(property)));
+            this.hierarchy = Collections.singleton(property);
         }
         return this.hierarchy;
     }

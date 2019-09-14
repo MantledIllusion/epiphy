@@ -80,11 +80,11 @@ public class BasicContextingTest {
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
-            Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE, PropertyRoute.class));
-            PropertyRoute route = context.getReference(NodeModelProperties.NODE, PropertyRoute.class);
+            Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+            PropertyRoute route = context.getReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
             NodeModel current = root;
             for (Context routeContext: route.getReference()) {
-                Assertions.assertFalse(routeContext.containsReference(NodeModelProperties.RETRIEVER, PropertyReference.class));
+                Assertions.assertFalse(routeContext.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
                 current = current.getChild();
             }
             Assertions.assertSame(current, NodeModelProperties.NODE.get(root, context));
@@ -117,8 +117,8 @@ public class BasicContextingTest {
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
-            Assertions.assertTrue(context.containsReference(MixedModelProperties.NODE, PropertyRoute.class));
-            PropertyRoute route = context.getReference(MixedModelProperties.NODE, PropertyRoute.class);
+            Assertions.assertTrue(context.containsReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+            PropertyRoute route = context.getReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
             MixedModelNode currentNode = root;
             for (Context routeContext: route.getReference()) {
                 Assertions.assertTrue(routeContext.containsReference(MixedModelProperties.LISTED_NODE, PropertyIndex.class));

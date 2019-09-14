@@ -1,7 +1,6 @@
 package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.DefaultContext;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.io.Getter;
@@ -13,7 +12,7 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
 
     private final Getter<O, V> getter;
 
-    private SortedSet<Property<?, ?>> hierarchy;
+    private Set<Property<?, ?>> hierarchy;
 
     private ObjectReferencedGetter(Getter<O, V> getter) {
         this.getter = getter;
@@ -34,13 +33,13 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
 
     @Override
     public Collection<Context> contextualize(Property<O, V> property, O object) {
-        return property.isNull(object) ? Collections.emptySet() : Collections.singleton(DefaultContext.EMPTY);
+        return property.isNull(object) ? Collections.emptySet() : Collections.singleton(Context.EMPTY);
     }
 
     @Override
-    public SortedSet<Property<?, ?>> getHierarchy(Property<O, V> property) {
+    public Set<Property<?, ?>> getHierarchy(Property<O, V> property) {
         if (this.hierarchy == null) {
-            this.hierarchy = Collections.unmodifiableSortedSet(new TreeSet<>(Arrays.asList(property)));
+            this.hierarchy = Collections.singleton(property);
         }
         return this.hierarchy;
     }

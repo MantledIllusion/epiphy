@@ -20,7 +20,7 @@ public interface ReferencedSetter<O, V> {
 	/**
 	 * Writes the value to the object.
 	 *
-	 * @param property
+	 * @param property The property to set; might <b>not</b> be null.
 	 * @param object
 	 *            The instance to write the value to; might be null.
 	 * @param value

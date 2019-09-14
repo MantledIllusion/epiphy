@@ -12,23 +12,23 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     private final Property<S, O> parent;
     private final Property<O, V> child;
     private final ReferencedGetter<O, V> getter;
-    private final SortedSet<Property<?, ?>> hierarchy;
+    private final Set<Property<?, ?>> hierarchy;
 
     private PathReferencedGetter(Property<S, O> parent, Property<O, V> child, ReferencedGetter<O, V> getter) {
         this.parent = parent;
         this.child = child;
         this.getter = getter;
 
-        SortedSet<Property<?, ?>> parentHierarchy = parent.getHierarchy();
-        SortedSet<Property<?, ?>> childHierarchy = child.getHierarchy();
+        Set<Property<?, ?>> parentHierarchy = parent.getHierarchy();
+        Set<Property<?, ?>> childHierarchy = child.getHierarchy();
         if (parentHierarchy.parallelStream().anyMatch(childHierarchy::contains)) {
             throw new IllegalArgumentException("The property "+parent+" contains at least one property in its " +
                     "hierarchy that is also contained by the property "+child+"; creating a path using these two " +
                     "would create an infinite loop.");
         }
-        SortedSet<Property<?, ?>> hierarchy = new TreeSet<>(parentHierarchy);
+        Set<Property<?, ?>> hierarchy = new HashSet<>(parentHierarchy);
         hierarchy.addAll(childHierarchy);
-        this.hierarchy = Collections.unmodifiableSortedSet(hierarchy);
+        this.hierarchy = Collections.unmodifiableSet(hierarchy);
     }
 
     @Override
@@ -40,12 +40,12 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     public Collection<Context> contextualize(Property<S, V> property, S object) {
         return this.parent.contextualize(object).stream().
                 flatMap(parentContext -> this.child.contextualize(this.parent.get(object, parentContext)).stream().
-                        map(childContext -> parentContext.merge(childContext))).
+                        map(childContext -> parentContext.union(childContext))).
                 collect(Collectors.toSet());
     }
 
     @Override
-    public SortedSet<Property<?, ?>> getHierarchy(Property<S, V> property) {
+    public Set<Property<?, ?>> getHierarchy(Property<S, V> property) {
         return this.hierarchy;
     }
 

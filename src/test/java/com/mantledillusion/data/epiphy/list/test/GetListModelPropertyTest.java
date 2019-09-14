@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.list.test;
 
-import com.mantledillusion.data.epiphy.context.DefaultContext;
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -15,7 +15,7 @@ public class GetListModelPropertyTest extends AbstractListModelPropertyTest {
 
 	@Test
 	public void testGetIndexedProperty() {
-		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
+		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 0));
 		assertSame(this.model.get(0).get(0), ListModelProperties.ELEMENTLIST_TO_ELEMENT.get(this.model, context));
 	}
@@ -23,7 +23,7 @@ public class GetListModelPropertyTest extends AbstractListModelPropertyTest {
 	@Test
 	public void testGetIndexedPropertyIntermediateNull() {
 		this.model.set(0, null);
-		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
+		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 1));
 		assertThrows(InterruptedPropertyPathException.class, () -> {
 			ListModelProperties.ELEMENTLIST_TO_ELEMENT.get(this.model, context);
@@ -32,7 +32,7 @@ public class GetListModelPropertyTest extends AbstractListModelPropertyTest {
 
 	@Test
 	public void testGetIndexedPropertyOutOfBounds() {
-		DefaultContext context = DefaultContext.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
+		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 2));
 		assertThrows(OutboundPropertyPathException.class, () -> {
 			ListModelProperties.ELEMENTLIST_TO_ELEMENT.get(this.model, context);
