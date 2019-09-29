@@ -263,6 +263,8 @@ public interface Property<O, V> {
     // ################################################ PATHING ##################################################
     // ###########################################################################################################
 
+    Set<Property<?, ?>> getHierarchy();
+
     /**
      * Builds a path with this {@link Property} as the leading and the given {@link Property} as the trailing end.
      * <p>
@@ -299,7 +301,35 @@ public interface Property<O, V> {
 
     Collection<Context> contextualize(O object);
 
-    Set<Property<?, ?>> getHierarchy();
+    default Iterable<V> iterate(O object) {
+        return () -> contextualize(object).stream().
+                map(context -> get(object, context, true)).
+                iterator();
+    }
+
+    default V predecessor(O object, V value) {
+        V predecessor = null;
+        for (V element: iterate(object)) {
+            if (element == value) {
+                return predecessor;
+            } else {
+                predecessor = element;
+            }
+        }
+        return null;
+    }
+
+    default V successor(O object, V value) {
+        boolean next = false;
+        for (V element: iterate(object)) {
+            if (next) {
+                return element;
+            } else if (element == value) {
+                next = true;
+            }
+        }
+        return null;
+    }
 
     // ###########################################################################################################
     // ################################################# MISC ####################################################
