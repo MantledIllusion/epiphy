@@ -16,6 +16,11 @@ public class SelfReferencedGetter<V> implements ReferencedGetter<V, V> {
     }
 
     @Override
+    public int occurrences(Property<V, V> property, V object) {
+        return 0;
+    }
+
+    @Override
     public Collection<Context> contextualize(Property<V, V> property, V object) {
         return Collections.singleton(Context.EMPTY);
     }

@@ -37,6 +37,13 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
+    public int occurrences(Property<S, V> property, S object) {
+        return this.parent.stream(object).
+                map(intermediate -> this.child.occurrences(intermediate)).
+                collect(Collectors.summingInt(Integer::intValue));
+    }
+
+    @Override
     public Collection<Context> contextualize(Property<S, V> property, S object) {
         return this.parent.contextualize(object).stream().
                 flatMap(parentContext -> this.child.contextualize(this.parent.get(object, parentContext)).stream().

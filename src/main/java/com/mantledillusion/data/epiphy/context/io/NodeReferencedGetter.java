@@ -38,6 +38,12 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     }
 
     @Override
+    public int occurrences(Property<O, N> property, O object) {
+        N node = this.getter.get(property, object, Context.EMPTY, false);
+        return node == null ? 0 : 1 + this.nodeRetriever.occurrences(node);
+    }
+
+    @Override
     public Collection<Context> contextualize(Property<O, N> property, O object) {
         N node = this.getter.get(property, object, Context.EMPTY, false);
         Set<Context> contexts = new HashSet<>();

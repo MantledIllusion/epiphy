@@ -14,7 +14,6 @@ import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import java.util.List;
 
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
-        SizableProperties<O, E, Integer>,
         IncludableProperties<O, E, Integer>,
         InsertableProperties<O, E, Integer>,
         StrippableProperties<O, E, Integer>,
@@ -35,11 +34,6 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
             throw new InterruptedPropertyPathException(this);
         }
         return elements;
-    }
-
-    @Override
-    public int size(O object, Context context) {
-        return elements(object, context).size();
     }
 
     @Override

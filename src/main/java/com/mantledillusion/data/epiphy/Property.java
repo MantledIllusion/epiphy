@@ -300,6 +300,8 @@ public interface Property<O, V> {
     // ############################################## CONTEXTING #################################################
     // ###########################################################################################################
 
+    int occurrences(O object);
+
     Collection<Context> contextualize(O object);
 
     default Stream<V> stream(O  object) {

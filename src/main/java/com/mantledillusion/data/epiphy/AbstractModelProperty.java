@@ -70,6 +70,12 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     // ############################################## CONTEXTING #################################################
     // ###########################################################################################################
 
+
+    @Override
+    public int occurrences(O object) {
+        return this.getter.occurrences(this, object);
+    }
+
     @Override
     public Collection<Context> contextualize(O object) {
         return this.getter.contextualize(this, object);

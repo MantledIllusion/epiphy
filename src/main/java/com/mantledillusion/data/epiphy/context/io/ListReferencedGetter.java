@@ -40,6 +40,11 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
     }
 
     @Override
+    public int occurrences(Property<List<E>, E> property, List<E> object) {
+        return object.size();
+    }
+
+    @Override
     public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object) {
         return IntStream.range(0, object.size()).
                 mapToObj(index -> Context.of(PropertyIndex.of(property, index))).

@@ -32,6 +32,11 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
     }
 
     @Override
+    public int occurrences(Property<O, V> property, O object) {
+        return property.isNull(object) ? 0 : 1;
+    }
+
+    @Override
     public Collection<Context> contextualize(Property<O, V> property, O object) {
         return property.isNull(object) ? Collections.emptySet() : Collections.singleton(Context.EMPTY);
     }

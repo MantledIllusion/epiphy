@@ -45,6 +45,8 @@ public interface ReferencedGetter<O, V> {
 	V get(Property<O, V> property, O object, Context context, boolean allowNull)
 			throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 
+	int occurrences(Property<O, V> property, O object);
+
 	Collection<Context> contextualize(Property<O, V> property, O object);
 
 	Set<Property<?, ?>> getHierarchy(Property<O, V> property);
