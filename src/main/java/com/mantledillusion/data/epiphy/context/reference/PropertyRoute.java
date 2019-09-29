@@ -1,11 +1,15 @@
 package com.mantledillusion.data.epiphy.context.reference;
 
 import com.mantledillusion.data.epiphy.NodeRetriever;
+import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 
 import java.util.Arrays;
 import java.util.Objects;
 
+/**
+ * {@link PropertyReference} for node element {@link Property}s.
+ */
 public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]> {
 
     private PropertyRoute(NodeRetriever<?> property, Context... reference) {
@@ -42,7 +46,7 @@ public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]
 
     @Override
     public String toString() {
-        return "PropertyRoute [property=" + getProperty() + ", indices=" + Arrays.toString(getReference()) + "]";
+        return "PropertyRoute [property=" + getProperty() + ", contexts=" + Arrays.toString(getReference()) + "]";
     }
 
     public PropertyRoute append(Context context) {
@@ -54,23 +58,22 @@ public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]
 
     /**
      * Creates a new {@link PropertyRoute}.
-     * <p>
-     * <b>NOTE:</b> The property route is created using the node receiver property, not the node property itself!
      *
-     * @param <N> The node type of
-     * @param property
-     *            The listed property this {@link PropertyIndex} indexes; might
-     *            <b>not</b> be null.
+     * @param <N>
+     *          The type of the node.
+     * @param nodeRetriever
+     *            The node property this {@link PropertyRoute} contexts; might <b>not</b> be null.
      * @param contexts
-     *            The contexts the given property has to have.
+     * 			The {@link Context}s of the given {@link Property}'s element; might <b>not</b> be null or contain
+     * 			nulls, might be empty.
      * @return A new {@link PropertyRoute}, never null
      */
-    public static <N> PropertyRoute of(NodeRetriever<N> property, Context... contexts) {
-        if (property == null) {
+    public static <N> PropertyRoute of(NodeRetriever<N> nodeRetriever, Context... contexts) {
+        if (nodeRetriever == null) {
             throw new IllegalArgumentException("Cannot create a route for a null property.");
         } else if (contexts == null || Arrays.stream(contexts).anyMatch(Objects::isNull)) {
             throw new IllegalArgumentException("Cannot create a route for a null context.");
         }
-        return new PropertyRoute(property, contexts);
+        return new PropertyRoute(nodeRetriever, contexts);
     }
 }

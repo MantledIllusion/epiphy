@@ -5,7 +5,7 @@ import com.mantledillusion.data.epiphy.Property;
 import java.util.List;
 
 /**
- * Represents a single property index.
+ * {@link PropertyReference} for {@link List} element {@link Property}s.
  */
 public final class PropertyIndex extends PropertyReference<Property<? extends List<?>, ?>, Integer> {
 
@@ -49,12 +49,12 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 	/**
 	 * Creates a new {@link PropertyIndex}.
 	 *
-	 * @param <E> The type of the listed element.
+	 * @param <E>
+	 * 			The type of the listed element.
 	 * @param listedProperty
-	 *            The listed property this {@link PropertyIndex} indexes; might
-	 *            <b>not</b> be null.
+	 * 			The listed property this {@link PropertyIndex} contexts; might <b>not</b> be null.
 	 * @param index
-	 *            The index the given property has to have.
+	 * 			The index of the given {@link Property}'s element; might <b>not</b> be null.
 	 * @return A new {@link PropertyIndex}, never null
 	 */
 	public static <E> PropertyIndex of(Property<? extends List<E>, E> listedProperty, Integer index) {

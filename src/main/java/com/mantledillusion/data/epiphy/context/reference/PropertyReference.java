@@ -4,14 +4,12 @@ import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.function.ExtractableProperties;
 
 /**
- * Base type for references to {@link ExtractableProperties} implementations.
+ * Base type for references to {@link Property}s whose values are elements to a batch.
  *
  * @param <P>
- *            The property type, which is the {@link ExtractableProperties}
- *            implementation this reference is meant for.
+ * 			The type of {@link Property} being referenced
  * @param <R>
- *            The reference type, which is the type the
- *            {@link ExtractableProperties} implementation requires as reference.
+ * 			The reference type, which is the type the {@link Property} requires as reference.
  */
 public abstract class PropertyReference<P extends Property<?, ?>, R> {
 
@@ -24,9 +22,9 @@ public abstract class PropertyReference<P extends Property<?, ?>, R> {
 	}
 
 	/**
-	 * Returns the property of this {@link PropertyReference}.
+	 * Returns the {@link Property} of this {@link PropertyReference}.
 	 * 
-	 * @return The property, never null
+	 * @return The {@link Property}, never null
 	 */
 	public P getProperty() {
 		return this.property;
