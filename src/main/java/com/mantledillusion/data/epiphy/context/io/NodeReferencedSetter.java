@@ -32,6 +32,11 @@ public class NodeReferencedSetter<O, N> implements ReferencedSetter<O, N> {
         }
     }
 
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
     public static <N> NodeReferencedSetter<N, N> from(ModelProperty<N, N> nodeRetriever) {
         return from(SelfReferencedGetter.from(), SelfReferencedSetter.from(nodeRetriever), nodeRetriever);
     }

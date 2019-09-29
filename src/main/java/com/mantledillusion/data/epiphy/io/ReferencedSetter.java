@@ -43,4 +43,6 @@ public interface ReferencedSetter<O, V> {
 	void set(Property<O, V> property, O object, V value, Context context)
 			throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
 			ReadonlyPropertyException;
+
+	boolean isWritable();
 }

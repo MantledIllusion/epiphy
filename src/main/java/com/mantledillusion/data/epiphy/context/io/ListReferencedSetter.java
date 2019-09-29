@@ -31,6 +31,11 @@ public class ListReferencedSetter<E> implements ReferencedSetter<List<E>, E> {
         }
     }
 
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
     public static <E> ListReferencedSetter from() {
         return new ListReferencedSetter();
     }

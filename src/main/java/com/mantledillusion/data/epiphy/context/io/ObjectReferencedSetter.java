@@ -22,6 +22,11 @@ public class ObjectReferencedSetter<O, V> implements ReferencedSetter<O, V> {
         this.setter.set(object, value);
     }
 
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
     public static <O, V> ObjectReferencedSetter<O, V> from(Setter<O, V> setter) {
         if (setter == null) {
             throw new IllegalArgumentException("Cannot create a property from a null setter");

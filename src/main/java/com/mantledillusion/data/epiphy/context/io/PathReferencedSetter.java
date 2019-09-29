@@ -27,6 +27,11 @@ public class PathReferencedSetter<S, O, V> implements ReferencedSetter<S, V> {
         this.setter.set(this.child, intermediate, value, context);
     }
 
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
     public static <S, O, V> PathReferencedSetter<S, O, V> from(Property<S, O> parent, Property<O, V> child, ReferencedSetter<O, V> getter) {
         return new PathReferencedSetter<>(parent, child, getter);
     }

@@ -17,6 +17,11 @@ public class SelfReferencedSetter<O, V> implements ReferencedSetter<O, V> {
         this.property.set(object, value, context);
     }
 
+    @Override
+    public boolean isWritable() {
+        return true;
+    }
+
     public static <O, V> SelfReferencedSetter from(Property<O, V> property) {
         return new SelfReferencedSetter(property);
     }

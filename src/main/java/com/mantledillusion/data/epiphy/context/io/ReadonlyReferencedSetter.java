@@ -16,6 +16,11 @@ public class ReadonlyReferencedSetter<O, V> implements ReferencedSetter<O, V> {
         throw new ReadonlyPropertyException(property);
     }
 
+    @Override
+    public boolean isWritable() {
+        return false;
+    }
+
     public static <O, V> ReadonlyReferencedSetter<O, V> from() {
         return new ReadonlyReferencedSetter<>();
     }

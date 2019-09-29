@@ -103,6 +103,14 @@ public interface Property<O, V> {
         return get(object, context, true) == null;
     }
 
+    /**
+     * Returns whether this {@link Property} was created including a {@link com.mantledillusion.data.epiphy.io.Setter},
+     * so it is writable.
+     *
+     * @return
+     */
+    boolean isWritable();
+
     // ###########################################################################################################
     // ################################################ GETTING ##################################################
     // ###########################################################################################################
