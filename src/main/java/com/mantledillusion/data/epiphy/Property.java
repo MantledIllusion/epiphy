@@ -8,6 +8,7 @@ import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathExcepti
 
 import java.util.Collection;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Interface for a value that resides in an object.
@@ -301,10 +302,13 @@ public interface Property<O, V> {
 
     Collection<Context> contextualize(O object);
 
+    default Stream<V> stream(O  object) {
+        return contextualize(object).stream().
+                map(context -> get(object, context, true));
+    }
+
     default Iterable<V> iterate(O object) {
-        return () -> contextualize(object).stream().
-                map(context -> get(object, context, true)).
-                iterator();
+        return () -> stream(object).iterator();
     }
 
     default V predecessor(O object, V value) {
