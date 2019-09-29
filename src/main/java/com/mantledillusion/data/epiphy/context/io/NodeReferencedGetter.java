@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.context.io;
 
-import com.mantledillusion.data.epiphy.ModelProperty;
+import com.mantledillusion.data.epiphy.NodeRetriever;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
@@ -16,11 +16,11 @@ import java.util.stream.Stream;
 public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
 
     private final ReferencedGetter<O, N> getter;
-    private final ModelProperty<N, N> nodeRetriever;
+    private final NodeRetriever<N> nodeRetriever;
 
     private Set<Property<?, ?>> hierarchy;
 
-    private NodeReferencedGetter(ReferencedGetter<O, N> getter, ModelProperty<N, N> nodeRetriever) {
+    private NodeReferencedGetter(ReferencedGetter<O, N> getter, NodeRetriever<N> nodeRetriever) {
         this.getter = getter;
         this.nodeRetriever = nodeRetriever;
     }
@@ -77,11 +77,11 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
         return this.hierarchy;
     }
 
-    public static <N> NodeReferencedGetter<N, N> from(ModelProperty<N, N> nodeRetriever) {
+    public static <N> NodeReferencedGetter<N, N> from(NodeRetriever<N> nodeRetriever) {
         return from(SelfReferencedGetter.from(), nodeRetriever);
     }
 
-    public static <O, N> NodeReferencedGetter<O, N> from(ReferencedGetter<O, N> getter, ModelProperty<N, N> nodeRetriever) {
+    public static <O, N> NodeReferencedGetter<O, N> from(ReferencedGetter<O, N> getter, NodeRetriever<N> nodeRetriever) {
         if (getter == null) {
             throw new IllegalArgumentException("Cannot create a property from a null getter");
         } else if (nodeRetriever == null) {

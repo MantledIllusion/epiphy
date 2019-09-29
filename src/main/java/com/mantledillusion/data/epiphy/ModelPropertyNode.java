@@ -1,19 +1,76 @@
 package com.mantledillusion.data.epiphy;
 
+import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.io.*;
 import com.mantledillusion.data.epiphy.io.Getter;
 import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 import com.mantledillusion.data.epiphy.io.Setter;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
 
-    private final Property<N, N> nodeRetriever;
+    private static class ModelPropertyNodeRetriever<N> implements NodeRetriever<N> {
+
+        private final Property<N, N> nodeRetriever;
+
+        private ModelPropertyNodeRetriever(Property<N, N> nodeRetriever) {
+            this.nodeRetriever = nodeRetriever;
+        }
+
+        @Override
+        public String getId() {
+            return this.nodeRetriever.getId();
+        }
+
+        @Override
+        public boolean exists(N object, Context context) {
+            return this.nodeRetriever.exists(object, context);
+        }
+
+        @Override
+        public boolean isWritable() {
+            return this.nodeRetriever.isWritable();
+        }
+
+        @Override
+        public N get(N object, Context context, boolean allowNull) {
+            return this.nodeRetriever.get(object, context, allowNull);
+        }
+
+        @Override
+        public void set(N object, N value, Context context) {
+            this.nodeRetriever.set(object, value, context);
+        }
+
+        @Override
+        public Set<Property<?, ?>> getHierarchy() {
+            return this.nodeRetriever.getHierarchy();
+        }
+
+        @Override
+        public <S> Property<S, N> prepend(Property<S, N> parent) {
+            return this.nodeRetriever.prepend(parent);
+        }
+
+        @Override
+        public int occurrences(N object) {
+            return this.nodeRetriever.occurrences(object);
+        }
+
+        @Override
+        public Collection<Context> contextualize(N object) {
+            return this.contextualize(object);
+        }
+    }
+
+    private final NodeRetriever<N> nodeRetriever;
 
     private ModelPropertyNode(String id, ReferencedGetter<O, N> getter, ReferencedSetter<O, N> setter,
-                              Property<N, N> nodeRetriever) {
+                              NodeRetriever<N> nodeRetriever) {
         super(id, getter, setter);
         this.nodeRetriever = nodeRetriever;
     }
@@ -22,7 +79,7 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     // ################################################ PATHING ##################################################
     // ###########################################################################################################
 
-    public Property<N, N> getNodeRetriever() {
+    public NodeRetriever<N> getNodeRetriever() {
         return nodeRetriever;
     }
 
@@ -43,8 +100,9 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     }
 
     public static <N> ModelPropertyNode<N, N> from(String id, ModelProperty<N, N> nodeRetriever) {
-        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(nodeRetriever),
-                NodeReferencedSetter.from(nodeRetriever), nodeRetriever);
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(retriever),
+                NodeReferencedSetter.from(retriever), retriever);
     }
 
     public static <O, N> ModelPropertyNode<O, N> fromObject(Getter<O, N> getter, ModelProperty<N, N> nodeRetriever) {
@@ -52,8 +110,9 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     }
 
     public static <O, N> ModelPropertyNode<O, N> fromObject(String id, Getter<O, N> getter, ModelProperty<N, N> nodeRetriever) {
-        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ObjectReferencedGetter.from(getter), nodeRetriever),
-                ReadonlyReferencedSetter.from(), nodeRetriever);
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ObjectReferencedGetter.from(getter), retriever),
+                ReadonlyReferencedSetter.from(), retriever);
     }
 
     public static <O, N> ModelPropertyNode<O, N> fromObject(Getter<O, N> getter, Setter<O, N> setter, ModelProperty<N, N> nodeRetriever) {
@@ -61,8 +120,9 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     }
 
     public static <O, N> ModelPropertyNode<O, N> fromObject(String id, Getter<O, N> getter, Setter<O, N> setter, ModelProperty<N, N> nodeRetriever) {
-        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ObjectReferencedGetter.from(getter), nodeRetriever),
-                NodeReferencedSetter.from(ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter), nodeRetriever), nodeRetriever);
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ObjectReferencedGetter.from(getter), retriever),
+                NodeReferencedSetter.from(ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter), retriever), retriever);
     }
 
     public static <N> ModelPropertyNode<List<N>, N> fromList(ModelProperty<N, N> nodeRetriever) {
@@ -70,7 +130,8 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     }
 
     public static <N> ModelPropertyNode<List<N>, N> fromList(String id, ModelProperty<N, N> nodeRetriever) {
-        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ListReferencedGetter.from(), nodeRetriever),
-                NodeReferencedSetter.from(ListReferencedGetter.from(), ListReferencedSetter.from(), nodeRetriever), nodeRetriever);
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ListReferencedGetter.from(), retriever),
+                NodeReferencedSetter.from(ListReferencedGetter.from(), ListReferencedSetter.from(), retriever), retriever);
     }
 }

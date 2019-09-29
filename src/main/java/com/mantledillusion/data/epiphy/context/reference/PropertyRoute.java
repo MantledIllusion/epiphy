@@ -1,15 +1,14 @@
 package com.mantledillusion.data.epiphy.context.reference;
 
-import com.mantledillusion.data.epiphy.Property;
+import com.mantledillusion.data.epiphy.NodeRetriever;
 import com.mantledillusion.data.epiphy.context.Context;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
 
-public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> {
+public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]> {
 
-    private PropertyRoute(Property<?, ?> property, Context... reference) {
+    private PropertyRoute(NodeRetriever<?> property, Context... reference) {
         super(property, reference);
     }
 
@@ -66,7 +65,7 @@ public class PropertyRoute extends PropertyReference<Property<?, ?>, Context[]> 
      *            The contexts the given property has to have.
      * @return A new {@link PropertyRoute}, never null
      */
-    public static <N> PropertyRoute of(Property<N, N> property, Context... contexts) {
+    public static <N> PropertyRoute of(NodeRetriever<N> property, Context... contexts) {
         if (property == null) {
             throw new IllegalArgumentException("Cannot create a route for a null property.");
         } else if (contexts == null || Arrays.stream(contexts).anyMatch(Objects::isNull)) {
