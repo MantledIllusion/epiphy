@@ -35,7 +35,7 @@ public interface InsertableProperties<O, E, R> {
 	 * @throws InterruptedPropertyPathException
 	 * 			If any property on the path to this {@link InsertableProperties} is null.
 	 * @throws UnreferencedPropertyPathException
-	 *          If there is any uncontexted property in this {@link IncludableProperties}'s path.
+	 *          If there is any uncontexted property in this {@link InsertableProperties}'s path.
 	 */
 	default void insert(O object, E element, R reference) throws
 			InterruptedPropertyPathException, UnreferencedPropertyPathException {

@@ -15,7 +15,7 @@ import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathExcepti
  * @param <O>
  *            The root parent object type of this {@link Property}.
  * @param <E>
- *            The type of the property element this {@link IncludableProperties} represents.
+ *            The type of the property element this {@link StripableProperties} represents.
  * @param <R>
  *            The type of the context reference.
  */
@@ -36,7 +36,7 @@ public interface StripableProperties<O, E, R> {
      * @throws InterruptedPropertyPathException
      * 			If any property on the path to this {@link StripableProperties} is null.
      * @throws UnreferencedPropertyPathException
-     *          If there is any uncontexted property in this {@link IncludableProperties}'s path.
+     *          If there is any uncontexted property in this {@link StripableProperties}'s path.
      */
     default ReferencedValue<R, E> strip(O object) throws
             InterruptedPropertyPathException, UnreferencedPropertyPathException {
