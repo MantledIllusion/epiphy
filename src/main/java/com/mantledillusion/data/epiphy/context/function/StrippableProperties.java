@@ -29,7 +29,7 @@ public interface StrippableProperties<C, E, R> {
      *             If there is any uncontexted property in this
      *             {@link ExtractableProperties}'s path.
      */
-    default ReferencedValue<Integer, E> strip(C collection) {
+    default ReferencedValue<R, E> strip(C collection) {
         return strip(collection, null);
     }
 
@@ -58,5 +58,5 @@ public interface StrippableProperties<C, E, R> {
      *             If there is any uncontexted property in this
      *             {@link ExtractableProperties}'s path.
      */
-    ReferencedValue<Integer, E> strip(C model, Context context);
+    ReferencedValue<R, E> strip(C model, Context context);
 }
