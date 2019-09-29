@@ -8,50 +8,65 @@ import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
 /**
- * Interface for properties that carry elements which can be reached by using a
- * {@link Context}.
+ * Interface for properties that carry elements which can be inserted using a specific reference.
  *
- * @param <C>
- *            The root model type of this {@link InsertableProperties}'s property
- *            tree.
+ * @param <O>
+ *            The root parent object type of this {@link Property}.
  * @param <E>
- *            The type of the property element this {@link InsertableProperties}
- *            represents.
+ *            The type of the property element this {@link InsertableProperties} represents.
  * @param <R>
  *            The type of the context reference.
  */
-public interface InsertableProperties<C, E, R> {
+public interface InsertableProperties<O, E, R> {
 
 	/**
-	 * Adds the given element to the elements represented by this
-	 * {@link InsertableProperties} in the given model.
+	 * Adds an element to the batch that is represented by this {@link InsertableProperties}.
 	 * <p>
-	 * The {@link PropertyReference} of this {@link InsertableProperties} in the
-	 * given context is used to determine where to add the given element.
+	 * The element is added at the next natural reference.
 	 * <p>
-	 * Note that this is a writing operation, so the property has to
-	 * {@link Property#exists(Object, Context)} in the model.
-	 * 
-	 * @param collection
-	 *            The model to add the element to; might <b>not</b> be null.
+	 * Note that this is a writing operation, so the property has to {@link Property#exists(Object)} in the object.
+	 *
+	 * @param object
+	 * 			The object to add the element to; might <b>not</b> be null.
 	 * @param element
-	 *            The element to add; might be null.
-	 * @param reference The reference to insert the element with; might <b>not</b> be null.
-	 * @param context
-	 *            The {@link Context} that should be used to satisfy the contexted
-	 *            properties from the root property to this
-	 *            {@link InsertableProperties}; might <b>not</b> be null.
+	 * 			The element to add; might be null.
+	 * @param reference
+	 * 			The reference to insert the element with; might <b>not</b> be null.
 	 * @throws InterruptedPropertyPathException
-	 *             If any property on the path to this {@link InsertableProperties}
-	 *             is null.
+	 * 			If any property on the path to this {@link InsertableProperties} is null.
 	 * @throws UnreferencedPropertyPathException
-	 *             If there is any uncontexted property in this
-	 *             {@link InsertableProperties}'s path that does not have a
-	 *             {@link PropertyReference} included in the given {@link Context}.
-	 * @throws OutboundPropertyPathException
-	 *             If the property reference provided by the given {@link Context}
-	 *             is out of bounds on the given model's elements this
-	 *             {@link InsertableProperties} represents.
+	 *          If there is any uncontexted property in this {@link IncludableProperties}'s path.
 	 */
-	void insert(C collection, E element, R reference, Context context);
+	default void insert(O object, E element, R reference) throws
+			InterruptedPropertyPathException, UnreferencedPropertyPathException {
+		insert(object, element, reference, null);
+	}
+
+	/**
+	 * Adds an element to the batch that is represented by this {@link InsertableProperties}.
+	 * <p>
+	 * The element is added at the next natural reference.
+	 * <p>
+	 * Note that this is a writing operation, so the property has to {@link Property#exists(Object)} in the object.
+	 *
+	 * @param object
+	 * 			The object to add the element to; might <b>not</b> be null.
+	 * @param element
+	 * 			The element to add; might be null.
+	 * @param reference
+	 * 			The reference to insert the element with; might <b>not</b> be null.
+	 * @param context
+	 * 			The {@link Context} that should be used to satisfy the contexted properties from the root property to
+	 * 			this {@link InsertableProperties}; might be null.
+	 * @throws InterruptedPropertyPathException
+	 * 			If any property on the path to this {@link InsertableProperties} is null.
+	 * @throws UnreferencedPropertyPathException
+	 * 			If there is any uncontexted property in this {@link InsertableProperties}'s path that does not have a
+	 * 			{@link PropertyReference} included in the given {@link Context}.
+	 * @throws OutboundPropertyPathException
+	 * 			If the property reference provided by the given {@link Context} is out of bounds on the given object's
+	 * 			elements this {@link InsertableProperties} represents.
+	 */
+	void insert(O object, E element, R reference, Context context) throws
+			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 }

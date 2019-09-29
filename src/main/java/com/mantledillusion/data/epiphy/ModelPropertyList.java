@@ -16,9 +16,9 @@ import java.util.List;
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
         IncludableProperties<O, E, Integer>,
         InsertableProperties<O, E, Integer>,
-        StrippableProperties<O, E, Integer>,
+        StripableProperties<O, E, Integer>,
         ExtractableProperties<O, E, Integer>,
-        DroppableProperties<O, E, Integer> {
+        DropableProperties<O, E, Integer> {
 
     private ModelPropertyList(String id, ReferencedGetter<O, List<E>> getter, ReferencedSetter<O, List<E>> setter) {
         super(id, getter, setter);
