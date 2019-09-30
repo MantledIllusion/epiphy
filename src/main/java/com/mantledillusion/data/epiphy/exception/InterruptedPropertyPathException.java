@@ -7,8 +7,6 @@ import com.mantledillusion.data.epiphy.Property;
  */
 public class InterruptedPropertyPathException extends NullPointerException {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor.
 	 * 

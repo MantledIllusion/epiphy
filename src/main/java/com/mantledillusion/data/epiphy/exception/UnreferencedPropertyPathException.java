@@ -8,8 +8,6 @@ import com.mantledillusion.data.epiphy.Property;
  */
 public final class UnreferencedPropertyPathException extends RuntimeException {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor.
 	 * 

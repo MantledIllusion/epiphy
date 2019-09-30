@@ -9,8 +9,6 @@ import com.mantledillusion.data.epiphy.Property;
  */
 public class OutboundPropertyPathException extends IndexOutOfBoundsException {
 
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * Constructor.
 	 *
