@@ -4,8 +4,6 @@ import com.mantledillusion.data.epiphy.NodeRetriever;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
-import com.mantledillusion.data.epiphy.io.ReferencedGetter;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 
 public class NodeReferencedSetter<O, N> implements ReferencedSetter<O, N> {
 

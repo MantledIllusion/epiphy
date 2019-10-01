@@ -3,8 +3,7 @@ package com.mantledillusion.data.epiphy.context.io;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
-import com.mantledillusion.data.epiphy.io.Setter;
+import com.mantledillusion.data.epiphy.Setter;
 
 public class ObjectReferencedSetter<O, V> implements ReferencedSetter<O, V> {
 

@@ -105,7 +105,7 @@ public interface Property<O, V> {
     }
 
     /**
-     * Returns whether this {@link Property} was created including a {@link com.mantledillusion.data.epiphy.io.Setter},
+     * Returns whether this {@link Property} was created including a {@link Setter},
      * so it is writable.
      *
      * @return
@@ -222,7 +222,7 @@ public interface Property<O, V> {
      * @throws UnreferencedPropertyPathException
      *             If there is any referenced property in this {@link Property} value's path.
      * @throws ReadonlyPropertyException
-     *             If this {@link Property} does not have a {@link com.mantledillusion.data.epiphy.io.Setter} defined
+     *             If this {@link Property} does not have a {@link Setter} defined
      *             to write its value with.
      */
     default void set(O object, V value)
@@ -253,7 +253,7 @@ public interface Property<O, V> {
      *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
      *             {@link Context} that does not match that {@link Property} value's bounds.
      * @throws ReadonlyPropertyException
-     *             If this {@link Property} does not have a {@link com.mantledillusion.data.epiphy.io.Setter} defined
+     *             If this {@link Property} does not have a {@link Setter} defined
      *             to write its value with.
      */
     void set(O object, V value, Context context)

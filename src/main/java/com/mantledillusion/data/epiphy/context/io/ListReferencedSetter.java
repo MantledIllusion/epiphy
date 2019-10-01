@@ -6,7 +6,6 @@ import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 
 import java.util.List;
 

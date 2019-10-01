@@ -3,8 +3,7 @@ package com.mantledillusion.data.epiphy.context.io;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
-import com.mantledillusion.data.epiphy.io.Getter;
-import com.mantledillusion.data.epiphy.io.ReferencedGetter;
+import com.mantledillusion.data.epiphy.Getter;
 
 import java.util.*;
 

@@ -1,10 +1,11 @@
 package com.mantledillusion.data.epiphy.exception;
 
 import com.mantledillusion.data.epiphy.Property;
+import com.mantledillusion.data.epiphy.Setter;
 
 /**
  * Exception that might be thrown if a writing operation is executed on a {@link Property} that returns
- * {@link Property#isWritable()} = false because it does not have a {@link com.mantledillusion.data.epiphy.io.Setter}.
+ * {@link Property#isWritable()} = false because it does not have a {@link Setter}.
  */
 public class ReadonlyPropertyException extends NullPointerException {
 

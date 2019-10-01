@@ -1,10 +1,8 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.io.*;
-import com.mantledillusion.data.epiphy.io.Getter;
-import com.mantledillusion.data.epiphy.io.ReferencedGetter;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
-import com.mantledillusion.data.epiphy.io.Setter;
+import com.mantledillusion.data.epiphy.context.io.ReferencedGetter;
+import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
 import java.util.List;
 

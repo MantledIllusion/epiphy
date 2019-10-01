@@ -3,7 +3,6 @@ package com.mantledillusion.data.epiphy.context.io;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.exception.ReadonlyPropertyException;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
 
 public class ReadonlyReferencedSetter<O, V> implements ReferencedSetter<O, V> {
 

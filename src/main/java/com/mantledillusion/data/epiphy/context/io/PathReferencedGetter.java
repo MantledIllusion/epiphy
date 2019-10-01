@@ -2,7 +2,6 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.io.ReferencedGetter;
 
 import java.util.*;
 import java.util.stream.Collectors;

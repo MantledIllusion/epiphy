@@ -1,4 +1,4 @@
-package com.mantledillusion.data.epiphy.io;
+package com.mantledillusion.data.epiphy;
 
 /**
  * Functional interface for writing a value to an object.

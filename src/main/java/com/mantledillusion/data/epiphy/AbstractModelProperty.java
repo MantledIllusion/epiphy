@@ -1,13 +1,11 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.io.ReferencedGetter;
-import com.mantledillusion.data.epiphy.io.ReferencedSetter;
+import com.mantledillusion.data.epiphy.context.io.ReferencedGetter;
+import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
-import java.util.SortedSet;
 
 abstract class AbstractModelProperty<O, V> implements Property<O, V> {
 
