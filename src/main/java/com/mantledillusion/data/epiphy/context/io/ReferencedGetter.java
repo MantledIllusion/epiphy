@@ -48,6 +48,17 @@ public interface ReferencedGetter<O, V> {
 			throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 
 	/**
+	 * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of the given {@link Property}, including
+	 * the given one.
+	 *
+	 * @param property
+	 * 			The property to check; might <b>not</b> be null.
+	 * @return
+	 * 			A {@link Set} of {@link Property}s, never null, might be empty
+	 */
+	Set<Property<?, ?>> getHierarchy(Property<O, V> property);
+
+	/**
 	 * Returns the count of occurrences ({@link Property#exists(Object)} != null) there are of the given
 	 * {@link Property} in the given object.
 	 *
@@ -75,15 +86,4 @@ public interface ReferencedGetter<O, V> {
 	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
 	 */
 	Collection<Context> contextualize(Property<O, V> property, O object);
-
-	/**
-	 * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of the given {@link Property}, including
-	 * the given one.
-	 *
-	 * @param property
-	 * 			The property to check; might <b>not</b> be null.
-	 * @return
-	 * 			A {@link Set} of {@link Property}s, never null, might be empty
-	 */
-	Set<Property<?, ?>> getHierarchy(Property<O, V> property);
 }

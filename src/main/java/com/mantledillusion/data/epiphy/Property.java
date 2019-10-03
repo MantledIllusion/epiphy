@@ -14,9 +14,9 @@ import java.util.stream.Stream;
  * Interface for a value that resides in an object.
  *
  * @param <O>
- *            The root parent object type of this {@link Property}.
+ *            The parent object type of this {@link Property}.
  * @param <V>
- *            The type of the value this {@link Property} represents.
+ *            The type of the child value this {@link Property} represents.
  */
 public interface Property<O, V> {
 
@@ -39,10 +39,11 @@ public interface Property<O, V> {
      * objects it is read from aren't.
      *
      * @param object
-     *            The instance to lookup the property from; might be null.
-     * @return True if all of this {@link Property}'s parents
+     *          The instance to lookup the property from; might be null.
+     * @return
+     *          True if all of this {@link Property}'s parent objects are not null, false otherwise
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      */
     default boolean exists(O object)
             throws UnreferencedPropertyPathException {
@@ -54,29 +55,34 @@ public interface Property<O, V> {
      * objects it is read from aren't.
      *
      * @param object
-     *            The instance to lookup the property from; might be null.
+     *          The instance to lookup the property from; might be null.
      * @param context
-     *            The {@link Context} that should be used to satisfy the referenced properties from the root object to
-     *            this {@link Property}'s value; might be null.
-     * @return True if all of this {@link Property}'s parents
+     *          The {@link Context} that should be used to satisfy the referenced properties from the root object to
+     *          this {@link Property}'s value; might be null.
+     * @return
+     *          True if all of this {@link Property}'s parent objects are not null, false otherwise
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      * @throws OutboundPropertyPathException
-     *             If there is a referenced property in this {@link Property} value's path that has a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
-     *             {@link Context} that does not match that {@link Property} value's bounds.
+     *          If there is a referenced property in this {@link Property} value's path that has a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
+     *          {@link Context} that does not match that {@link Property} value's bounds.
      */
     boolean exists(O object, Context context)
             throws UnreferencedPropertyPathException, OutboundPropertyPathException;
 
     /**
      * Returns whether this {@link Property}'s value or any parent object is null.
+     * <p>
+     * Equals {@link #exists(Object)}, with the addition that the value is not allowed to be null as well as the
+     * parents.
      *
      * @param object
-     *            The instance to lookup the property from; might be null.
-     * @return True if this {@link Property} or any of its parents is null, false otherwise
+     *          The instance to lookup the property from; might be null.
+     * @return
+     *          True if this {@link Property} or any of its parents is null, false otherwise
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      */
     default boolean isNull(O object)
             throws UnreferencedPropertyPathException {
@@ -85,19 +91,23 @@ public interface Property<O, V> {
 
     /**
      * Returns whether this {@link Property}'s value or any parent object is null.
+     * <p>
+     * Equals {@link #exists(Object, Context)}, with the addition that the value is not allowed to be null as well as
+     * the parents.
      *
      * @param object
-     *            The instance to lookup the property from; might be null.
+     *          The instance to lookup the property from; might be null.
      * @param context
-     *            The {@link Context} that should be used to satisfy the referenced properties from the root object to
-     *            this {@link Property}'s value; might be null.
-     * @return True if this {@link Property} or any of its parents is null, false otherwise
+     *          The {@link Context} that should be used to satisfy the referenced properties from the root object to
+     *          this {@link Property}'s value; might be null.
+     * @return
+     *          True if this {@link Property} or any of its parents is null, false otherwise
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      * @throws OutboundPropertyPathException
-     *             If there is a referenced property in this {@link Property} value's path that has a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
-     *             {@link Context} that does not match that {@link Property} value's bounds.
+     *          If there is a referenced property in this {@link Property} value's path that has a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
+     *          {@link Context} that does not match that {@link Property} value's bounds.
      */
     default boolean isNull(O object, Context context)
             throws UnreferencedPropertyPathException, OutboundPropertyPathException {
@@ -105,10 +115,9 @@ public interface Property<O, V> {
     }
 
     /**
-     * Returns whether this {@link Property} was created including a {@link Setter},
-     * so it is writable.
+     * Returns whether this {@link Property} was created including a {@link Setter}, so it is writable.
      *
-     * @return
+     * @return True if this {@link Property} is writeable, false otherwise
      */
     boolean isWritable();
 
@@ -120,12 +129,13 @@ public interface Property<O, V> {
      * Retrieves this {@link Property}'s value out of the given object.
      *
      * @param object
-     *            The instance to lookup the property value from; might be null.
-     * @return This {@link Property}'s retrieved value; might return null if the value is null
+     *          The instance to lookup the property value from; might be null.
+     * @return
+     *          This {@link Property}'s retrieved value; might return null if the value is null
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null.
+     *          If any object on the path to this {@link Property}'s value is null.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      */
     default V get(O object)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException {
@@ -136,16 +146,17 @@ public interface Property<O, V> {
      * Retrieves this {@link Property}'s value out of the given object.
      *
      * @param object
-     *            The instance to lookup the property value from; might be null.
+     *          The instance to lookup the property value from; might be null.
      * @param allowNull
-     *            Whether or not any parent object of this property is allowed to be null. If set to true, instead of
-     *            throwing an {@link InterruptedPropertyPathException}, the method will just return null.
-     * @return This {@link Property}'s retrieved value; might return null if the value is null or if a parent object is
-     * null and allowNull is set to true
+     *          Whether or not any parent object of this property is allowed to be null. If set to true, instead of
+     *          throwing an {@link InterruptedPropertyPathException}, the method will just return null.
+     * @return
+     *          This {@link Property}'s retrieved value; might return null if the value is null or if a parent object
+     *          is null and allowNull is set to true
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null and allowNull is set to false.
+     *          If any object on the path to this {@link Property}'s value is null and allowNull is set to false.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      */
     default V get(O object, boolean allowNull)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException {
@@ -156,21 +167,22 @@ public interface Property<O, V> {
      * Retrieves this {@link Property}'s value out of the given object.
      *
      * @param object
-     *            The instance to lookup the property value from; might be null.
+     *          The instance to lookup the property value from; might be null.
      * @param context
-     *            The {@link Context} that should be used to satisfy the referenced properties from the root object to
-     *            this {@link Property}'s value; might be null.
-     * @return This {@link Property}'s retrieved value; might return null if the value is null
+     *          The {@link Context} that should be used to satisfy the referenced properties from the root object to
+     *          this {@link Property}'s value; might be null.
+     * @return
+     *          This {@link Property}'s retrieved value; might return null if the value is null
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null.
+     *          If any object on the path to this {@link Property}'s value is null.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path that does not have a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
-     *             {@link Context}.
+     *          If there is any referenced property in this {@link Property} value's path that does not have a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context}.
      * @throws OutboundPropertyPathException
-     *             If there is a referenced property in this {@link Property} value's path that has a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
-     *             {@link Context} that does not match that {@link Property} value's bounds.
+     *          If there is a referenced property in this {@link Property} value's path that has a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context} that does not match that {@link Property} value's bounds.
      */
     default V get(O object, Context context)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException {
@@ -181,25 +193,26 @@ public interface Property<O, V> {
      * Retrieves this {@link Property}'s value out of the given object.
      *
      * @param object
-     *            The instance to lookup the property value from; might be null.
+     *          The instance to lookup the property value from; might be null.
      * @param context
-     *            The {@link Context} that should be used to satisfy the referenced properties from the root object to
-     *            this {@link Property}'s value; might be null.
+     *          The {@link Context} that should be used to satisfy the referenced properties from the root object to
+     *          this {@link Property}'s value; might be null.
      * @param allowNull
-     *            Whether or not any parent object of this property is allowed to be null. If set to true, instead of
-     *            throwing an {@link InterruptedPropertyPathException}, the method will just return null.
-     * @return This {@link Property}'s retrieved value; might return null if the value is null or if a parent object is
-     * null and allowNull is set to true
+     *          Whether or not any parent object of this property is allowed to be null. If set to true, instead of
+     *          throwing an {@link InterruptedPropertyPathException}, the method will just return null.
+     * @return
+     *          This {@link Property}'s retrieved value; might return null if the value is null or if a parent object
+     *          is null and allowNull is set to true
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null and allowNull is set to false.
+     *          If any object on the path to this {@link Property}'s value is null and allowNull is set to false.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path that does not have a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
-     *             {@link Context}.
+     *          If there is any referenced property in this {@link Property} value's path that does not have a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context}.
      * @throws OutboundPropertyPathException
-     *             If there is a referenced property in this {@link Property} value's path that has a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
-     *             {@link Context} that does not match that {@link Property} value's bounds.
+     *          If there is a referenced property in this {@link Property} value's path that has a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context} that does not match that {@link Property} value's bounds.
      */
     V get(O object, Context context, boolean allowNull)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
@@ -214,16 +227,15 @@ public interface Property<O, V> {
      * Note that this is a writing operation; the property has to {@link #exists(Object, Context)} in the given object.
      *
      * @param object
-     *            The instance to write the property value to; might be null.
+     *          The instance to write the property value to; might be null.
      * @param value
-     *            The value to set; might be null.
+     *          The value to set; might be null.
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null.
+     *          If any object on the path to this {@link Property}'s value is null.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path.
+     *          If there is any referenced property in this {@link Property} value's path.
      * @throws ReadonlyPropertyException
-     *             If this {@link Property} does not have a {@link Setter} defined
-     *             to write its value with.
+     *          If this {@link Property} does not have a {@link Setter} defined to write its value with.
      */
     default void set(O object, V value)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, ReadonlyPropertyException {
@@ -236,25 +248,24 @@ public interface Property<O, V> {
      * Note that this is a writing operation; the property has to {@link #exists(Object, Context)} in the given object.
      *
      * @param object
-     *            The instance to write the property value to; might be null.
+     *          The instance to write the property value to; might be null.
      * @param value
-     *            The value to set; might be null.
+     *          The value to set; might be null.
      * @param context
-     *            The {@link Context} that should be used to satisfy the referenced properties from the root object to
-     *            this {@link Property}'s value; might be null.
+     *          The {@link Context} that should be used to satisfy the referenced properties from the root object to
+     *          this {@link Property}'s value; might be null.
      * @throws InterruptedPropertyPathException
-     *             If any object on the path to this {@link Property}'s value is null.
+     *          If any object on the path to this {@link Property}'s value is null.
      * @throws UnreferencedPropertyPathException
-     *             If there is any referenced property in this {@link Property} value's path that does not have a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
-     *             {@link Context}.
+     *          If there is any referenced property in this {@link Property} value's path that does not have a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context}.
      * @throws OutboundPropertyPathException
-     *             If there is a referenced property in this {@link Property} value's path that has a
-     *             {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the  given
-     *             {@link Context} that does not match that {@link Property} value's bounds.
+     *          If there is a referenced property in this {@link Property} value's path that has a
+     *          {@link com.mantledillusion.data.epiphy.context.reference.PropertyReference} included in the given
+     *          {@link Context} that does not match that {@link Property} value's bounds.
      * @throws ReadonlyPropertyException
-     *             If this {@link Property} does not have a {@link Setter} defined
-     *             to write its value with.
+     *          If this {@link Property} does not have a {@link Setter} defined to write its value with.
      */
     void set(O object, V value, Context context)
             throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
@@ -264,20 +275,23 @@ public interface Property<O, V> {
     // ################################################ PATHING ##################################################
     // ###########################################################################################################
 
-    Set<Property<?, ?>> getHierarchy();
-
     /**
      * Builds a path with this {@link Property} as the leading and the given {@link Property} as the trailing end.
      * <p>
      * A {@link Property} path also is a property, but with at least one intermediate object between the root object
      * and the value.
      *
-     * @param <T> The value type of the path.
-     * @param <P1> The {@link Property} type of the child.
-     * @param <P2> The {@link Property} type of the path.
-     * @param child The child to append to this {@link Property} to form the path; might <b>not</b> be null.
-     * @return A new {@link Property} with the same type as the child and the root object type of this {@link Property},
-     * never null
+     * @param <T>
+     *          The value type of the path.
+     * @param <P1>
+     *          The {@link Property} type of the child.
+     * @param <P2>
+     *          The {@link Property} type of the path.
+     * @param child
+     *          The child to append to this {@link Property} to form the path; might <b>not</b> be null.
+     * @return
+     *          A new {@link Property} with the same type as the child and the root object type of this
+     *          {@link Property}, never null
      */
     default <T, P1 extends Property<V, T>, P2 extends Property<O, T>> P2 append(P1 child) {
         return (P2) child.prepend(this);
@@ -289,10 +303,13 @@ public interface Property<O, V> {
      * A {@link Property} path also is a property, but with at least one intermediate object between the root object
      * and the value.
      *
-     * @param <S> The object type of the path.
-     * @param parent The parent to prepent to this {@link Property} to form the path; might <b>not</b> be null.
-     * @return A new {@link Property} with the same type as this {@link Property} and the root object type of the child,
-     * never null
+     * @param <S>
+     *          The object type of the path.
+     * @param parent
+     *          The parent to prepent to this {@link Property} to form the path; might <b>not</b> be null.
+     * @return
+     *          A new {@link Property} with the same type as this {@link Property} and the root object type of the
+     *          child, never null
      */
     <S> Property<S, V> prepend(Property<S, O> parent);
 
@@ -300,20 +317,81 @@ public interface Property<O, V> {
     // ############################################## CONTEXTING #################################################
     // ###########################################################################################################
 
+    /**
+     * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of this {@link Property}, including this
+     * one.
+     *
+     * @return
+     * 			A {@link Set} of {@link Property}s, never null, might be empty
+     */
+    Set<Property<?, ?>> getHierarchy();
+
+    /**
+     * Returns the count of occurrences ({@link Property#exists(Object)} != null) there are of this {@link Property}
+     * in the given object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @return
+     * 			The occurrence count; always >=0
+     */
     int occurrences(O object);
 
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
     Collection<Context> contextualize(O object);
 
+    /**
+     * Returns a {@link Stream} of all of this {@link Property}'s values occurring in the given object.
+     * <p>
+     * The count of streamed values exactly matches the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to get the value occurrences from; might be null.
+     * @return
+     *          A {@link Stream} of values, never null, might be empty
+     */
     default Stream<V> stream(O  object) {
         return contextualize(object).stream().
                 map(context -> get(object, context, true));
     }
 
+    /**
+     * Returns a {@link Iterable} of all of this {@link Property}'s values occurring in the given object.
+     * <p>
+     * The count of iterable values exactly matches the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to get the value occurrences from; might be null.
+     * @return
+     *          A {@link Stream} of values, never null, might be empty
+     */
     default Iterable<V> iterate(O object) {
         return () -> stream(object).iterator();
     }
 
-    default V predecessor(O object, V value) {
+    /**
+     * Returns the predecessor of the given value in the given object.
+     *
+     * @param object
+     *          The object to get the value from; might be null.
+     * @param value
+     *          The value to search a predecessor for; might be null.
+     * @return
+     *          The predecessor of the given value, might be null if the given value is the first element
+     * @throws IllegalArgumentException
+     *          If the given value is not a value of the given object.
+     */
+    default V predecessor(O object, V value) throws IllegalArgumentException {
         V predecessor = null;
         for (V element: iterate(object)) {
             if (element == value) {
@@ -322,10 +400,23 @@ public interface Property<O, V> {
                 predecessor = element;
             }
         }
-        return null;
+        throw new IllegalArgumentException("The given value '" + value + "' is not an element of the given object '" +
+                object + "'");
     }
 
-    default V successor(O object, V value) {
+    /**
+     * Returns the successor of the given value in the given object.
+     *
+     * @param object
+     *          The object to get the value from; might be null.
+     * @param value
+     *          The value to search a successor for; might be null.
+     * @return
+     *          The successor of the given value, might be null if the given value is the last element
+     * @throws IllegalArgumentException
+     *          If the given value is not a value of the given object.
+     */
+    default V successor(O object, V value) throws IllegalArgumentException {
         boolean next = false;
         for (V element: iterate(object)) {
             if (next) {
@@ -334,7 +425,12 @@ public interface Property<O, V> {
                 next = true;
             }
         }
-        return null;
+        if (next) {
+            return null;
+        } else {
+            throw new IllegalArgumentException("The given value '" + value + "' is not an element of the given object '" +
+                    object + "'");
+        }
     }
 
     // ###########################################################################################################
