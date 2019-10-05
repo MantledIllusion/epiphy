@@ -11,6 +11,16 @@ import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 
 import java.util.List;
 
+/**
+ * Represents a listed {@link Property}.
+ * <p>
+ * Instantiable using the <code>from...()</code> methods.
+ *
+ * @param <O>
+ *          The parent object type of this {@link Property}.
+ * @param <E>
+ *          The element type of the list this {@link Property} represents.
+ */
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
         IncludableProperties<O, E, Integer>,
         InsertableProperties<O, E, Integer>,
@@ -83,26 +93,104 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     // ################################################ FACTORY ##################################################
     // ###########################################################################################################
 
+    /**
+     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <O>
+     *          The parent object type of the {@link Property}.
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @param getter
+     *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
     public static <O, E> ModelPropertyList<O, E> fromObject(Getter<O, List<E>> getter) {
         return fromObject(null, getter);
     }
 
+    /**
+     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <O>
+     *          The parent object type of the {@link Property}.
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @param getter
+     *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
     public static <O, E> ModelPropertyList<O, E> fromObject(String id, Getter<O, List<E>> getter) {
         return new ModelPropertyList<>(id, ObjectReferencedGetter.from(getter), ReadonlyReferencedSetter.from());
     }
 
+    /**
+     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     *
+     * @param <O>
+     *          The parent object type of the {@link Property}.
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @param getter
+     *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
+     * @param setter
+     *          A function that is able to write a value to its parent object; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
     public static <O, E> ModelPropertyList<O, E> fromObject(Getter<O, List<E>> getter, Setter<O, List<E>> setter) {
         return fromObject(null, getter, setter);
     }
 
+    /**
+     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     *
+     * @param <O>
+     *          The parent object type of the {@link Property}.
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @param getter
+     *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
+     * @param setter
+     *          A function that is able to write a value to its parent object; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
     public static <O, E> ModelPropertyList<O, E> fromObject(String id, Getter<O, List<E>> getter, Setter<O, List<E>> setter) {
         return new ModelPropertyList<>(id, ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter));
     }
 
+    /**
+     * Factory method for a listed {@link Property} that resides in another {@link List}.
+     *
+     * @param <E>
+     *          The element type of the list.
+     * @return
+     *          A new instance, never null
+     */
     public static <E> ModelPropertyList<List<List<E>>, E> fromList() {
         return fromList(null);
     }
 
+    /**
+     * Factory method for a listed {@link Property} that resides in another {@link List}.
+     *
+     * @param <E>
+     *          The element type of the list.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
     public static <E> ModelPropertyList<List<List<E>>, E> fromList(String id) {
         return new ModelPropertyList<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
     }

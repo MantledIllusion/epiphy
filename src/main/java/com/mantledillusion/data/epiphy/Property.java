@@ -14,9 +14,9 @@ import java.util.stream.Stream;
  * Interface for a value that resides in an object.
  *
  * @param <O>
- *            The parent object type of this {@link Property}.
+ *          The parent object type of this {@link Property}.
  * @param <V>
- *            The type of the child value this {@link Property} represents.
+ *          The type of the child value this {@link Property} represents.
  */
 public interface Property<O, V> {
 
@@ -400,8 +400,8 @@ public interface Property<O, V> {
                 predecessor = element;
             }
         }
-        throw new IllegalArgumentException("The given value '" + value + "' is not an element of the given object '" +
-                object + "'");
+        throw new IllegalArgumentException("The given value '" + value +
+                "' is not an element of the given object '" +  object + "'");
     }
 
     /**
@@ -428,8 +428,8 @@ public interface Property<O, V> {
         if (next) {
             return null;
         } else {
-            throw new IllegalArgumentException("The given value '" + value + "' is not an element of the given object '" +
-                    object + "'");
+            throw new IllegalArgumentException("The given value '" + value +
+                    "' is not an element of the given object '" + object + "'");
         }
     }
 
