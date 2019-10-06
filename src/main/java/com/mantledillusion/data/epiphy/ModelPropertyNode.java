@@ -72,7 +72,7 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
 
         @Override
         public Collection<Context> contextualize(N object) {
-            return this.contextualize(object);
+            return this.nodeRetriever.contextualize(object);
         }
     }
 
