@@ -7,7 +7,7 @@ import com.mantledillusion.data.epiphy.Property;
  * Exception that might be thrown if a {@link PropertyReference} is provided for a {@link Property}, but its reference
  * is out of bounds for that {@link Property}'s object.
  */
-public class OutboundPropertyPathException extends IndexOutOfBoundsException {
+public class OutboundPropertyPathException extends IllegalStateException {
 
 	/**
 	 * Constructor.

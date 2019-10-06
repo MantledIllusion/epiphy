@@ -6,8 +6,7 @@ import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.ReferencedValue;
 import com.mantledillusion.data.epiphy.context.io.*;
-import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
-import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.*;
 
 import java.util.List;
 
@@ -22,11 +21,11 @@ import java.util.List;
  *          The element type of the list this {@link Property} represents.
  */
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
-        IncludableProperties<O, E, Integer>,
-        InsertableProperties<O, E, Integer>,
-        StripableProperties<O, E, Integer>,
-        ExtractableProperties<O, E, Integer>,
-        DropableProperties<O, E, Integer> {
+        IncludableProperty<O, E, Integer>,
+        InsertableProperty<O, E, Integer>,
+        StripableProperty<O, E, Integer>,
+        ExtractableProperty<O, E, Integer>,
+        DropableProperty<O, E, Integer> {
 
     private ModelPropertyList(String id, ReferencedGetter<O, List<E>> getter, ReferencedSetter<O, List<E>> setter) {
         super(id, getter, setter);
@@ -53,6 +52,10 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
 
     @Override
     public void insert(O object, E element, Integer reference, Context context) {
+        List<E> elements = elements(object, context);
+        if (reference < 0 || reference > elements.size()) {
+            throw new OutboundInsertableReferenceException(this, reference);
+        }
         elements(object, context).add(reference, element);
     }
 
@@ -64,7 +67,11 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
 
     @Override
     public E extract(O object, Integer reference, Context context) {
-        return elements(object, context).remove((int) reference);
+        List<E> elements = elements(object, context);
+        if (reference < 0 || reference >= elements.size()) {
+            throw new OutboundExtractableReferenceException(this, reference);
+        }
+        return elements.remove((int) reference);
     }
 
     @Override
@@ -72,7 +79,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
         List<E> elements = elements(object, context);
         int index = elements.indexOf(element);
         if (index == -1) {
-            throw new OutboundPropertyPathException(this, null); // TODO other exception
+            throw new UnknownDropableElementException(this, element);
         }
         elements.remove(element);
         return index;

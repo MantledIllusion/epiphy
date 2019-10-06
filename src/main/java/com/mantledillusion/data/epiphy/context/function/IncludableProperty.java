@@ -1,26 +1,27 @@
 package com.mantledillusion.data.epiphy.context.function;
 
-import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
+import com.mantledillusion.data.epiphy.Property;
 
 /**
- * Interface for properties that carry elements which can be inserted using a specific reference.
+ * Interface for properties that carry elements whose references have a natural order, so new elements can be added
+ * without explicitly providing a reference.
  *
  * @param <O>
  *            The root parent object type of this {@link Property}.
  * @param <E>
- *            The type of the property element this {@link InsertableProperties} represents.
+ *            The type of the property element this {@link IncludableProperty} represents.
  * @param <R>
  *            The type of the context reference.
  */
-public interface InsertableProperties<O, E, R> {
+public interface IncludableProperty<O, E, R> {
 
 	/**
-	 * Adds an element to the batch that is represented by this {@link InsertableProperties}.
+	 * Adds an element to the batch that is represented by this {@link IncludableProperty}.
 	 * <p>
 	 * The element is added at the next natural reference.
 	 * <p>
@@ -30,20 +31,20 @@ public interface InsertableProperties<O, E, R> {
 	 * 			The object to add the element to; might <b>not</b> be null.
 	 * @param element
 	 * 			The element to add; might be null.
-	 * @param reference
-	 * 			The reference to insert the element with; might <b>not</b> be null.
+	 * @return
+	 * 			The property reference of the element that has been removed; never null
 	 * @throws InterruptedPropertyPathException
-	 * 			If any property on the path to this {@link InsertableProperties} is null.
+	 * 			If any property on the path to this {@link IncludableProperty} is null.
 	 * @throws UnreferencedPropertyPathException
-	 *          If there is any uncontexted property in this {@link InsertableProperties}'s path.
+	 *          If there is any uncontexted property in this {@link IncludableProperty}'s path.
 	 */
-	default void insert(O object, E element, R reference) throws
+	default R include(O object, E element) throws
 			InterruptedPropertyPathException, UnreferencedPropertyPathException {
-		insert(object, element, reference, null);
+		return include(object, element, null);
 	}
 
 	/**
-	 * Adds an element to the batch that is represented by this {@link InsertableProperties}.
+	 * Adds an element to the batch that is represented by this {@link IncludableProperty}.
 	 * <p>
 	 * The element is added at the next natural reference.
 	 * <p>
@@ -53,20 +54,20 @@ public interface InsertableProperties<O, E, R> {
 	 * 			The object to add the element to; might <b>not</b> be null.
 	 * @param element
 	 * 			The element to add; might be null.
-	 * @param reference
-	 * 			The reference to insert the element with; might <b>not</b> be null.
 	 * @param context
 	 * 			The {@link Context} that should be used to satisfy the contexted properties from the root property to
-	 * 			this {@link InsertableProperties}; might be null.
+	 * 			this {@link IncludableProperty}; might be null.
+	 * @return
+	 * 			The property reference of the element that has been removed; never null
 	 * @throws InterruptedPropertyPathException
-	 * 			If any property on the path to this {@link InsertableProperties} is null.
+	 * 			If any property on the path to this {@link IncludableProperty} is null.
 	 * @throws UnreferencedPropertyPathException
-	 * 			If there is any uncontexted property in this {@link InsertableProperties}'s path that does not have a
+	 * 			If there is any uncontexted property in this {@link IncludableProperty}'s path that does not have a
 	 * 			{@link PropertyReference} included in the given {@link Context}.
 	 * @throws OutboundPropertyPathException
 	 * 			If the property reference provided by the given {@link Context} is out of bounds on the given object's
-	 * 			elements this {@link InsertableProperties} represents.
+	 * 			elements this {@link IncludableProperty} represents.
 	 */
-	void insert(O object, E element, R reference, Context context) throws
+	R include(O object, E element, Context context) throws
 			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 }

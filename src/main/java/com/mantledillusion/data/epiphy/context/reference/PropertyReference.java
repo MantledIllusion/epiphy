@@ -1,7 +1,6 @@
 package com.mantledillusion.data.epiphy.context.reference;
 
 import com.mantledillusion.data.epiphy.Property;
-import com.mantledillusion.data.epiphy.context.function.ExtractableProperties;
 
 /**
  * Base type for references to {@link Property}s whose values are elements to a batch.

@@ -13,14 +13,14 @@ import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathExcepti
  * @param <O>
  *            The root parent object type of this {@link Property}.
  * @param <E>
- *            The type of the property element this {@link DropableProperties} represents.
+ *            The type of the property element this {@link DropableProperty} represents.
  * @param <R>
  *            The type of the context reference.
  */
-public interface DropableProperties<O, E, R> {
+public interface DropableProperty<O, E, R> {
 
     /**
-     * Removes an element from the batch that is represented by this {@link DropableProperties}.
+     * Removes an element from the batch that is represented by this {@link DropableProperty}.
      * <p>
      * The element is removed by equality; the equality is determined in relation to the given element.
      * <p>
@@ -35,9 +35,9 @@ public interface DropableProperties<O, E, R> {
      *          The property reference of the element that has been removed; might be null if the given element was not
      *          included in its element
      * @throws InterruptedPropertyPathException
-     *          If any property on the path to this {@link DropableProperties} is null.
+     *          If any property on the path to this {@link DropableProperty} is null.
      * @throws UnreferencedPropertyPathException
-     *          If there is any uncontexted property in this {@link DropableProperties}'s path.
+     *          If there is any uncontexted property in this {@link DropableProperty}'s path.
      */
     default R drop(O object, E element) throws
             InterruptedPropertyPathException, UnreferencedPropertyPathException {
@@ -45,7 +45,7 @@ public interface DropableProperties<O, E, R> {
     }
 
     /**
-     * Removes an element from the batch that is represented by this {@link DropableProperties}.
+     * Removes an element from the batch that is represented by this {@link DropableProperty}.
      * <p>
      * The element is removed by equality; the equality is determined in relation to the given element.
      * <p>
@@ -58,18 +58,18 @@ public interface DropableProperties<O, E, R> {
      *          removed; might be null.
      * @param context
      *          The {@link Context} that should be used to satisfy the contexted properties from the root property to
-     *          this {@link DropableProperties}; might be null.
+     *          this {@link DropableProperty}; might be null.
      * @return
      *          The property reference of the element that has been removed; might be null if the given element was not
      *          included in its element
      * @throws InterruptedPropertyPathException
-     *          If any property on the path to this {@link DropableProperties} is null.
+     *          If any property on the path to this {@link DropableProperty} is null.
      * @throws UnreferencedPropertyPathException
-     *          If there is any uncontexted property in this {@link DropableProperties}'s path that does not have a
+     *          If there is any uncontexted property in this {@link DropableProperty}'s path that does not have a
      *          {@link PropertyReference} included in the given {@link Context}.
      * @throws OutboundPropertyPathException
      *          If the property reference provided by the given {@link Context} is out of bounds on the given object's
-     *          elements this {@link DropableProperties} represents.
+     *          elements this {@link DropableProperty} represents.
      */
     R drop(O object, E element, Context context) throws
             InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;

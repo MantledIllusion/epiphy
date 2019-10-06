@@ -4,6 +4,7 @@ import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 import com.mantledillusion.data.epiphy.list.AbstractListModelPropertyTest;
 import com.mantledillusion.data.epiphy.list.ListModelProperties;
 import org.junit.jupiter.api.Test;
@@ -14,14 +15,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class GetListModelPropertyTest extends AbstractListModelPropertyTest {
 
 	@Test
-	public void testGetIndexedProperty() {
+	public void testGet() {
 		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 0));
 		assertSame(this.model.get(0).get(0), ListModelProperties.ELEMENTLIST_TO_ELEMENT.get(this.model, context));
 	}
 
 	@Test
-	public void testGetIndexedPropertyIntermediateNull() {
+	public void testGetInterrupted() {
 		this.model.set(0, null);
 		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 1));
@@ -31,7 +32,14 @@ public class GetListModelPropertyTest extends AbstractListModelPropertyTest {
 	}
 
 	@Test
-	public void testGetIndexedPropertyOutOfBounds() {
+	public void testGetUnreferenced() {
+		assertThrows(UnreferencedPropertyPathException.class, () -> {
+			ListModelProperties.ELEMENTLIST_TO_ELEMENT.get(this.model);
+		});
+	}
+
+	@Test
+	public void testGetOutbound() {
 		Context context = Context.of(PropertyIndex.of(ListModelProperties.ELEMENTLIST, 0),
 				PropertyIndex.of(ListModelProperties.ELEMENT, 2));
 		assertThrows(OutboundPropertyPathException.class, () -> {

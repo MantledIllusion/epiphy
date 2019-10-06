@@ -48,7 +48,7 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
 
     @Override
     public V get(O instance, Context context, boolean allowNull) {
-        return this.getter.get(this, instance, context, allowNull);
+        return this.getter.get(this, instance, Context.defaultIfNull(context), allowNull);
     }
 
     // ###########################################################################################################
@@ -61,7 +61,7 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
 
     @Override
     public void set(O instance, V value, Context context) {
-        this.setter.set(this, instance, value, context);
+        this.setter.set(this, instance, value, Context.defaultIfNull(context));
     }
 
     // ###########################################################################################################

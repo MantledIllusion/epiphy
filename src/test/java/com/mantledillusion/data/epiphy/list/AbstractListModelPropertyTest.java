@@ -10,6 +10,8 @@ public abstract class AbstractListModelPropertyTest {
 	protected static final String ELEMENT_0_ELEMENT_0 = "e0_e0";
 	protected static final String ELEMENT_0_ELEMENT_1 = "e0_e1";
 	protected static final String ELEMENT_1_ELEMENT_0 = "e1_e0";
+
+	protected static final String NEW_ELEMENT = "newElem";
 	
 	protected List<List<String>> model;
 	

@@ -185,4 +185,16 @@ public class Context {
 			return context;
 		}
 	}
+
+	/**
+	 * Defaults to returning an {@link #EMPTY} {@link Context} if the given one is null.
+	 *
+	 * @param context
+	 * 			The {@link Context} to check; might be null.
+	 * @return
+	 * 			Either the given {@link Context} if it is not null, {@link #EMPTY} otherwise
+	 */
+	public static Context defaultIfNull(Context context) {
+		return context == null ? EMPTY : context;
+	}
 }
