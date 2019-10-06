@@ -11,13 +11,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class SetObjectModelPropertyTest extends AbstractObjectModelPropertyTest {
 
 	@Test
-	public void testSetProperty() {
+	public void testSet() {
 		ObjectModelProperties.MODELID.set(this.model, "reset");
 		assertEquals(this.model.modelId, ObjectModelProperties.MODELID.get(this.model));
 	}
 
 	@Test
-	public void testSetPropertyIntermediateNull() {
+	public void testSetInterrupted() {
 		this.model.sub.subSub = null;
 		assertThrows(InterruptedPropertyPathException.class, () -> {
 			ObjectModelProperties.MODEL_TO_SUBSUBID.set(this.model, "newId");
