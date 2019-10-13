@@ -12,14 +12,14 @@ public abstract class AbstractObjectModelPropertyTest {
 	@BeforeEach
 	public void before() {
 		model = new ObjectModel();
-		model.modelId = "model";
+		model.setModelId("model");
 		
 		ObjectSubType sub = new ObjectSubType();
-		sub.subId = "sub";
-		model.sub = sub;
+		sub.setSubId("sub");
+		model.setSub(sub);
 		
 		ObjectSubSubType subSub = new ObjectSubSubType();
-		subSub.subSubId = "subSub";
-		sub.subSub = subSub;
+		subSub.setSubSubId("subSub");
+		sub.setSubSub(subSub);
 	}
 }

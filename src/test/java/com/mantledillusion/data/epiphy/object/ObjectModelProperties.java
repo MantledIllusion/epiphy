@@ -7,11 +7,11 @@ import com.mantledillusion.data.epiphy.object.model.ObjectSubType;
 
 public interface ObjectModelProperties {
 
-    ModelProperty<ObjectModel, String> MODELID = ModelProperty.fromObject(m -> m.modelId, (m, modelId) -> m.modelId = modelId);
-    ModelProperty<ObjectModel, ObjectSubType> MODELSUB = ModelProperty.fromObject(m -> m.sub, (m, sub) -> m.sub = sub);
-    ModelProperty<ObjectSubType, String> SUBID = ModelProperty.fromObject(s -> s.subId, (s, subId) -> s.subId = subId);
-    ModelProperty<ObjectSubType, ObjectSubSubType> SUBSUB = ModelProperty.fromObject(s -> s.subSub, (s, subSub) -> s.subSub = subSub);
-    ModelProperty<ObjectSubSubType, String> SUBSUBID = ModelProperty.fromObject(s -> s.subSubId, (s, subSubId) -> s.subSubId = subSubId);
+    ModelProperty<ObjectModel, String> MODELID = ModelProperty.fromObject(ObjectModel::getModelId, ObjectModel::setModelId);
+    ModelProperty<ObjectModel, ObjectSubType> MODELSUB = ModelProperty.fromObject(ObjectModel::getSub, ObjectModel::setSub);
+    ModelProperty<ObjectSubType, String> SUBID = ModelProperty.fromObject(ObjectSubType::getSubId, ObjectSubType::setSubId);
+    ModelProperty<ObjectSubType, ObjectSubSubType> SUBSUB = ModelProperty.fromObject(ObjectSubType::getSubSub, ObjectSubType::setSubSub);
+    ModelProperty<ObjectSubSubType, String> SUBSUBID = ModelProperty.fromObject(ObjectSubSubType::getSubSubId, ObjectSubSubType::setSubSubId);
 
     ModelProperty<ObjectModel, String> MODEL_TO_SUBID = MODELSUB.append(SUBID);
     ModelProperty<ObjectModel, ObjectSubSubType> MODEL_TO_SUBSUB = MODELSUB.append(SUBSUB);

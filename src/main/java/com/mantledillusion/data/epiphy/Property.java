@@ -313,10 +313,6 @@ public interface Property<O, V> {
      */
     <S> Property<S, V> prepend(Property<S, O> parent);
 
-    // ###########################################################################################################
-    // ############################################## CONTEXTING #################################################
-    // ###########################################################################################################
-
     /**
      * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of this {@link Property}, including this
      * one.
@@ -325,6 +321,10 @@ public interface Property<O, V> {
      * 			A {@link Set} of {@link Property}s, never null, might be empty
      */
     Set<Property<?, ?>> getHierarchy();
+
+    // ###########################################################################################################
+    // ############################################## CONTEXTING #################################################
+    // ###########################################################################################################
 
     /**
      * Returns the count of occurrences ({@link Property#exists(Object)} != null) there are of this {@link Property}

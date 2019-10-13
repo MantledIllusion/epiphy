@@ -16,7 +16,7 @@ public class ContextObjectModelPropertyTest {
     @Test
     public void testNullObjectIndexing() {
         ObjectModel model = new ObjectModel();
-        model.sub = null;
+        model.setSub(null);
 
         Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(model);
         Assertions.assertEquals(0, contexts.size());
@@ -25,7 +25,7 @@ public class ContextObjectModelPropertyTest {
     @Test
     public void testObjectIndexing() {
         ObjectModel model = new ObjectModel();
-        model.sub = new ObjectSubType();
+        model.setSub(new ObjectSubType());
 
         Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(model);
         Assertions.assertEquals(1, contexts.size());
@@ -33,7 +33,7 @@ public class ContextObjectModelPropertyTest {
         while (iter.hasNext()) {
             Context context = iter.next();
             Assertions.assertFalse(context.containsReference(ObjectModelProperties.MODELSUB, PropertyReference.class));
-            Assertions.assertSame(model.sub, ObjectModelProperties.MODELSUB.get(model, context));
+            Assertions.assertSame(model.getSub(), ObjectModelProperties.MODELSUB.get(model, context));
         }
     }
 }
