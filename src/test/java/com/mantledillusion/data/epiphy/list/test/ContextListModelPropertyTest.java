@@ -46,4 +46,30 @@ public class ContextListModelPropertyTest {
             Assertions.assertSame(list.get(index.getReference()), ListModelProperties.ELEMENT.get(list, context));
         }
     }
+
+    @Test
+    public void testStream() {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        list.add("D");
+
+        Queue<String> expected = new ArrayDeque<>(Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
+        ListModelProperties.ELEMENT.stream(list).forEachOrdered(element -> Assertions.assertSame(expected.poll(), element));
+    }
+
+    @Test
+    public void testIterate() {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+        list.add("C");
+        list.add("D");
+
+        Queue<String> expected = new ArrayDeque<>(Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
+        for (String s: ListModelProperties.ELEMENT.iterate(list)) {
+            Assertions.assertSame(expected.poll(), s);
+        }
+    }
 }

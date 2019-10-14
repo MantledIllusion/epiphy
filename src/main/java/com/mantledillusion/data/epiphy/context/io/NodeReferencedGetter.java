@@ -50,17 +50,17 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     @Override
     public Collection<Context> contextualize(Property<O, N> property, O object) {
         N node = this.getter.get(property, object, Context.EMPTY, false);
-        Set<Context> contexts = new HashSet<>();
+        List<Context> contexts = new ArrayList<>();
         if (node != null) {
             PropertyRoute baseRoute = PropertyRoute.of(this.nodeRetriever);
             contexts.add(Context.of(baseRoute));
-            contexts.addAll(subContextualize(node, baseRoute).collect(Collectors.toSet()));
+            contexts.addAll(subContextualize(node, baseRoute).collect(Collectors.toList()));
         }
         return contexts;
     }
 
     private Stream<Context> subContextualize(N node, PropertyRoute route) {
-        return this.nodeRetriever.contextualize(node).parallelStream().
+        return this.nodeRetriever.contextualize(node).stream().
                 flatMap(subContext -> {
                     PropertyRoute appendedRoute = route.append(subContext);
                     N child = this.nodeRetriever.get(node, subContext, false);

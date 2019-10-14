@@ -8,8 +8,7 @@ import com.mantledillusion.data.epiphy.node.model.NodeModel;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class ContextNodeModelPropertyTest {
 
@@ -66,6 +65,36 @@ public class ContextNodeModelPropertyTest {
                 current = current.getChild();
             }
             Assertions.assertSame(current, NodeModelProperties.NODE.get(root, context));
+        }
+    }
+
+    @Test
+    public void testStream() {
+        NodeModel root = new NodeModel();
+        NodeModel sub1 = new NodeModel();
+        root.setChild(sub1);
+        NodeModel sub2 = new NodeModel();
+        sub1.setChild(sub2);
+        NodeModel sub3 = new NodeModel();
+        sub2.setChild(sub3);
+
+        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(root, sub1, sub2, sub3));
+        NodeModelProperties.NODE.stream(root).forEachOrdered(node -> Assertions.assertSame(expected.poll(), node));
+    }
+
+    @Test
+    public void testIterate() {
+        NodeModel root = new NodeModel();
+        NodeModel sub1 = new NodeModel();
+        root.setChild(sub1);
+        NodeModel sub2 = new NodeModel();
+        sub1.setChild(sub2);
+        NodeModel sub3 = new NodeModel();
+        sub2.setChild(sub3);
+
+        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(root, sub1, sub2, sub3));
+        for (NodeModel node: NodeModelProperties.NODE.iterate(root)) {
+            Assertions.assertSame(expected.poll(), node);
         }
     }
 }

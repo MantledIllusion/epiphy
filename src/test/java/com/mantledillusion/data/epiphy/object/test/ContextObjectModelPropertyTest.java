@@ -8,8 +8,7 @@ import com.mantledillusion.data.epiphy.object.model.ObjectSubType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 public class ContextObjectModelPropertyTest {
 
@@ -50,6 +49,26 @@ public class ContextObjectModelPropertyTest {
             Context context = iter.next();
             Assertions.assertFalse(context.containsReference(ObjectModelProperties.MODELSUB, PropertyReference.class));
             Assertions.assertSame(model.getSub(), ObjectModelProperties.MODELSUB.get(model, context));
+        }
+    }
+
+    @Test
+    public void testStream() {
+        ObjectModel model = new ObjectModel();
+        model.setSub(new ObjectSubType());
+
+        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(model.getSub()));
+        ObjectModelProperties.MODELSUB.stream(model).forEachOrdered(sub -> Assertions.assertSame(expected.poll(), sub));
+    }
+
+    @Test
+    public void testIterate() {
+        ObjectModel model = new ObjectModel();
+        model.setSub(new ObjectSubType());
+
+        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(model.getSub()));
+        for (ObjectSubType sub: ObjectModelProperties.MODELSUB.iterate(model)) {
+            Assertions.assertSame(expected.poll(), sub);
         }
     }
 }
