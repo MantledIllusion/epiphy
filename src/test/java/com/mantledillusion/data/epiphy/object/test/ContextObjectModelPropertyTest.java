@@ -2,73 +2,69 @@ package com.mantledillusion.data.epiphy.object.test;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
+import com.mantledillusion.data.epiphy.object.AbstractObjectModelPropertyTest;
 import com.mantledillusion.data.epiphy.object.ObjectModelProperties;
-import com.mantledillusion.data.epiphy.object.model.ObjectModel;
 import com.mantledillusion.data.epiphy.object.model.ObjectSubType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-public class ContextObjectModelPropertyTest {
+public class ContextObjectModelPropertyTest extends AbstractObjectModelPropertyTest {
 
     @Test
     public void testNullOccurrences() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(null);
+        this.model.setSub(null);
 
-        Assertions.assertEquals(0, ObjectModelProperties.MODELSUB.occurrences(model));
+        Assertions.assertEquals(0, ObjectModelProperties.MODELSUB.occurrences(this.model));
     }
 
     @Test
     public void testOccurrences() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(new ObjectSubType());
-
-        Assertions.assertEquals(1, ObjectModelProperties.MODELSUB.occurrences(model));
+        Assertions.assertEquals(1, ObjectModelProperties.MODELSUB.occurrences(this.model));
     }
 
     @Test
     public void testNullContexting() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(null);
+        this.model.setSub(null);
 
-        Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(model);
+        Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(this.model);
         Assertions.assertEquals(0, contexts.size());
     }
 
     @Test
     public void testContexting() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(new ObjectSubType());
-
-        Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(model);
+        Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(this.model);
         Assertions.assertEquals(1, contexts.size());
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
             Assertions.assertFalse(context.containsReference(ObjectModelProperties.MODELSUB, PropertyReference.class));
-            Assertions.assertSame(model.getSub(), ObjectModelProperties.MODELSUB.get(model, context));
+            Assertions.assertSame(this.model.getSub(), ObjectModelProperties.MODELSUB.get(this.model, context));
         }
     }
 
     @Test
     public void testStream() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(new ObjectSubType());
-
-        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(model.getSub()));
-        ObjectModelProperties.MODELSUB.stream(model).forEachOrdered(sub -> Assertions.assertSame(expected.poll(), sub));
+        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(this.model.getSub()));
+        ObjectModelProperties.MODELSUB.stream(this.model).forEachOrdered(sub -> Assertions.assertSame(expected.poll(), sub));
     }
 
     @Test
     public void testIterate() {
-        ObjectModel model = new ObjectModel();
-        model.setSub(new ObjectSubType());
-
-        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(model.getSub()));
-        for (ObjectSubType sub: ObjectModelProperties.MODELSUB.iterate(model)) {
+        Queue<ObjectSubType> expected = new ArrayDeque<>(Arrays.asList(this.model.getSub()));
+        for (ObjectSubType sub: ObjectModelProperties.MODELSUB.iterate(this.model)) {
             Assertions.assertSame(expected.poll(), sub);
         }
+    }
+
+    @Test
+    public void testPredecessor() {
+        Assertions.assertNull(ObjectModelProperties.MODELSUB.predecessor(this.model, this.model.getSub()));
+    }
+
+    @Test
+    public void testSuccessor() {
+        Assertions.assertNull(ObjectModelProperties.MODELSUB.successor(this.model, this.model.getSub()));
     }
 }

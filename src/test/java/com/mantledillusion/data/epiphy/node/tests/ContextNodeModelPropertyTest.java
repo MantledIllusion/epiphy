@@ -3,6 +3,7 @@ package com.mantledillusion.data.epiphy.node.tests;
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
+import com.mantledillusion.data.epiphy.node.AbstractNodeModelPropertyTest;
 import com.mantledillusion.data.epiphy.node.NodeModelProperties;
 import com.mantledillusion.data.epiphy.node.model.NodeModel;
 import org.junit.jupiter.api.Assertions;
@@ -10,33 +11,25 @@ import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-public class ContextNodeModelPropertyTest {
+public class ContextNodeModelPropertyTest extends AbstractNodeModelPropertyTest {
 
     @Test
     public void testNoChildOccurrences() {
-        NodeModel root = new NodeModel();
-        root.setChild(null);
+        this.root.setChild(null);
 
-        Assertions.assertEquals(1, NodeModelProperties.NODE.occurrences(root));
+        Assertions.assertEquals(1, NodeModelProperties.NODE.occurrences(this.root));
     }
 
     @Test
     public void testOccurrences() {
-        NodeModel root = new NodeModel();
-        NodeModel sub1 = new NodeModel();
-        root.setChild(sub1);
-        NodeModel sub2 = new NodeModel();
-        sub1.setChild(sub2);
-
-        Assertions.assertEquals(3, NodeModelProperties.NODE.occurrences(root));
+        Assertions.assertEquals(3, NodeModelProperties.NODE.occurrences(this.root));
     }
 
     @Test
     public void testNoChildContexting() {
-        NodeModel root = new NodeModel();
-        root.setChild(null);
+        this.root.setChild(null);
 
-        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(root);
+        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(this.root);
         Assertions.assertEquals(1, contexts.size());
         Context context = contexts.iterator().next();
 
@@ -46,55 +39,47 @@ public class ContextNodeModelPropertyTest {
 
     @Test
     public void testContexting() {
-        NodeModel root = new NodeModel();
-        NodeModel sub1 = new NodeModel();
-        root.setChild(sub1);
-        NodeModel sub2 = new NodeModel();
-        sub1.setChild(sub2);
-
-        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(root);
+        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(this.root);
         Assertions.assertEquals(3, contexts.size());
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
             Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
             PropertyRoute route = context.getReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
-            NodeModel current = root;
+            NodeModel current = this.root;
             for (Context routeContext: route.getReference()) {
                 Assertions.assertFalse(routeContext.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
                 current = current.getChild();
             }
-            Assertions.assertSame(current, NodeModelProperties.NODE.get(root, context));
+            Assertions.assertSame(current, NodeModelProperties.NODE.get(this.root, context));
         }
     }
 
     @Test
     public void testStream() {
-        NodeModel root = new NodeModel();
-        NodeModel sub1 = new NodeModel();
-        root.setChild(sub1);
-        NodeModel sub2 = new NodeModel();
-        sub1.setChild(sub2);
-        NodeModel sub3 = new NodeModel();
-        sub2.setChild(sub3);
-
-        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(root, sub1, sub2, sub3));
-        NodeModelProperties.NODE.stream(root).forEachOrdered(node -> Assertions.assertSame(expected.poll(), node));
+        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(this.root, this.root.getChild(), this.root.getChild().getChild()));
+        NodeModelProperties.NODE.stream(this.root).forEachOrdered(node -> Assertions.assertSame(expected.poll(), node));
     }
 
     @Test
     public void testIterate() {
-        NodeModel root = new NodeModel();
-        NodeModel sub1 = new NodeModel();
-        root.setChild(sub1);
-        NodeModel sub2 = new NodeModel();
-        sub1.setChild(sub2);
-        NodeModel sub3 = new NodeModel();
-        sub2.setChild(sub3);
-
-        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(root, sub1, sub2, sub3));
-        for (NodeModel node: NodeModelProperties.NODE.iterate(root)) {
+        Queue<NodeModel> expected = new ArrayDeque<>(Arrays.asList(this.root, this.root.getChild(), this.root.getChild().getChild()));
+        for (NodeModel node: NodeModelProperties.NODE.iterate(this.root)) {
             Assertions.assertSame(expected.poll(), node);
         }
+    }
+
+    @Test
+    public void testPredecessor() {
+        Assertions.assertSame(null, NodeModelProperties.NODE.predecessor(this.root, this.root));
+        Assertions.assertSame(this.root, NodeModelProperties.NODE.predecessor(this.root, this.root.getChild()));
+        Assertions.assertSame(this.root.getChild(), NodeModelProperties.NODE.predecessor(this.root, this.root.getChild().getChild()));
+    }
+
+    @Test
+    public void testSuccessor() {
+        Assertions.assertSame(this.root.getChild(), NodeModelProperties.NODE.successor(this.root, this.root));
+        Assertions.assertSame(this.root.getChild().getChild(), NodeModelProperties.NODE.successor(this.root, this.root.getChild()));
+        Assertions.assertSame(null, NodeModelProperties.NODE.successor(this.root, this.root.getChild().getChild()));
     }
 }

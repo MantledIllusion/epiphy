@@ -47,7 +47,7 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
         return this.parent.contextualize(object).stream().
                 flatMap(parentContext -> this.child.contextualize(this.parent.get(object, parentContext)).stream().
                         map(childContext -> parentContext.union(childContext))).
-                collect(Collectors.toSet());
+                collect(Collectors.toList());
     }
 
     @Override

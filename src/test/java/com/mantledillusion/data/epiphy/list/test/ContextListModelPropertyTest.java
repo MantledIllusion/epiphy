@@ -2,26 +2,25 @@ package com.mantledillusion.data.epiphy.list.test;
 
 import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
+import com.mantledillusion.data.epiphy.list.AbstractListModelPropertyTest;
 import com.mantledillusion.data.epiphy.list.ListModelProperties;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-public class ContextListModelPropertyTest {
+public class ContextListModelPropertyTest extends AbstractListModelPropertyTest {
 
     @Test
     public void testEmptyOccurrences() {
-        Assertions.assertEquals(0, ListModelProperties.ELEMENT.occurrences(Collections.emptyList()));
+        this.model.clear();
+
+        Assertions.assertEquals(0, ListModelProperties.ELEMENTLIST.occurrences(this.model));
     }
 
     @Test
     public void testOccurrences() {
-        List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-
-        Assertions.assertEquals(2, ListModelProperties.ELEMENT.occurrences(list));
+        Assertions.assertEquals(2, ListModelProperties.ELEMENTLIST.occurrences(this.model));
     }
 
     @Test
@@ -49,27 +48,29 @@ public class ContextListModelPropertyTest {
 
     @Test
     public void testStream() {
-        List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-        list.add("D");
-
-        Queue<String> expected = new ArrayDeque<>(Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
-        ListModelProperties.ELEMENT.stream(list).forEachOrdered(element -> Assertions.assertSame(expected.poll(), element));
+        Queue<String> expected = new ArrayDeque<>(Arrays.asList(ELEMENT_0_ELEMENT_0, ELEMENT_0_ELEMENT_1, ELEMENT_1_ELEMENT_0));
+        ListModelProperties.ELEMENTLIST_TO_ELEMENT.stream(this.model).forEachOrdered(element -> Assertions.assertSame(expected.poll(), element));
     }
 
     @Test
     public void testIterate() {
-        List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
-        list.add("C");
-        list.add("D");
-
-        Queue<String> expected = new ArrayDeque<>(Arrays.asList(list.get(0), list.get(1), list.get(2), list.get(3)));
-        for (String s: ListModelProperties.ELEMENT.iterate(list)) {
+        Queue<String> expected = new ArrayDeque<>(Arrays.asList(ELEMENT_0_ELEMENT_0, ELEMENT_0_ELEMENT_1, ELEMENT_1_ELEMENT_0));
+        for (String s: ListModelProperties.ELEMENTLIST_TO_ELEMENT.iterate(this.model)) {
             Assertions.assertSame(expected.poll(), s);
         }
+    }
+
+    @Test
+    public void testPredecessor() {
+        Assertions.assertSame(null, ListModelProperties.ELEMENTLIST_TO_ELEMENT.predecessor(this.model, this.model.get(0).get(0)));
+        Assertions.assertSame(this.model.get(0).get(0), ListModelProperties.ELEMENTLIST_TO_ELEMENT.predecessor(this.model, this.model.get(0).get(1)));
+        Assertions.assertSame(this.model.get(0).get(1), ListModelProperties.ELEMENTLIST_TO_ELEMENT.predecessor(this.model, this.model.get(1).get(0)));
+    }
+
+    @Test
+    public void testSuccessor() {
+        Assertions.assertSame(this.model.get(0).get(1), ListModelProperties.ELEMENTLIST_TO_ELEMENT.successor(this.model, this.model.get(0).get(0)));
+        Assertions.assertSame(this.model.get(1).get(0), ListModelProperties.ELEMENTLIST_TO_ELEMENT.successor(this.model, this.model.get(0).get(1)));
+        Assertions.assertSame(null, ListModelProperties.ELEMENTLIST_TO_ELEMENT.successor(this.model, this.model.get(1).get(0)));
     }
 }
