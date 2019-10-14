@@ -14,7 +14,23 @@ import java.util.Iterator;
 public class ContextObjectModelPropertyTest {
 
     @Test
-    public void testNullObjectIndexing() {
+    public void testNullOccurrences() {
+        ObjectModel model = new ObjectModel();
+        model.setSub(null);
+
+        Assertions.assertEquals(0, ObjectModelProperties.MODELSUB.occurrences(model));
+    }
+
+    @Test
+    public void testOccurrences() {
+        ObjectModel model = new ObjectModel();
+        model.setSub(new ObjectSubType());
+
+        Assertions.assertEquals(1, ObjectModelProperties.MODELSUB.occurrences(model));
+    }
+
+    @Test
+    public void testNullContexting() {
         ObjectModel model = new ObjectModel();
         model.setSub(null);
 
@@ -23,7 +39,7 @@ public class ContextObjectModelPropertyTest {
     }
 
     @Test
-    public void testObjectIndexing() {
+    public void testContexting() {
         ObjectModel model = new ObjectModel();
         model.setSub(new ObjectSubType());
 

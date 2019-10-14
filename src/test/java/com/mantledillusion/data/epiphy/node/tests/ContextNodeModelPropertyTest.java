@@ -14,7 +14,39 @@ import java.util.Iterator;
 public class ContextNodeModelPropertyTest {
 
     @Test
-    public void testNodeIndexing() {
+    public void testNoChildOccurrences() {
+        NodeModel root = new NodeModel();
+        root.setChild(null);
+
+        Assertions.assertEquals(1, NodeModelProperties.NODE.occurrences(root));
+    }
+
+    @Test
+    public void testOccurrences() {
+        NodeModel root = new NodeModel();
+        NodeModel sub1 = new NodeModel();
+        root.setChild(sub1);
+        NodeModel sub2 = new NodeModel();
+        sub1.setChild(sub2);
+
+        Assertions.assertEquals(3, NodeModelProperties.NODE.occurrences(root));
+    }
+
+    @Test
+    public void testNoChildContexting() {
+        NodeModel root = new NodeModel();
+        root.setChild(null);
+
+        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(root);
+        Assertions.assertEquals(1, contexts.size());
+        Context context = contexts.iterator().next();
+
+        Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+        Assertions.assertEquals(0, context.getReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class).getReference().length);
+    }
+
+    @Test
+    public void testContexting() {
         NodeModel root = new NodeModel();
         NodeModel sub1 = new NodeModel();
         root.setChild(sub1);

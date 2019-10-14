@@ -38,8 +38,13 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
 
     @Override
     public int occurrences(Property<O, N> property, O object) {
-        N node = this.getter.get(property, object, Context.EMPTY, false);
-        return node == null ? 0 : 1 + this.nodeRetriever.occurrences(node);
+        return subOccurrences(this.getter.get(property, object, Context.EMPTY, false));
+    }
+
+    private int subOccurrences(N node) {
+        return node == null ? 0 : 1 + this.nodeRetriever.contextualize(node).parallelStream().
+                map(subContext -> subOccurrences(this.nodeRetriever.get(node, subContext, false))).
+                reduce(0, Integer::sum);
     }
 
     @Override

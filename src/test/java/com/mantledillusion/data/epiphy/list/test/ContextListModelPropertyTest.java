@@ -11,13 +11,27 @@ import java.util.*;
 public class ContextListModelPropertyTest {
 
     @Test
-    public void testEmptyListIndexing() {
+    public void testEmptyOccurrences() {
+        Assertions.assertEquals(0, ListModelProperties.ELEMENT.occurrences(Collections.emptyList()));
+    }
+
+    @Test
+    public void testOccurrences() {
+        List<String> list = new ArrayList<>();
+        list.add("A");
+        list.add("B");
+
+        Assertions.assertEquals(2, ListModelProperties.ELEMENT.occurrences(list));
+    }
+
+    @Test
+    public void testEmptyContexting() {
         Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(Collections.emptyList());
         Assertions.assertEquals(0, contexts.size());
     }
 
     @Test
-    public void testListIndexing() {
+    public void testContexting() {
         List<String> list = new ArrayList<>();
         list.add("A");
         list.add("B");
