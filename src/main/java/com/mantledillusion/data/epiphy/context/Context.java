@@ -137,7 +137,7 @@ public class Context {
 	/**
 	 * Returns the amount of references contained by this {@link Context}.
 	 *
-	 * @return The amount of references, never <0
+	 * @return The amount of references, never &lt;0
 	 */
 	public int size() {
 		return this.keys.size();

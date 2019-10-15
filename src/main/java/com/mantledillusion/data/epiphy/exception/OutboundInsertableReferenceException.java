@@ -12,6 +12,8 @@ public class OutboundInsertableReferenceException extends IllegalStateException 
 	/**
 	 * Constructor.
 	 *
+	 * @param <R>
+	 *          The reference type.
 	 * @param property
 	 * 			The {@link Property} the reference to insert is out of bounds to; might <b>not</b> be null.
 	 * @param reference

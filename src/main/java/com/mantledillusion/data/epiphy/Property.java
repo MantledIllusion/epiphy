@@ -333,7 +333,7 @@ public interface Property<O, V> {
      * @param object
      * 			The instance to check the value occurrences in; might be null.
      * @return
-     * 			The occurrence count; always >=0
+     * 			The occurrence count; always &gt;=0
      */
     int occurrences(O object);
 

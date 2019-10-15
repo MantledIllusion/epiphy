@@ -12,6 +12,8 @@ public class UnknownDropableElementException extends IllegalStateException {
 	/**
 	 * Constructor.
 	 *
+	 * @param <E>
+	 * 			The element type of the batch.
 	 * @param property
 	 * 			The {@link Property} the element to drop is unknown to; might <b>not</b> be null.
 	 * @param element
