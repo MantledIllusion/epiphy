@@ -1,6 +1,6 @@
 package com.mantledillusion.data.epiphy.context;
 
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -28,7 +28,7 @@ public class Context {
 	private final Map<Property<?, ?>, PropertyReference<?, ?>> keys;
 
 	private Context() {
-		this.keys = new IdentityHashMap<>();
+		this.keys = new HashMap<>();
 	}
 
 	/**
@@ -134,11 +134,20 @@ public class Context {
 		return context;
 	}
 
+	/**
+	 * Returns the amount of references contained by this {@link Context}.
+	 *
+	 * @return The amount of references, never <0
+	 */
+	public int size() {
+		return this.keys.size();
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((keys == null) ? 0 : keys.hashCode());
+		result = prime * result + this.keys.hashCode();
 		return result;
 	}
 
@@ -150,13 +159,7 @@ public class Context {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Context other = (Context) obj;
-		if (keys == null) {
-			if (other.keys != null)
-				return false;
-		} else if (!keys.equals(other.keys))
-			return false;
-		return true;
+		return this.keys.equals(((Context) obj).keys);
 	}
 
 	@Override

@@ -18,7 +18,7 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + getReference();
-		result = prime * result + ((getProperty() == null) ? 0 : getProperty().hashCode());
+		result = prime * result + getProperty().hashCode();
 		return result;
 	}
 
@@ -33,10 +33,7 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 		PropertyIndex other = (PropertyIndex) obj;
 		if (getReference() != other.getReference())
 			return false;
-		if (getProperty() == null) {
-			if (other.getProperty() != null)
-				return false;
-		} else if (!getProperty().equals(other.getProperty()))
+		if (!getProperty().equals(other.getProperty()))
 			return false;
 		return true;
 	}

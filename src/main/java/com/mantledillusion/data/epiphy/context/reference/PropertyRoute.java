@@ -21,7 +21,7 @@ public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]
         final int prime = 31;
         int result = 1;
         result = prime * result + Arrays.hashCode(getReference());
-        result = prime * result + ((getProperty() == null) ? 0 : getProperty().hashCode());
+        result = prime * result + getProperty().hashCode();
         return result;
     }
 
@@ -36,10 +36,7 @@ public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]
         PropertyRoute other = (PropertyRoute) obj;
         if (!Arrays.equals(getReference(), other.getReference()))
             return false;
-        if (getProperty() == null) {
-            if (other.getProperty() != null)
-                return false;
-        } else if (!getProperty().equals(other.getProperty()))
+        if (!getProperty().equals(other.getProperty()))
             return false;
         return true;
     }
