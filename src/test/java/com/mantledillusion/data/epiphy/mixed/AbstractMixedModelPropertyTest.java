@@ -1,6 +1,8 @@
 package com.mantledillusion.data.epiphy.mixed;
 
+import com.mantledillusion.data.epiphy.mixed.model.MixedModel;
 import com.mantledillusion.data.epiphy.mixed.model.MixedModelNode;
+import com.mantledillusion.data.epiphy.mixed.model.MixedModelNodeRoot;
 import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -14,16 +16,22 @@ public class AbstractMixedModelPropertyTest {
 	protected static final String SUB_CHILD1B = "sub_child1b";
 	protected static final String NODE_CHILD2A = "child2a";
 
-	protected MixedModelNode root;
+	protected MixedModel model;
 	
 	@BeforeEach
 	public void before() {
-		this.root = new MixedModelNode();
-		this.root.setNodeId(NODE_ROOT);
+		this.model = new MixedModel();
+
+		MixedModelNodeRoot root = new MixedModelNodeRoot();
+		this.model.setRoot(root);
+
+		MixedModelNode base = new MixedModelNode();
+		base.setNodeId(NODE_ROOT);
+		root.setNode(base);
 		
 		MixedSubType sub1 = new MixedSubType();
 		sub1.setSubId(SUB_ROOT);
-		this.root.setSub(sub1);
+		base.setSub(sub1);
 
 		MixedModelNode child1a = new MixedModelNode();
 		child1a.setNodeId(NODE_CHILD1A);

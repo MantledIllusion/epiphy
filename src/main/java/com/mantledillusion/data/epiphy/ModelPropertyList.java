@@ -32,6 +32,17 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     // ###########################################################################################################
+    // ################################################ PATHING ##################################################
+    // ###########################################################################################################
+
+    @Override
+    public <S> ModelPropertyList<S, E> prepend(Property<S, O> parent) {
+        return new ModelPropertyList<>(parent.getId()+'.'+getId(),
+                PathReferencedGetter.from(parent, this, getGetter()),
+                PathReferencedSetter.from(parent, this, getSetter()));
+    }
+
+    // ###########################################################################################################
     // ################################################ CONTEXT ##################################################
     // ###########################################################################################################
 
@@ -83,17 +94,6 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
         }
         elements.remove(element);
         return index;
-    }
-
-    // ###########################################################################################################
-    // ################################################ PATHING ##################################################
-    // ###########################################################################################################
-
-    @Override
-    public <S> ModelPropertyList<S, E> prepend(Property<S, O> parent) {
-        return new ModelPropertyList<>(parent.getId()+'.'+getId(),
-                PathReferencedGetter.from(parent, this, getGetter()),
-                PathReferencedSetter.from(parent, this, getSetter()));
     }
 
     // ###########################################################################################################
