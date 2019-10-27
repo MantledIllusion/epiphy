@@ -32,18 +32,34 @@ public class ContextListModelPropertyTest extends AbstractListModelPropertyTest 
     @Test
     public void testContexting() {
         List<String> list = new ArrayList<>();
-        list.add("A");
-        list.add("B");
+        list.add(ELEMENT_0_ELEMENT_0);
+        list.add(ELEMENT_0_ELEMENT_1);
 
         Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(list);
         Assertions.assertEquals(2, contexts.size());
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
+            Assertions.assertEquals(1, context.size());
             Assertions.assertTrue(context.containsReference(ListModelProperties.ELEMENT, PropertyIndex.class));
             PropertyIndex index = context.getReference(ListModelProperties.ELEMENT, PropertyIndex.class);
             Assertions.assertSame(list.get(index.getReference()), ListModelProperties.ELEMENT.get(list, context));
         }
+    }
+
+    @Test
+    public void testValueContexting() {
+        List<String> list = new ArrayList<>();
+        list.add(ELEMENT_0_ELEMENT_0);
+        list.add(ELEMENT_0_ELEMENT_1);
+
+        Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(list, ELEMENT_0_ELEMENT_1);
+        Assertions.assertEquals(1, contexts.size());
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(ListModelProperties.ELEMENT, PropertyIndex.class));
+        Assertions.assertSame(ELEMENT_0_ELEMENT_1, ListModelProperties.ELEMENT.get(list, context));
     }
 
     @Test

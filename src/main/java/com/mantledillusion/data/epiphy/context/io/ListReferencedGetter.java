@@ -45,8 +45,16 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
 
     @Override
     public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object) {
-        return IntStream.range(0, object.size()).
+        return IntStream.range(0, object == null ? 0 : object.size()).
                 mapToObj(index -> Context.of(PropertyIndex.of(property, index))).
+                collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object, E value, Context context) {
+        return IntStream.range(0, object == null ? 0 : object.size()).
+                filter(i -> Objects.equals(object.get(i), value)).
+                mapToObj(i -> context.union(PropertyIndex.of(property, i))).
                 collect(Collectors.toList());
     }
 

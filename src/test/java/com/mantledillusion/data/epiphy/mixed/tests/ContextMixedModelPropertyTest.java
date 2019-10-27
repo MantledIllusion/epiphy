@@ -31,6 +31,7 @@ public class ContextMixedModelPropertyTest extends AbstractMixedModelPropertyTes
         Iterator<Context> iter = contexts.iterator();
         while (iter.hasNext()) {
             Context context = iter.next();
+            Assertions.assertEquals(1, context.size());
             Assertions.assertTrue(context.containsReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
             PropertyRoute route = context.getReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
             MixedModelNode currentNode = this.model.getRoot().getNode();
@@ -41,5 +42,21 @@ public class ContextMixedModelPropertyTest extends AbstractMixedModelPropertyTes
             }
             Assertions.assertSame(currentNode, MixedModelProperties.NODE.get(this.model, context));
         }
+    }
+
+    @Test
+    public void testValuePathIndexing() {
+        MixedModelNode child = this.model.getRoot().getNode().getSub().getSubNodes().get(1);
+        Collection<Context> contexts = MixedModelProperties.NODE.contextualize(this.model, child);
+        Assertions.assertEquals(1, contexts.size());
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+
+        PropertyRoute route = context.getReference(MixedModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
+        Assertions.assertEquals(1, route.getReference().length);
+        Assertions.assertTrue(route.getReference()[0].containsReference(MixedModelProperties.LISTED_NODE, PropertyIndex.class));
+        Assertions.assertSame(child, MixedModelProperties.NODE.get(this.model, context));
     }
 }

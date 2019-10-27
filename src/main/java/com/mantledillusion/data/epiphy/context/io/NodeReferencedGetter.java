@@ -72,6 +72,15 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     }
 
     @Override
+    public Collection<Context> contextualize(Property<O, N> property, O object, N value, Context context) {
+        N node = this.getter.get(property, object, context, false);
+        return this.nodeRetriever.contextualize(node).stream().
+                filter(subContext -> Objects.equals(this.nodeRetriever.get(node, subContext, false), value)).
+                map(subContext -> Context.of(PropertyRoute.of(this.nodeRetriever, subContext))).
+                collect(Collectors.toList());
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy(Property<O, N> property) {
         if (this.hierarchy == null) {
             this.hierarchy = new HashSet<>(this.getter.getHierarchy(property));

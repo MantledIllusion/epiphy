@@ -51,6 +51,18 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
+    public Collection<Context> contextualize(Property<S, V> property, S object, V value, Context context) {
+        return this.parent.contextualize(object).stream().
+                flatMap(parentContext -> {
+                    O parent = this.parent.get(object, parentContext);
+                    return this.child.contextualize(parent).stream().
+                        filter(childContext -> Objects.equals(this.child.get(parent, childContext, false), value)).
+                        map(childContext -> parentContext.union(childContext));
+                }).
+                collect(Collectors.toList());
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy(Property<S, V> property) {
         return this.hierarchy;
     }

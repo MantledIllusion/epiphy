@@ -80,6 +80,11 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     }
 
     @Override
+    public Collection<Context> contextualize(O object, V value, Context context) {
+        return this.getter.contextualize(this, object, value, Context.defaultIfNull(context));
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy() {
         return this.getter.getHierarchy(this);
     }

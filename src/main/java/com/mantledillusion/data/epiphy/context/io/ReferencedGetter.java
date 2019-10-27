@@ -86,4 +86,21 @@ public interface ReferencedGetter<O, V> {
 	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
 	 */
 	Collection<Context> contextualize(Property<O, V> property, O object);
+
+	/**
+	 * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
+	 * by the given value in the given object.
+	 *
+	 * @param property
+	 * 			The property to check; might <b>not</b> be null.
+	 * @param object
+	 * 			The instance to check the value occurrences in; might be null.
+	 * @param value
+	 *          The value to look for; might be null.
+	 * @param context
+	 *          The context in which to find the given value; might be null.
+	 * @return
+	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
+	 */
+	Collection<Context> contextualize(Property<O, V> property, O object, V value, Context context);
 }

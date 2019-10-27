@@ -351,6 +351,36 @@ public interface Property<O, V> {
     Collection<Context> contextualize(O object);
 
     /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
+     * by the given value in the given object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param value
+     *          The value to look for; might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, V value) {
+        return contextualize(object, value, null);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
+     * by the given value in the given object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param value
+     *          The value to look for; might be null.
+     * @param context
+     *          The context in which to find the given value; might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    Collection<Context> contextualize(O object, V value, Context context);
+
+    /**
      * Returns a {@link Stream} of all of this {@link Property}'s values occurring in the given object.
      * <p>
      * The count of streamed values exactly matches the result of {@link #occurrences(Object)} on the same object.

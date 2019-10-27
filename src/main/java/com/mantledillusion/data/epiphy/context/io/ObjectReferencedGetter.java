@@ -37,7 +37,13 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
 
     @Override
     public Collection<Context> contextualize(Property<O, V> property, O object) {
-        return property.isNull(object) ? Collections.emptySet() : Collections.singleton(Context.EMPTY);
+        return !property.isNull(object) ? Collections.singleton(Context.EMPTY) : Collections.emptySet();
+    }
+
+    @Override
+    public Collection<Context> contextualize(Property<O, V> property, O object, V value, Context context) {
+        return !property.isNull(object) && Objects.equals(this.getter.get(object), value) ?
+                Collections.singleton(Context.EMPTY) : Collections.emptySet();
     }
 
     @Override

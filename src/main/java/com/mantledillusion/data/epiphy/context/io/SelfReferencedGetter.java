@@ -25,6 +25,11 @@ public class SelfReferencedGetter<V> implements ReferencedGetter<V, V> {
     }
 
     @Override
+    public Collection<Context> contextualize(Property<V, V> property, V object, V value, Context context) {
+        return Collections.singleton(Context.EMPTY);
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy(Property<V, V> property) {
         return Collections.emptySet();
     }
