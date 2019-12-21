@@ -44,15 +44,20 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object) {
-        return IntStream.range(0, object == null ? 0 : object.size()).
-                mapToObj(index -> Context.of(PropertyIndex.of(property, index))).
+    public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object, Context context, boolean includeNull) {
+        Integer idx = context.containsReference(property, PropertyIndex.class) ?
+                context.getReference(property, PropertyIndex.class).getReference() : null;
+        return IntStream.range(idx != null ? idx : 0, idx != null ? idx+1 : (object == null ? 0 : object.size())).
+                filter(index -> includeNull || object.get(index) != null).
+                mapToObj(index -> context.union(PropertyIndex.of(property, index))).
                 collect(Collectors.toList());
     }
 
     @Override
     public Collection<Context> contextualize(Property<List<E>, E> property, List<E> object, E value, Context context) {
-        return IntStream.range(0, object == null ? 0 : object.size()).
+        Integer idx = context.containsReference(property, PropertyIndex.class) ?
+                context.getReference(property, PropertyIndex.class).getReference() : null;
+        return IntStream.range(idx != null ? idx : 0, idx != null ? idx+1 : (object == null ? 0 : object.size())).
                 filter(i -> Objects.equals(object.get(i), value)).
                 mapToObj(i -> context.union(PropertyIndex.of(property, i))).
                 collect(Collectors.toList());

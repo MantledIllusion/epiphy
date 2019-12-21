@@ -71,8 +71,8 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         }
 
         @Override
-        public Collection<Context> contextualize(N object) {
-            return this.nodeRetriever.contextualize(object);
+        public Collection<Context> contextualize(N object, Context context, boolean includeNull) {
+            return this.nodeRetriever.contextualize(object, context, includeNull);
         }
 
         @Override

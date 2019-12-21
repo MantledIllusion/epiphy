@@ -36,13 +36,11 @@ public class ContextObjectModelPropertyTest extends AbstractObjectModelPropertyT
     public void testContexting() {
         Collection<Context> contexts = ObjectModelProperties.MODELSUB.contextualize(this.model);
         Assertions.assertEquals(1, contexts.size());
-        Iterator<Context> iter = contexts.iterator();
-        while (iter.hasNext()) {
-            Context context = iter.next();
-            Assertions.assertEquals(0, context.size());
-            Assertions.assertFalse(context.containsReference(ObjectModelProperties.MODELSUB, PropertyReference.class));
-            Assertions.assertSame(this.model.getSub(), ObjectModelProperties.MODELSUB.get(this.model, context));
-        }
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(0, context.size());
+        Assertions.assertFalse(context.containsReference(ObjectModelProperties.MODELSUB, PropertyReference.class));
+        Assertions.assertSame(this.model.getSub(), ObjectModelProperties.MODELSUB.get(this.model, context));
     }
 
     @Test

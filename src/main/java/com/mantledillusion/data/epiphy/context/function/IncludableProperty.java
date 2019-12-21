@@ -18,7 +18,7 @@ import com.mantledillusion.data.epiphy.Property;
  * @param <R>
  *            The type of the context reference.
  */
-public interface IncludableProperty<O, E, R> {
+public interface IncludableProperty<O, V, E, R> extends Property<O, V> {
 
 	/**
 	 * Adds an element to the batch that is represented by this {@link IncludableProperty}.

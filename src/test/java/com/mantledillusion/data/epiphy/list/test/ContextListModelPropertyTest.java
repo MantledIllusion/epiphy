@@ -48,12 +48,45 @@ public class ContextListModelPropertyTest extends AbstractListModelPropertyTest 
     }
 
     @Test
+    public void testBasedContexting() {
+        List<String> list = new ArrayList<>();
+        list.add(ELEMENT_0_ELEMENT_0);
+        list.add(ELEMENT_0_ELEMENT_1);
+
+        Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(list,
+                Context.of(PropertyIndex.of(ListModelProperties.ELEMENT, 1)));
+        Assertions.assertEquals(1, contexts.size());
+        Context context = contexts.iterator().next();
+
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(ListModelProperties.ELEMENT, PropertyIndex.class));
+        Assertions.assertSame(1, context.getReference(ListModelProperties.ELEMENT, PropertyIndex.class).getReference());
+        Assertions.assertSame(ELEMENT_0_ELEMENT_1, ListModelProperties.ELEMENT.get(list, context));
+    }
+
+    @Test
     public void testValueContexting() {
         List<String> list = new ArrayList<>();
         list.add(ELEMENT_0_ELEMENT_0);
         list.add(ELEMENT_0_ELEMENT_1);
 
         Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(list, ELEMENT_0_ELEMENT_1);
+        Assertions.assertEquals(1, contexts.size());
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(ListModelProperties.ELEMENT, PropertyIndex.class));
+        Assertions.assertSame(ELEMENT_0_ELEMENT_1, ListModelProperties.ELEMENT.get(list, context));
+    }
+
+    @Test
+    public void testValueBasedContexting() {
+        List<String> list = new ArrayList<>();
+        list.add(ELEMENT_0_ELEMENT_1);
+        list.add(ELEMENT_0_ELEMENT_1);
+
+        Collection<Context> contexts = ListModelProperties.ELEMENT.contextualize(list, ELEMENT_0_ELEMENT_1,
+                Context.of(PropertyIndex.of(ListModelProperties.ELEMENT, 1)));
         Assertions.assertEquals(1, contexts.size());
 
         Context context = contexts.iterator().next();

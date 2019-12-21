@@ -48,36 +48,47 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<O, N> property, O object) {
-        N node = this.getter.get(property, object, Context.EMPTY, false);
-        List<Context> contexts = new ArrayList<>();
+    public Collection<Context> contextualize(Property<O, N> property, O object, Context context, boolean includeNull) {
+        N node = get(property, object, context, false);
         if (node != null) {
-            PropertyRoute baseRoute = PropertyRoute.of(this.nodeRetriever);
-            contexts.add(Context.of(baseRoute));
-            contexts.addAll(subContextualize(node, baseRoute).collect(Collectors.toList()));
+            PropertyRoute baseRoute = context.containsReference(this.nodeRetriever, PropertyRoute.class) ?
+                    context.getReference(this.nodeRetriever, PropertyRoute.class) : PropertyRoute.of(this.nodeRetriever);
+            return subContextualize(node, baseRoute, context, includeNull).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
         }
-        return contexts;
     }
 
-    private Stream<Context> subContextualize(N node, PropertyRoute route) {
-        return this.nodeRetriever.contextualize(node).stream().
+    private Stream<Context> subContextualize(N node, PropertyRoute route, Context baseContext, boolean includeNull) {
+        return Stream.concat(Stream.of(baseContext.union(route)),
+                this.nodeRetriever.contextualize(node, includeNull).stream().
                 flatMap(subContext -> {
                     PropertyRoute appendedRoute = route.append(subContext);
                     N child = this.nodeRetriever.get(node, subContext, false);
-                    return Stream.concat(
-                            Stream.of(Context.of(appendedRoute)),
-                            subContextualize(child, appendedRoute)
-                    );
-                });
+                    return subContextualize(child, appendedRoute, baseContext, includeNull);
+                }));
     }
 
     @Override
     public Collection<Context> contextualize(Property<O, N> property, O object, N value, Context context) {
-        N node = this.getter.get(property, object, context, false);
-        return this.nodeRetriever.contextualize(node).stream().
-                filter(subContext -> Objects.equals(this.nodeRetriever.get(node, subContext, false), value)).
-                map(subContext -> Context.of(PropertyRoute.of(this.nodeRetriever, subContext))).
-                collect(Collectors.toList());
+        N node = get(property, object, context, false);
+        if (node != null) {
+            PropertyRoute baseRoute = context.containsReference(this.nodeRetriever, PropertyRoute.class) ?
+                    context.getReference(this.nodeRetriever, PropertyRoute.class) : PropertyRoute.of(this.nodeRetriever);
+            return subContextualize(node, value, baseRoute, context).collect(Collectors.toList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    private Stream<Context> subContextualize(N node, N value, PropertyRoute route, Context baseContext) {
+        return Stream.concat(Objects.equals(node, value) ? Stream.of(baseContext.union(route)) : Stream.empty(),
+                this.nodeRetriever.contextualize(node, true).stream().
+                flatMap(subContext -> {
+                    PropertyRoute appendedRoute = route.append(subContext);
+                    N child = this.nodeRetriever.get(node, subContext, false);
+                    return subContextualize(child, value, appendedRoute, baseContext);
+                }));
     }
 
     @Override

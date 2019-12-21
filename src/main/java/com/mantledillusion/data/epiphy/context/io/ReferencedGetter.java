@@ -82,10 +82,15 @@ public interface ReferencedGetter<O, V> {
 	 * 			The property to check; might <b>not</b> be null.
 	 * @param object
 	 * 			The instance to check the value occurrences in; might be null.
+	 * @param context
+	 *          The context to use as a base; might be null.
+	 * @param includeNull
+	 *          Include {@link Context}s for all values where {@link Property#exists(Object, Context)} would return
+	 *          true, so they might be null.
 	 * @return
 	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
 	 */
-	Collection<Context> contextualize(Property<O, V> property, O object);
+	Collection<Context> contextualize(Property<O, V> property, O object, Context context, boolean includeNull);
 
 	/**
 	 * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
@@ -96,7 +101,8 @@ public interface ReferencedGetter<O, V> {
 	 * @param object
 	 * 			The instance to check the value occurrences in; might be null.
 	 * @param value
-	 *          The value to look for; might be null.
+	 *          The value to look for; might be null, though to equal the {@link Property} has to
+	 *          {@link Property#exists(Object, Context)} in the {@link Context}.
 	 * @param context
 	 *          The context in which to find the given value; might be null.
 	 * @return

@@ -57,6 +57,23 @@ public class ContextNodeModelPropertyTest extends AbstractNodeModelPropertyTest 
     }
 
     @Test
+    public void testBasedContexting() {
+        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(this.root,
+                Context.of(PropertyRoute.of(NodeModelProperties.NODE.getNodeRetriever(), Context.EMPTY, Context.EMPTY)));
+        Assertions.assertEquals(1, contexts.size());
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+
+        PropertyRoute route = context.getReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
+        Assertions.assertSame(2, route.getReference().length);
+        Assertions.assertFalse(route.getReference()[0].containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
+        Assertions.assertFalse(route.getReference()[1].containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
+        Assertions.assertSame(this.root.getChild().getChild(), NodeModelProperties.NODE.get(this.root, context));
+    }
+
+    @Test
     public void testValueContexting() {
         Collection<Context> contexts = NodeModelProperties.NODE.contextualize(this.root, this.root.getChild());
         Assertions.assertEquals(1, contexts.size());
@@ -69,6 +86,23 @@ public class ContextNodeModelPropertyTest extends AbstractNodeModelPropertyTest 
         Assertions.assertEquals(1, route.getReference().length);
         Assertions.assertFalse(route.getReference()[0].containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
         Assertions.assertSame(this.root.getChild(), NodeModelProperties.NODE.get(this.root, context));
+    }
+
+    @Test
+    public void testBasedValueContexting() {
+        Collection<Context> contexts = NodeModelProperties.NODE.contextualize(this.root, this.root.getChild().getChild(),
+                Context.of(PropertyRoute.of(NodeModelProperties.NODE.getNodeRetriever(), Context.EMPTY)));
+        Assertions.assertEquals(1, contexts.size());
+
+        Context context = contexts.iterator().next();
+        Assertions.assertEquals(1, context.size());
+        Assertions.assertTrue(context.containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class));
+
+        PropertyRoute route = context.getReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyRoute.class);
+        Assertions.assertEquals(2, route.getReference().length);
+        Assertions.assertFalse(route.getReference()[0].containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
+        Assertions.assertFalse(route.getReference()[1].containsReference(NodeModelProperties.NODE.getNodeRetriever(), PropertyReference.class));
+        Assertions.assertSame(this.root.getChild().getChild(), NodeModelProperties.NODE.get(this.root, context));
     }
 
     @Test

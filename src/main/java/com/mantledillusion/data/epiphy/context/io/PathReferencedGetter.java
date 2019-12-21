@@ -43,19 +43,20 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<S, V> property, S object) {
-        return this.parent.contextualize(object).stream().
-                flatMap(parentContext -> this.child.contextualize(this.parent.get(object, parentContext)).stream().
-                        map(childContext -> parentContext.union(childContext))).
+    public Collection<Context> contextualize(Property<S, V> property, S object, Context context, boolean includeNull) {
+        return this.parent.contextualize(object, context, false).stream().
+                flatMap(parentContext ->
+                        this.child.contextualize(this.parent.get(object, parentContext), parentContext, includeNull).
+                        stream().map(childContext -> parentContext.union(childContext))).
                 collect(Collectors.toList());
     }
 
     @Override
     public Collection<Context> contextualize(Property<S, V> property, S object, V value, Context context) {
-        return this.parent.contextualize(object).stream().
+        return this.parent.contextualize(object, context, false).stream().
                 flatMap(parentContext -> {
                     O parent = this.parent.get(object, parentContext);
-                    return this.child.contextualize(parent).stream().
+                    return this.child.contextualize(parent, parentContext, true).stream().
                         filter(childContext -> Objects.equals(this.child.get(parent, childContext, false), value)).
                         map(childContext -> parentContext.union(childContext));
                 }).

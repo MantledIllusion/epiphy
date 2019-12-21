@@ -21,7 +21,7 @@ import java.util.List;
  *          The element type of the list this {@link Property} represents.
  */
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
-        IncludableProperty<O, E, Integer>,
+        IncludableProperty<O, List<E>, E, Integer>,
         InsertableProperty<O, E, Integer>,
         StripableProperty<O, E, Integer>,
         ExtractableProperty<O, E, Integer>,

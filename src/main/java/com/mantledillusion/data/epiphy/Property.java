@@ -348,7 +348,62 @@ public interface Property<O, V> {
      * @return
      * 			A {@link Collection} of {@link Context}s, never null, might be empty
      */
-    Collection<Context> contextualize(O object);
+    default Collection<Context> contextualize(O object) {
+        return contextualize(object, null,false);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, Context context) {
+        return contextualize(object, context, false);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param includeNull
+     *          Include {@link Context}s for all values where {@link #exists(Object, Context)} would return true, so
+     *          they might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, boolean includeNull) {
+        return contextualize(object, null, includeNull);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @param includeNull
+     *          Include {@link Context}s for all values where {@link #exists(Object, Context)} would return true, so
+     *          they might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    Collection<Context> contextualize(O object, Context context, boolean includeNull);
 
     /**
      * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
@@ -372,7 +427,8 @@ public interface Property<O, V> {
      * @param object
      * 			The instance to check the value occurrences in; might be null.
      * @param value
-     *          The value to look for; might be null.
+     *          The value to look for; might be null, though to equal the {@link Property} has to
+     *          {@link Property#exists(Object, Context)} in the {@link Context}.
      * @param context
      *          The context in which to find the given value; might be null.
      * @return

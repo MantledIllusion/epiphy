@@ -75,8 +75,8 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(O object) {
-        return this.getter.contextualize(this, object);
+    public Collection<Context> contextualize(O object, Context context, boolean includeNull) {
+        return this.getter.contextualize(this, object, Context.defaultIfNull(context), includeNull);
     }
 
     @Override

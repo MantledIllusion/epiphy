@@ -20,13 +20,13 @@ public class SelfReferencedGetter<V> implements ReferencedGetter<V, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<V, V> property, V object) {
-        return Collections.singleton(Context.EMPTY);
+    public Collection<Context> contextualize(Property<V, V> property, V object, Context context, boolean includeNull) {
+        return Collections.singleton(context);
     }
 
     @Override
     public Collection<Context> contextualize(Property<V, V> property, V object, V value, Context context) {
-        return Collections.singleton(Context.EMPTY);
+        return Collections.singleton(context);
     }
 
     @Override

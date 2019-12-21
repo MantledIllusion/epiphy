@@ -46,7 +46,17 @@ public class PropertyRoute extends PropertyReference<NodeRetriever<?>, Context[]
         return "PropertyRoute [property=" + getProperty() + ", contexts=" + Arrays.toString(getReference()) + "]";
     }
 
+    /**
+     * Creates a new {@link PropertyRoute} by appending all {@link Context}s of this {@link PropertyRoute} with the
+     * given one.
+     *
+     * @param context The {@link Context} to append to this route's {@link Context}s; might <b>not</b> be null.
+     * @return A new {@link PropertyRoute}, never null
+     */
     public PropertyRoute append(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Cannot append a route with a null context");
+        }
         Context[] currentReferences = getReference();
         Context[] references = Arrays.copyOf(currentReferences, currentReferences.length+1);
         references[currentReferences.length] = context;
