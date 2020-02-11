@@ -21,4 +21,9 @@ public class FactorizeListModelPropertyTest extends AbstractModelPropertyTest {
     public void testFactorizeFromList() {
         validateFactorization(ModelPropertyList.fromList(), true);
     }
+
+    @Test
+    public void testFactorizeFromMap() {
+        validateFactorization(ModelPropertyList.fromMap(), true);
+    }
 }

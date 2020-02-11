@@ -40,7 +40,7 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 
 	@Override
 	public String toString() {
-		return "PropertyIndex [key=" + getProperty() + ", index=" + this.getReference() + "]";
+		return "PropertyIndex [property=" + getProperty() + ", index=" + this.getReference() + "]";
 	}
 
 	/**

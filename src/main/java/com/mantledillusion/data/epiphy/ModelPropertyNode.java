@@ -7,8 +7,8 @@ import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-
 
 /**
  * Represents a {@link Property} whose value is a node of a tree.
@@ -114,7 +114,6 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
     // ###########################################################################################################
     // ################################################ FACTORY ##################################################
     // ###########################################################################################################
-
 
     /**
      * Factory method for a {@link Property} that resides in an {@link Object} that is equal to the value type, so it
@@ -286,5 +285,45 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
         return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ListReferencedGetter.from(), retriever),
                 NodeReferencedSetter.from(ListReferencedGetter.from(), ListReferencedSetter.from(), retriever), retriever);
+    }
+
+    /**
+     * Factory method for a listed {@link Property} that resides in a {@link Map} and whose value type represents a
+     * node that enables traversing through a node tree.
+     *
+     * @param <K>
+     *          The key type of the map.
+     * @param <N>
+     *          The element type of the map.
+     * @param nodeRetriever
+     *          A {@link ModelProperty} that whose object and value type are the same, so it is able to access the
+     *          child (value) of a parent (object) node; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, N> ModelPropertyNode<Map<K, N>, N> fromMap(ModelProperty<N, N> nodeRetriever) {
+        return fromMap(null, nodeRetriever);
+    }
+
+    /**
+     * Factory method for a listed {@link Property} that resides in a {@link Map} and whose value type represents a
+     * node that enables traversing through a node tree.
+     *
+     * @param <K>
+     *          The key type of the map.
+     * @param <N>
+     *          The element type of the map.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @param nodeRetriever
+     *          A {@link ModelProperty} that whose object and value type are the same, so it is able to access the
+     *          child (value) of a parent (object) node; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, N> ModelPropertyNode<Map<K, N>, N> fromMap(String id, ModelProperty<N, N> nodeRetriever) {
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(MapReferencedGetter.from(), retriever),
+                NodeReferencedSetter.from(MapReferencedGetter.from(), MapReferencedSetter.from(), retriever), retriever);
     }
 }

@@ -9,9 +9,10 @@ import com.mantledillusion.data.epiphy.context.io.*;
 import com.mantledillusion.data.epiphy.exception.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
- * Represents a listed {@link Property}.
+ * Represents a {@link Property} {@link List}.
  * <p>
  * Instantiable using the <code>from...()</code> methods.
  *
@@ -101,7 +102,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     // ###########################################################################################################
 
     /**
-     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link List} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
      *
@@ -119,7 +120,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
-     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link List} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
      *
@@ -139,7 +140,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
-     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link List} that resides in an {@link Object}.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
@@ -157,7 +158,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
-     * Factory method for a listed {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link List} that resides in an {@link Object}.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
@@ -177,7 +178,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
-     * Factory method for a listed {@link Property} that resides in another {@link List}.
+     * Factory method for a {@link Property} {@link List} that resides in another {@link List}.
      *
      * @param <E>
      *          The element type of the list.
@@ -189,7 +190,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
-     * Factory method for a listed {@link Property} that resides in another {@link List}.
+     * Factory method for a {@link Property} {@link List} that resides in another {@link List}.
      *
      * @param <E>
      *          The element type of the list.
@@ -200,5 +201,35 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      */
     public static <E> ModelPropertyList<List<List<E>>, E> fromList(String id) {
         return new ModelPropertyList<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link List} that resides in a {@link Map}.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <E>
+     *          The element type of the list.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, E> ModelPropertyList<Map<K, List<E>>, E> fromMap() {
+        return fromMap(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link List} that resides in a {@link Map}.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <E>
+     *          The element type of the list.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, E> ModelPropertyList<Map<K, List<E>>, E> fromMap(String id) {
+        return new ModelPropertyList<>(id, MapReferencedGetter.from(), MapReferencedSetter.from());
     }
 }

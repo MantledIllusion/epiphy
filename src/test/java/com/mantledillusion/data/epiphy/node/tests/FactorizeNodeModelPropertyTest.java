@@ -27,4 +27,9 @@ public class FactorizeNodeModelPropertyTest extends AbstractModelPropertyTest {
     public void testFactorizeFromList() {
         validateFactorization(ModelPropertyNode.fromList(NodeModelProperties.RETRIEVER), true, NodeModelProperties.RETRIEVER);
     }
+
+    @Test
+    public void testFactorizeFromMap() {
+        validateFactorization(ModelPropertyNode.fromMap(NodeModelProperties.RETRIEVER), true, NodeModelProperties.RETRIEVER);
+    }
 }

@@ -48,8 +48,8 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
         Integer idx = context.containsReference(property, PropertyIndex.class) ?
                 context.getReference(property, PropertyIndex.class).getReference() : null;
         return IntStream.range(idx != null ? idx : 0, idx != null ? idx+1 : (object == null ? 0 : object.size())).
-                filter(index -> includeNull || object.get(index) != null).
-                mapToObj(index -> context.union(PropertyIndex.of(property, index))).
+                filter(i -> includeNull || object.get(i) != null).
+                mapToObj(i -> context.union(PropertyIndex.of(property, i))).
                 collect(Collectors.toList());
     }
 

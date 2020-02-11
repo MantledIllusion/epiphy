@@ -1,25 +1,25 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.io.*;
-import com.mantledillusion.data.epiphy.context.io.ReferencedGetter;
-import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
 import java.util.List;
 import java.util.Map;
 
 /**
- * Represents a simple {@link Property} where an object value resides in another object.
+ * Represents a {@link Property} {@link Map}.
  * <p>
  * Instantiable using the <code>from...()</code> methods.
  *
  * @param <O>
  *          The parent object type of this {@link Property}.
+ * @param <K>
+ *          The key type of the map this {@link Property} represents.
  * @param <V>
- *          The type of the child value this {@link Property} represents.
+ *          The value type of the map this {@link Property} represents.
  */
-public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
+public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, V>> {
 
-    private ModelProperty(String id, ReferencedGetter<O, V> getter, ReferencedSetter<O, V> setter) {
+    private ModelPropertyMap(String id, ReferencedGetter<O, Map<K, V>> getter, ReferencedSetter<O, Map<K, V>> setter) {
         super(id, getter, setter);
     }
 
@@ -28,8 +28,8 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
     // ###########################################################################################################
 
     @Override
-    public <S> ModelProperty<S, V> prepend(Property<S, O> parent) {
-        return new ModelProperty<>(parent.getId()+'.'+getId(),
+    public <S> ModelPropertyMap<S, K, V> prepend(Property<S, O> parent) {
+        return new ModelPropertyMap<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),
                 PathReferencedSetter.from(parent, this, getSetter()));
     }
@@ -39,32 +39,36 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
     // ###########################################################################################################
 
     /**
-     * Factory method for a {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link Map} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
      * @param <V>
-     *          The type of the child value the {@link Property} represents.
+     *          The value type of the map this {@link Property} represents.
      * @param getter
      *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
      * @return
      *          A new instance, never null
      */
-    public static <O, V> ModelProperty<O, V> fromObject(Getter<O, V> getter) {
+    public static <O, K, V> ModelPropertyMap<O, K, V> fromObject(Getter<O, Map<K, V>> getter) {
         return fromObject(null, getter);
     }
 
     /**
-     * Factory method for a {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link Map} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
      * @param <V>
-     *          The type of the child value the {@link Property} represents.
+     *          The value type of the map this {@link Property} represents.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @param getter
@@ -72,17 +76,19 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * @return
      *          A new instance, never null
      */
-    public static <O, V> ModelProperty<O, V> fromObject(String id, Getter<O, V> getter) {
-        return new ModelProperty<>(id, ObjectReferencedGetter.from(getter), ReadonlyReferencedSetter.from());
+    public static <O, K, V> ModelPropertyMap<O, K, V> fromObject(String id, Getter<O, Map<K, V>> getter) {
+        return new ModelPropertyMap<>(id, ObjectReferencedGetter.from(getter), ReadonlyReferencedSetter.from());
     }
 
     /**
-     * Factory method for a {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link Map} that resides in an {@link Object}.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
      * @param <V>
-     *          The type of the child value the {@link Property} represents.
+     *          The value type of the map this {@link Property} represents.
      * @param getter
      *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
      * @param setter
@@ -90,17 +96,19 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * @return
      *          A new instance, never null
      */
-    public static <O, V> ModelProperty<O, V> fromObject(Getter<O, V> getter, Setter<O, V> setter) {
+    public static <O, K, V> ModelPropertyMap<O, K, V> fromObject(Getter<O, Map<K, V>> getter, Setter<O, Map<K, V>> setter) {
         return fromObject(null, getter, setter);
     }
 
     /**
-     * Factory method for a {@link Property} that resides in an {@link Object}.
+     * Factory method for a {@link Property} {@link Map} that resides in an {@link Object}.
      *
      * @param <O>
      *          The parent object type of the {@link Property}.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
      * @param <V>
-     *          The type of the child value the {@link Property} represents.
+     *          The value type of the map this {@link Property} represents.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @param getter
@@ -110,54 +118,62 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * @return
      *          A new instance, never null
      */
-    public static <O, V> ModelProperty<O, V> fromObject(String id, Getter<O, V> getter, Setter<O, V> setter) {
-        return new ModelProperty<>(id, ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter));
+    public static <O, K, V> ModelPropertyMap<O, K, V> fromObject(String id, Getter<O, Map<K, V>> getter, Setter<O, Map<K, V>> setter) {
+        return new ModelPropertyMap<>(id, ObjectReferencedGetter.from(getter), ObjectReferencedSetter.from(setter));
     }
 
     /**
-     * Factory method for a {@link Property} that resides in a {@link List}.
+     * Factory method for a {@link Property} {@link Map} that resides in a {@link List}.
      *
-     * @param <E>
-     *          The element type of the list.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
      * @return
      *          A new instance, never null
      */
-    public static <E> ModelProperty<List<E>, E> fromList() {
+    public static <K, V> ModelPropertyMap<List<Map<K, V>>, K, V> fromList() {
         return fromList(null);
     }
 
     /**
-     * Factory method for a {@link Property} that resides in a {@link List}.
+     * Factory method for a {@link Property} {@link Map} that resides in a {@link List}.
      *
-     * @param <E>
-     *          The element type of the list.
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @return
      *          A new instance, never null
      */
-    public static <E> ModelProperty<List<E>, E> fromList(String id) {
-        return new ModelProperty<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
+    public static <K, V> ModelPropertyMap<List<Map<K, V>>, K, V> fromList(String id) {
+        return new ModelPropertyMap<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
     }
 
     /**
-     * Factory method for a {@link Property} that resides in a {@link Map}.
+     * Factory method for a {@link Property} {@link Map} that resides in another {@link Map}.
      *
-     * @param <K>
+     * @param <K1>
+     *          The key type of the this {@link Property}'s parent map represents.
+     * @param <K2>
      *          The key type of the map this {@link Property} represents.
      * @param <V>
      *          The value type of the map this {@link Property} represents.
      * @return
      *          A new instance, never null
      */
-    public static <K, V> ModelProperty<Map<K, V>, V> fromMap() {
+    public static <K1, K2, V> ModelPropertyMap<Map<K1, Map<K2, V>>, K2, V> fromMap() {
         return fromMap(null);
     }
 
     /**
-     * Factory method for a {@link Property} that resides in a {@link Map}.
+     * Factory method for a {@link Property} {@link Map} that resides in another {@link Map}.
      *
-     * @param <K>
+     * @param <K1>
+     *          The key type of the this {@link Property}'s parent map represents.
+     * @param <K2>
      *          The key type of the map this {@link Property} represents.
      * @param <V>
      *          The value type of the map this {@link Property} represents.
@@ -166,7 +182,7 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * @return
      *          A new instance, never null
      */
-    public static <K, V> ModelProperty<Map<K, V>, V> fromMap(String id) {
-        return new ModelProperty<>(id, MapReferencedGetter.from(), MapReferencedSetter.from());
+    public static <K1, K2, V> ModelPropertyMap<Map<K1, Map<K2, V>>, K2, V> fromMap(String id) {
+        return new ModelPropertyMap<>(id, MapReferencedGetter.from(), MapReferencedSetter.from());
     }
 }
