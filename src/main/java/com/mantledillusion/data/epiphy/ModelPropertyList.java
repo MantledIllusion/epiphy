@@ -102,6 +102,36 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     // ###########################################################################################################
 
     /**
+     * Factory method for a {@link Property} {@link List} where the {@link List} itself is the base.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelPropertyList<List<E>, E> from() {
+        return from(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link List} where the {@link List} itself is the base.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <E>
+     *          The element type of the list the {@link Property} represents.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelPropertyList<List<E>, E> from(String id) {
+        return new ModelPropertyList<>(id, SelfReferencedGetter.from(), ReadonlyReferencedSetter.from());
+    }
+
+    /**
      * Factory method for a {@link Property} {@link List} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.

@@ -39,6 +39,40 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
     // ###########################################################################################################
 
     /**
+     * Factory method for a {@link Property} {@link Map} where the {@link Map} itself is the base.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, V> ModelPropertyMap<Map<K, V>, K, V> from() {
+        return from(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link Map} where the {@link Map} itself is the base.
+     * <p>
+     * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, V> ModelPropertyMap<Map<K, V>, K, V> from(String id) {
+        return new ModelPropertyMap<>(id, SelfReferencedGetter.from(), ReadonlyReferencedSetter.from());
+    }
+
+    /**
      * Factory method for a {@link Property} {@link Map} that resides in an {@link Object}.
      * <p>
      * Creates a read-only ({@link Property#isWritable()} == false) {@link Property} since no {@link Setter} is involved.
