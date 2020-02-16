@@ -10,10 +10,10 @@ import com.mantledillusion.data.epiphy.Property;
  * @param <V>
  *     		  The type of the child value this {@link Property} represents.
  * @param <E>
- *            The type of the property element this {@link ReferencableProperty} represents.
+ *            The type of the property element this {@link ReferencingProperty} represents.
  * @param <R>
  *            The type of the context reference.
  */
-public interface ReferencableProperty<O, V, E, R> extends Property<O, V> {
+public interface ReferencingProperty<O, V, E, R> extends Property<O, V> {
 
 }

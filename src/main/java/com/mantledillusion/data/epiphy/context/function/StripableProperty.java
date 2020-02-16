@@ -2,7 +2,7 @@ package com.mantledillusion.data.epiphy.context.function;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.ReferencableProperty;
+import com.mantledillusion.data.epiphy.context.ReferencingProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.context.reference.ReferencedValue;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
@@ -22,7 +22,7 @@ import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathExcepti
  * @param <R>
  *            The type of the context reference.
  */
-public interface StripableProperty<O, V, E, R> extends ReferencableProperty<O, V, E, R> {
+public interface StripableProperty<O, V, E, R> extends ReferencingProperty<O, V, E, R> {
 
     /**
      * Removes an element from the batch that is represented by this {@link StripableProperty}.

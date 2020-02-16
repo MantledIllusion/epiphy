@@ -85,6 +85,11 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return this.getter.getParent();
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy() {
         return this.getter.getHierarchy(this);
     }

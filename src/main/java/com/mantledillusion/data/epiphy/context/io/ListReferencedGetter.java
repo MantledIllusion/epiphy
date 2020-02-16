@@ -39,6 +39,19 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return null;
+    }
+
+    @Override
+    public Set<Property<?, ?>> getHierarchy(Property<List<E>, E> property) {
+        if (this.hierarchy == null) {
+            this.hierarchy = Collections.singleton(property);
+        }
+        return this.hierarchy;
+    }
+
+    @Override
     public int occurrences(Property<List<E>, E> property, List<E> object) {
         return object.size();
     }
@@ -61,14 +74,6 @@ public class ListReferencedGetter<E> implements ReferencedGetter<List<E>, E> {
                 filter(i -> Objects.equals(object.get(i), value)).
                 mapToObj(i -> context.union(PropertyIndex.of(property, i))).
                 collect(Collectors.toList());
-    }
-
-    @Override
-    public Set<Property<?, ?>> getHierarchy(Property<List<E>, E> property) {
-        if (this.hierarchy == null) {
-            this.hierarchy = Collections.singleton(property);
-        }
-        return this.hierarchy;
     }
 
     public static <E> ListReferencedGetter<E> from() {

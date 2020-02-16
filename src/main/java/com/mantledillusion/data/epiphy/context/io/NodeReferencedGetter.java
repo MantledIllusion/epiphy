@@ -37,6 +37,21 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return null;
+    }
+
+    @Override
+    public Set<Property<?, ?>> getHierarchy(Property<O, N> property) {
+        if (this.hierarchy == null) {
+            this.hierarchy = new HashSet<>(this.getter.getHierarchy(property));
+            this.hierarchy.addAll(this.nodeRetriever.getHierarchy());
+            this.hierarchy = Collections.unmodifiableSet(this.hierarchy);
+        }
+        return this.hierarchy;
+    }
+
+    @Override
     public int occurrences(Property<O, N> property, O object) {
         return subOccurrences(this.getter.get(property, object, Context.EMPTY, false));
     }
@@ -89,16 +104,6 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
                     N child = this.nodeRetriever.get(node, subContext, false);
                     return subContextualize(child, value, appendedRoute, baseContext);
                 }));
-    }
-
-    @Override
-    public Set<Property<?, ?>> getHierarchy(Property<O, N> property) {
-        if (this.hierarchy == null) {
-            this.hierarchy = new HashSet<>(this.getter.getHierarchy(property));
-            this.hierarchy.addAll(this.nodeRetriever.getHierarchy());
-            this.hierarchy = Collections.unmodifiableSet(this.hierarchy);
-        }
-        return this.hierarchy;
     }
 
     public static <N> NodeReferencedGetter<N, N> from(NodeRetriever<N> nodeRetriever) {

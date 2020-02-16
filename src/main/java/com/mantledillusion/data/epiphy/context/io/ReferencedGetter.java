@@ -47,6 +47,8 @@ public interface ReferencedGetter<O, V> {
 	V get(Property<O, V> property, O object, Context context, boolean allowNull)
 			throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
 
+	Property<?, ?> getParent();
+
 	/**
 	 * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of the given {@link Property}, including
 	 * the given one.

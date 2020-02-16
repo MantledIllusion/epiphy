@@ -36,6 +36,16 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return this.parent;
+    }
+
+    @Override
+    public Set<Property<?, ?>> getHierarchy(Property<S, V> property) {
+        return this.hierarchy;
+    }
+
+    @Override
     public int occurrences(Property<S, V> property, S object) {
         return this.parent.stream(object).
                 map(intermediate -> this.child.occurrences(intermediate)).
@@ -61,11 +71,6 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
                         map(childContext -> parentContext.union(childContext));
                 }).
                 collect(Collectors.toList());
-    }
-
-    @Override
-    public Set<Property<?, ?>> getHierarchy(Property<S, V> property) {
-        return this.hierarchy;
     }
 
     public static <S, O, V> PathReferencedGetter<S, O, V> from(Property<S, O> parent, Property<O, V> child, ReferencedGetter<O, V> getter) {

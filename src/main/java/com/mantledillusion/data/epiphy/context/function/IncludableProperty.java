@@ -1,7 +1,7 @@
 package com.mantledillusion.data.epiphy.context.function;
 
 import com.mantledillusion.data.epiphy.context.Context;
-import com.mantledillusion.data.epiphy.context.ReferencableProperty;
+import com.mantledillusion.data.epiphy.context.ReferencingProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -21,7 +21,7 @@ import com.mantledillusion.data.epiphy.Property;
  * @param <R>
  *            The type of the context reference.
  */
-public interface IncludableProperty<O, V, E, R> extends ReferencableProperty<O, V, E, R> {
+public interface IncludableProperty<O, V, E, R> extends ReferencingProperty<O, V, E, R> {
 
 	/**
 	 * Adds an element to the batch that is represented by this {@link IncludableProperty}.

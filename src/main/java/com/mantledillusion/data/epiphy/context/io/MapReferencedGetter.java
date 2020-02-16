@@ -39,6 +39,11 @@ public class MapReferencedGetter<K, V> implements ReferencedGetter<Map<K, V>, V>
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return null;
+    }
+
+    @Override
     public int occurrences(Property<Map<K, V>, V> property, Map<K, V> object) {
         return object.size();
     }

@@ -56,6 +56,11 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         }
 
         @Override
+        public Property<?, ?> getParent() {
+            return this.nodeRetriever.getParent();
+        }
+
+        @Override
         public Set<Property<?, ?>> getHierarchy() {
             return this.nodeRetriever.getHierarchy();
         }

@@ -48,6 +48,11 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
     }
 
     @Override
+    public Property<?, ?> getParent() {
+        return null;
+    }
+
+    @Override
     public Set<Property<?, ?>> getHierarchy(Property<O, V> property) {
         if (this.hierarchy == null) {
             this.hierarchy = Collections.singleton(property);
