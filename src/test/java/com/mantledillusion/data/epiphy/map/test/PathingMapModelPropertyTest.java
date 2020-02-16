@@ -1,22 +1,22 @@
-package com.mantledillusion.data.epiphy.object.test;
+package com.mantledillusion.data.epiphy.map.test;
 
 import com.mantledillusion.data.epiphy.ModelProperty;
+import com.mantledillusion.data.epiphy.ModelPropertyMap;
 import com.mantledillusion.data.epiphy.Property;
-import com.mantledillusion.data.epiphy.object.AbstractObjectModelPropertyTest;
-import com.mantledillusion.data.epiphy.object.model.ObjectModel;
-import com.mantledillusion.data.epiphy.object.model.ObjectSubType;
+import com.mantledillusion.data.epiphy.map.AbstractMapModelPropertyTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 import java.util.Set;
 
-public class PathingObjectModelPropertyTest extends AbstractObjectModelPropertyTest {
+public class PathingMapModelPropertyTest extends AbstractMapModelPropertyTest {
 
     @Test
     public void testPrepend() {
-        ModelProperty<ObjectModel, ObjectSubType> parent = ModelProperty.fromObject(ObjectModel::getSub);
-        ModelProperty<ObjectSubType, String> child = ModelProperty.fromObject(ObjectSubType::getSubId);
-        ModelProperty<ObjectModel, String> path = child.prepend(parent);
+        ModelPropertyMap<Map<String, Map<String, String>>, String, String> parent = ModelPropertyMap.fromMap();
+        ModelProperty<Map<String, String>, String> child = ModelProperty.fromMap();
+        ModelProperty<Map<String, Map<String, String>>, String> path = child.prepend(parent);
 
         Set<Property<?, ?>> hierarchy = path.getHierarchy();
         Assertions.assertEquals(2, hierarchy.size());
@@ -30,9 +30,9 @@ public class PathingObjectModelPropertyTest extends AbstractObjectModelPropertyT
 
     @Test
     public void testAppend() {
-        ModelProperty<ObjectModel, ObjectSubType> parent = ModelProperty.fromObject(ObjectModel::getSub);
-        ModelProperty<ObjectSubType, String> child = ModelProperty.fromObject(ObjectSubType::getSubId);
-        ModelProperty<ObjectModel, String> path = parent.append(child);
+        ModelPropertyMap<Map<String, Map<String, String>>, String, String> parent = ModelPropertyMap.fromMap();
+        ModelProperty<Map<String, String>, String> child = ModelProperty.fromMap();
+        ModelProperty<Map<String, Map<String, String>>, String> path = parent.append(child);
 
         Set<Property<?, ?>> hierarchy = path.getHierarchy();
         Assertions.assertEquals(2, hierarchy.size());

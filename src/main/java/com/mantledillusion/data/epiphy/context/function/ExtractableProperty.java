@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy.context.function;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.ReferencableProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -12,12 +13,14 @@ import com.mantledillusion.data.epiphy.Property;
  *
  * @param <O>
  *            The root parent object type of this {@link Property}.
+ * @param <V>
+ *     		  The type of the child value this {@link Property} represents.
  * @param <E>
  *            The type of the property element this {@link ExtractableProperty} represents.
  * @param <R>
  *            The type of the context reference.
  */
-public interface ExtractableProperty<O, E, R> {
+public interface ExtractableProperty<O, V, E, R> extends ReferencableProperty<O, V, E, R> {
 
 	/**
 	 * Removes an element from the batch that is represented by this {@link ExtractableProperty}.

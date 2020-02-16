@@ -313,6 +313,8 @@ public interface Property<O, V> {
      */
     <S> Property<S, V> prepend(Property<S, O> parent);
 
+    Property<?, ?> getParent();
+
     /**
      * Returns a {@link Set} of all {@link Property}s in the parent hierarchy of this {@link Property}, including this
      * one.

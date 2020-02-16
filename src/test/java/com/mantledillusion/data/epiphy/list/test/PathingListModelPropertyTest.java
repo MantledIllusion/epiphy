@@ -4,8 +4,6 @@ import com.mantledillusion.data.epiphy.ModelProperty;
 import com.mantledillusion.data.epiphy.ModelPropertyList;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.object.AbstractObjectModelPropertyTest;
-import com.mantledillusion.data.epiphy.object.model.ObjectModel;
-import com.mantledillusion.data.epiphy.object.model.ObjectSubType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -25,6 +23,10 @@ public class PathingListModelPropertyTest extends AbstractObjectModelPropertyTes
         Assertions.assertEquals(2, hierarchy.size());
         Assertions.assertTrue(hierarchy.contains(parent));
         Assertions.assertTrue(hierarchy.contains(child));
+
+        Assertions.assertNull(child.getParent());
+        Assertions.assertSame(parent, path.getParent());
+        Assertions.assertNull(parent.getParent());
     }
 
     @Test
@@ -37,5 +39,9 @@ public class PathingListModelPropertyTest extends AbstractObjectModelPropertyTes
         Assertions.assertEquals(2, hierarchy.size());
         Assertions.assertTrue(hierarchy.contains(parent));
         Assertions.assertTrue(hierarchy.contains(child));
+
+        Assertions.assertNull(child.getParent());
+        Assertions.assertSame(parent, path.getParent());
+        Assertions.assertNull(parent.getParent());
     }
 }

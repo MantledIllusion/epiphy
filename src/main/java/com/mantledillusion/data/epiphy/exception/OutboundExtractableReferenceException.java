@@ -19,7 +19,7 @@ public class OutboundExtractableReferenceException extends IllegalStateException
 	 * @param reference
 	 * 			The reference that is out of bounds; might <b>not</b> be null.
 	 */
-	public <R> OutboundExtractableReferenceException(ExtractableProperty<?, ?, R> property, R reference) {
+	public <R> OutboundExtractableReferenceException(ExtractableProperty<?, ?, ?, R> property, R reference) {
 		super("Unable to extract the element at reference '" + reference + "' from the property '" + property +
 				"'; the reference to extract at is out of bounds for the batch.");
 	}

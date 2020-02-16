@@ -19,7 +19,7 @@ public class OutboundInsertableReferenceException extends IllegalStateException 
 	 * @param reference
 	 * 			The reference that is out of bounds; might <b>not</b> be null.
 	 */
-	public <R> OutboundInsertableReferenceException(InsertableProperty<?, ?, R> property, R reference) {
+	public <R> OutboundInsertableReferenceException(InsertableProperty<?, ?, ?, R> property, R reference) {
 		super("Unable to insert the element at reference '" + reference + "' into the property '" + property +
 				"'; the reference to insert at is out of bounds for the batch.");
 	}

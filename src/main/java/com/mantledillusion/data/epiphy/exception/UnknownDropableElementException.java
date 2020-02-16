@@ -19,7 +19,7 @@ public class UnknownDropableElementException extends IllegalStateException {
 	 * @param element
 	 * 			The element value that was unknown; might <b>not</b> be null.
 	 */
-	public <E> UnknownDropableElementException(DropableProperty<?, E, ?> property, E element) {
+	public <E> UnknownDropableElementException(DropableProperty<?, ?, E, ?> property, E element) {
 		super("Unable to drop the element value '" + element + "' from the property '" + property +
 				"'; the element to drop is unknown to the batch.");
 	}

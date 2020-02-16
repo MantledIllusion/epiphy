@@ -23,10 +23,10 @@ import java.util.Map;
  */
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
         IncludableProperty<O, List<E>, E, Integer>,
-        InsertableProperty<O, E, Integer>,
-        StripableProperty<O, E, Integer>,
-        ExtractableProperty<O, E, Integer>,
-        DropableProperty<O, E, Integer> {
+        InsertableProperty<O, List<E>, E, Integer>,
+        StripableProperty<O, List<E>, E, Integer>,
+        ExtractableProperty<O, List<E>, E, Integer>,
+        DropableProperty<O, List<E>, E, Integer> {
 
     private ModelPropertyList(String id, ReferencedGetter<O, List<E>> getter, ReferencedSetter<O, List<E>> setter) {
         super(id, getter, setter);
