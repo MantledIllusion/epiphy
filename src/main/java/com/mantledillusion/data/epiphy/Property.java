@@ -454,6 +454,23 @@ public interface Property<O, V> {
     }
 
     /**
+     * Returns a {@link Stream} of all of this {@link Property}'s values occurring in the given object.
+     * <p>
+     * The count of streamed values exactly matches the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to get the value occurrences from; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @return
+     *          A {@link Stream} of values, never null, might be empty
+     */
+    default Stream<V> stream(O  object, Context context) {
+        return contextualize(object, context).stream().
+                map(ctx -> get(object, ctx, true));
+    }
+
+    /**
      * Returns a {@link Iterable} of all of this {@link Property}'s values occurring in the given object.
      * <p>
      * The count of iterable values exactly matches the result of {@link #occurrences(Object)} on the same object.
@@ -465,6 +482,22 @@ public interface Property<O, V> {
      */
     default Iterable<V> iterate(O object) {
         return () -> stream(object).iterator();
+    }
+
+    /**
+     * Returns a {@link Iterable} of all of this {@link Property}'s values occurring in the given object.
+     * <p>
+     * The count of iterable values exactly matches the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to get the value occurrences from; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @return
+     *          A {@link Stream} of values, never null, might be empty
+     */
+    default Iterable<V> iterate(O object, Context context) {
+        return () -> stream(object, context).iterator();
     }
 
     /**
