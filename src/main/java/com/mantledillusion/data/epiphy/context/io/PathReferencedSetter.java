@@ -27,7 +27,7 @@ public class PathReferencedSetter<S, O, V> implements ReferencedSetter<S, V> {
 
     @Override
     public boolean isWritable() {
-        return true;
+        return this.child.isWritable();
     }
 
     public static <S, O, V> PathReferencedSetter<S, O, V> from(Property<S, O> parent, Property<O, V> child, ReferencedSetter<O, V> getter) {
