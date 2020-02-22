@@ -1,9 +1,13 @@
 package com.mantledillusion.data.epiphy;
 
+import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.function.DropableProperty;
+import com.mantledillusion.data.epiphy.context.function.ExtractableProperty;
+import com.mantledillusion.data.epiphy.context.function.InsertableProperty;
 import com.mantledillusion.data.epiphy.context.io.*;
+import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Represents a {@link Property} {@link Map}.
@@ -17,7 +21,10 @@ import java.util.Map;
  * @param <V>
  *          The value type of the map this {@link Property} represents.
  */
-public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, V>> {
+public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, V>> implements
+        InsertableProperty<O, Map<K, V>, V, K>,
+        ExtractableProperty<O, Map<K, V>, V, K>,
+        DropableProperty<O, Map<K, V>, V, K> {
 
     private ModelPropertyMap(String id, ReferencedGetter<O, Map<K, V>> getter, ReferencedSetter<O, Map<K, V>> setter) {
         super(id, getter, setter);
@@ -32,6 +39,38 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
         return new ModelPropertyMap<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),
                 PathReferencedSetter.from(parent, this, getSetter()));
+    }
+
+    // ###########################################################################################################
+    // ################################################ CONTEXT ##################################################
+    // ###########################################################################################################
+
+    private Map<K, V> elements(O object, Context context) {
+        Map<K, V> elements = get(object, context, false);
+        if (elements == null) {
+            throw new InterruptedPropertyPathException(this);
+        }
+        return elements;
+    }
+
+    @Override
+    public void insert(O object, V element, K reference, Context context) {
+        elements(object, context).put(reference, element);
+    }
+
+    @Override
+    public V extract(O object, K reference, Context context) {
+        return elements(object, context).remove(reference);
+    }
+
+    @Override
+    public K drop(O object, V element, Context context) {
+        Map<K, V> elements = elements(object, context);
+        Optional<K> key = elements.entrySet().parallelStream().
+                filter(entry -> Objects.equals(entry.getValue(), element)).
+                map(Map.Entry::getKey).
+                findFirst();
+        return key.filter(k -> elements.remove(k, element)).orElse(null);
     }
 
     // ###########################################################################################################
