@@ -6,6 +6,8 @@ import com.mantledillusion.data.epiphy.context.function.ExtractableProperty;
 import com.mantledillusion.data.epiphy.context.function.InsertableProperty;
 import com.mantledillusion.data.epiphy.context.io.*;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.OutboundExtractableReferenceException;
+import com.mantledillusion.data.epiphy.exception.UnknownDropableElementException;
 
 import java.util.*;
 
@@ -60,6 +62,10 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
 
     @Override
     public V extract(O object, K reference, Context context) {
+        Map<K, V> elements = elements(object, context);
+        if (!elements.containsKey(reference)) {
+            throw new OutboundExtractableReferenceException(this, reference);
+        }
         return elements(object, context).remove(reference);
     }
 
@@ -70,7 +76,11 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
                 filter(entry -> Objects.equals(entry.getValue(), element)).
                 map(Map.Entry::getKey).
                 findFirst();
-        return key.filter(k -> elements.remove(k, element)).orElse(null);
+        if (key.isPresent()) {
+            return key.filter(k -> elements.remove(k, element)).get();
+        } else {
+            throw new UnknownDropableElementException(this, element);
+        }
     }
 
     // ###########################################################################################################

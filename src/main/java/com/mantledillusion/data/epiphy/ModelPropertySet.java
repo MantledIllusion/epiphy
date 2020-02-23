@@ -1,6 +1,11 @@
 package com.mantledillusion.data.epiphy;
 
+import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.function.DropableProperty;
+import com.mantledillusion.data.epiphy.context.function.IncludableProperty;
 import com.mantledillusion.data.epiphy.context.io.*;
+import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.UnknownDropableElementException;
 
 import java.util.List;
 import java.util.Map;
@@ -16,7 +21,9 @@ import java.util.Set;
  * @param <E>
  *          The element type of the {@link Set} this {@link Property} represents.
  */
-public class ModelPropertySet<O, E> extends AbstractModelProperty<O, Set<E>> {
+public class ModelPropertySet<O, E> extends AbstractModelProperty<O, Set<E>> implements
+        IncludableProperty<O, Set<E>, E, E>,
+        DropableProperty<O, Set<E>, E, E> {
     
     private ModelPropertySet(String id, ReferencedGetter<O, Set<E>> getter, ReferencedSetter<O, Set<E>> setter) {
         super(id, getter, setter);
@@ -31,6 +38,32 @@ public class ModelPropertySet<O, E> extends AbstractModelProperty<O, Set<E>> {
         return new ModelPropertySet<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),
                 PathReferencedSetter.from(parent, this, getSetter()));
+    }
+
+    // ###########################################################################################################
+    // ################################################ CONTEXT ##################################################
+    // ###########################################################################################################
+
+    private Set<E> elements(O object, Context context) {
+        Set<E> elements = get(object, context, false);
+        if (elements == null) {
+            throw new InterruptedPropertyPathException(this);
+        }
+        return elements;
+    }
+
+    @Override
+    public E include(O object, E element, Context context) {
+        elements(object, context).add(element);
+        return element;
+    }
+
+    @Override
+    public E drop(O object, E element, Context context) {
+        if (!elements(object, context).remove(element)) {
+            throw new UnknownDropableElementException(this, element);
+        }
+        return element;
     }
 
     // ###########################################################################################################

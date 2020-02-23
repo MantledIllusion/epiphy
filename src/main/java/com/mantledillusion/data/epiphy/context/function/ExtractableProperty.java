@@ -4,6 +4,7 @@ import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.ReferencingProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.OutboundExtractableReferenceException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
@@ -39,9 +40,12 @@ public interface ExtractableProperty<O, V, E, R> extends ReferencingProperty<O, 
 	 * 			If any property on the path to this {@link ExtractableProperty} is null.
 	 * @throws UnreferencedPropertyPathException
 	 *          If there is any uncontexted property in this {@link ExtractableProperty}'s path.
+	 * @throws OutboundExtractableReferenceException
+	 * 			If the given reference is out of bounds on the given object's elements this
+	 * 	 * 		{@link ExtractableProperty} represents.
 	 */
 	default E extract(O object, R reference) throws
-			InterruptedPropertyPathException, UnreferencedPropertyPathException {
+			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundExtractableReferenceException {
 		return extract(object, reference, null);
 	}
 
@@ -69,7 +73,11 @@ public interface ExtractableProperty<O, V, E, R> extends ReferencingProperty<O, 
 	 * @throws OutboundPropertyPathException
 	 * 			If the property reference provided by the given {@link Context} is out of bounds on the given object's
 	 * 			elements this {@link ExtractableProperty} represents.
+	 * @throws OutboundExtractableReferenceException
+	 * 			If the given reference is out of bounds on the given object's elements this
+	 * 	 * 		{@link ExtractableProperty} represents.
 	 */
 	E extract(O object, R reference, Context context) throws
-			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
+			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
+			OutboundExtractableReferenceException;
 }

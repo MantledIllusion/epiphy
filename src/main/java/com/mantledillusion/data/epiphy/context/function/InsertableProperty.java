@@ -5,6 +5,7 @@ import com.mantledillusion.data.epiphy.context.Context;
 import com.mantledillusion.data.epiphy.context.ReferencingProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.OutboundInsertableReferenceException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
@@ -39,9 +40,12 @@ public interface InsertableProperty<O, V, E, R> extends ReferencingProperty<O, V
 	 * 			If any property on the path to this {@link InsertableProperty} is null.
 	 * @throws UnreferencedPropertyPathException
 	 *          If there is any uncontexted property in this {@link InsertableProperty}'s path.
+	 * @throws OutboundInsertableReferenceException
+	 * 			If the given reference is out of bounds on the given object's elements this
+	 * 			{@link InsertableProperty} represents.
 	 */
 	default void insert(O object, E element, R reference) throws
-			InterruptedPropertyPathException, UnreferencedPropertyPathException {
+			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundInsertableReferenceException {
 		insert(object, element, reference, null);
 	}
 
@@ -69,7 +73,11 @@ public interface InsertableProperty<O, V, E, R> extends ReferencingProperty<O, V
 	 * @throws OutboundPropertyPathException
 	 * 			If the property reference provided by the given {@link Context} is out of bounds on the given object's
 	 * 			elements this {@link InsertableProperty} represents.
+	 * @throws OutboundInsertableReferenceException
+	 * 			If the given reference is out of bounds on the given object's elements this
+	 * 			{@link InsertableProperty} represents.
 	 */
 	void insert(O object, E element, R reference, Context context) throws
-			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
+			InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
+			OutboundInsertableReferenceException;
 }

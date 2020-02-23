@@ -6,6 +6,7 @@ import com.mantledillusion.data.epiphy.context.ReferencingProperty;
 import com.mantledillusion.data.epiphy.context.reference.PropertyReference;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
+import com.mantledillusion.data.epiphy.exception.UnknownDropableElementException;
 import com.mantledillusion.data.epiphy.exception.UnreferencedPropertyPathException;
 
 /**
@@ -35,15 +36,17 @@ public interface DropableProperty<O, V, E, R> extends ReferencingProperty<O, V, 
      *          The element to remove. If it is contained by the elements multiple times, the first occurrence is
      *          removed; might be null.
      * @return
-     *          The property reference of the element that has been removed; might be null if the given element was not
-     *          included in its element
+     *          The property reference of the element that has been removed; might be null if the reference of the
+     *          given element is null
      * @throws InterruptedPropertyPathException
      *          If any property on the path to this {@link DropableProperty} is null.
      * @throws UnreferencedPropertyPathException
      *          If there is any uncontexted property in this {@link DropableProperty}'s path.
+     * @throws UnknownDropableElementException
+     *          If the element it not referenced in the given object.
      */
     default R drop(O object, E element) throws
-            InterruptedPropertyPathException, UnreferencedPropertyPathException {
+            InterruptedPropertyPathException, UnreferencedPropertyPathException, UnknownDropableElementException {
         return drop(object, element, null);
     }
 
@@ -63,8 +66,8 @@ public interface DropableProperty<O, V, E, R> extends ReferencingProperty<O, V, 
      *          The {@link Context} that should be used to satisfy the contexted properties from the root property to
      *          this {@link DropableProperty}; might be null.
      * @return
-     *          The property reference of the element that has been removed; might be null if the given element was not
-     *          included in its element
+     *          The property reference of the element that has been removed; might be null if the reference of the
+     *          given element is null
      * @throws InterruptedPropertyPathException
      *          If any property on the path to this {@link DropableProperty} is null.
      * @throws UnreferencedPropertyPathException
@@ -73,7 +76,10 @@ public interface DropableProperty<O, V, E, R> extends ReferencingProperty<O, V, 
      * @throws OutboundPropertyPathException
      *          If the property reference provided by the given {@link Context} is out of bounds on the given object's
      *          elements this {@link DropableProperty} represents.
+     * @throws UnknownDropableElementException
+     *          If the element it not referenced in the given object.
      */
     R drop(O object, E element, Context context) throws
-            InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException;
+            InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException,
+            UnknownDropableElementException;
 }

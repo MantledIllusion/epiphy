@@ -90,7 +90,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     @Override
     public Integer drop(O object, E element, Context context) {
         List<E> elements = elements(object, context);
-        int index = elements.indexOf(element);
+        Integer index = elements.indexOf(element);
         if (index == -1) {
             throw new UnknownDropableElementException(this, element);
         }
