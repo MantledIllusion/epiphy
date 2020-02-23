@@ -53,6 +53,11 @@ public class ModelPropertySet<O, E> extends AbstractModelProperty<O, Set<E>> imp
     }
 
     @Override
+    public boolean contains(O object, E reference, Context context) {
+        return elements(object, context).contains(reference);
+    }
+
+    @Override
     public E include(O object, E element, Context context) {
         elements(object, context).add(element);
         return element;

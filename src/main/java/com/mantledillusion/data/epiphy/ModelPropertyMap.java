@@ -56,6 +56,11 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
     }
 
     @Override
+    public boolean contains(O object, K reference, Context context) {
+        return elements(object, context).containsKey(reference);
+    }
+
+    @Override
     public void insert(O object, V element, K reference, Context context) {
         elements(object, context).put(reference, element);
     }

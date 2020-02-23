@@ -57,6 +57,11 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     @Override
+    public boolean contains(O object, Integer reference, Context context) {
+        return reference >= 0 && reference < elements(object, context).size();
+    }
+
+    @Override
     public Integer include(O object, E element, Context context) {
         List<E> elements = elements(object, context);
         elements.add(element);
