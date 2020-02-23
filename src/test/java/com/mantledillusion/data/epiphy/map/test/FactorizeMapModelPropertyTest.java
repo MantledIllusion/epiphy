@@ -23,6 +23,11 @@ public class FactorizeMapModelPropertyTest extends AbstractModelPropertyTest {
     }
 
     @Test
+    public void testFactorizeFromSet() {
+        validateFactorization(ModelPropertyMap.fromSet(), true);
+    }
+
+    @Test
     public void testFactorizeFromMap() {
         validateFactorization(ModelPropertyMap.fromMap(), true);
     }

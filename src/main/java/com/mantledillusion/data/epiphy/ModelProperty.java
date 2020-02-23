@@ -6,6 +6,7 @@ import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a simple {@link Property} where an object value resides in another object.
@@ -118,7 +119,7 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * Factory method for a {@link Property} that resides in a {@link List}.
      *
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @return
      *          A new instance, never null
      */
@@ -130,7 +131,7 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      * Factory method for a {@link Property} that resides in a {@link List}.
      *
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @return
@@ -138,6 +139,32 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
      */
     public static <E> ModelProperty<List<E>, E> fromList(String id) {
         return new ModelProperty<>(id, ListReferencedGetter.from(), ListReferencedSetter.from());
+    }
+
+    /**
+     * Factory method for a {@link Property} that resides in a {@link Set}.
+     *
+     * @param <E>
+     *          The element type of the {@link Set}.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelProperty<Set<E>, E> fromSet() {
+        return fromSet(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} that resides in a {@link Set}.
+     *
+     * @param <E>
+     *          The element type of the {@link Set}.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelProperty<Set<E>, E> fromSet(String id) {
+        return new ModelProperty<>(id, SetReferencedGetter.from(), SetReferencedSetter.from());
     }
 
     /**

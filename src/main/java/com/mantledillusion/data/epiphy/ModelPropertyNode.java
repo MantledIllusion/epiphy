@@ -261,7 +261,7 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
      * node that enables traversing through a node tree.
      *
      * @param <N>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @param nodeRetriever
      *          A {@link ModelProperty} that whose object and value type are the same, so it is able to access the
      *          child (value) of a parent (object) node; might <b>not</b> be null.
@@ -277,7 +277,7 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
      * node that enables traversing through a node tree.
      *
      * @param <N>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @param nodeRetriever
@@ -290,6 +290,42 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
         return new ModelPropertyNode<>(id, NodeReferencedGetter.from(ListReferencedGetter.from(), retriever),
                 NodeReferencedSetter.from(ListReferencedGetter.from(), ListReferencedSetter.from(), retriever), retriever);
+    }
+
+    /**
+     * Factory method for a listed {@link Property} that resides in a {@link Set} and whose value type represents a
+     * node that enables traversing through a node tree.
+     *
+     * @param <N>
+     *          The element type of the {@link Set}.
+     * @param nodeRetriever
+     *          A {@link ModelProperty} that whose object and value type are the same, so it is able to access the
+     *          child (value) of a parent (object) node; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
+    public static <N> ModelPropertyNode<Set<N>, N> fromSet(ModelProperty<N, N> nodeRetriever) {
+        return fromSet(null, nodeRetriever);
+    }
+
+    /**
+     * Factory method for a listed {@link Property} that resides in a {@link Set} and whose value type represents a
+     * node that enables traversing through a node tree.
+     *
+     * @param <N>
+     *          The element type of the {@link Set}.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @param nodeRetriever
+     *          A {@link ModelProperty} that whose object and value type are the same, so it is able to access the
+     *          child (value) of a parent (object) node; might <b>not</b> be null.
+     * @return
+     *          A new instance, never null
+     */
+    public static <N> ModelPropertyNode<Set<N>, N> fromSet(String id, ModelProperty<N, N> nodeRetriever) {
+        NodeRetriever<N> retriever = new ModelPropertyNodeRetriever<>(nodeRetriever);
+        return new ModelPropertyNode<>(id, NodeReferencedGetter.from(SetReferencedGetter.from(), retriever),
+                NodeReferencedSetter.from(SetReferencedGetter.from(), SetReferencedSetter.from(), retriever), retriever);
     }
 
     /**

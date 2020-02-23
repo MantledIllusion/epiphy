@@ -10,6 +10,7 @@ import com.mantledillusion.data.epiphy.exception.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Represents a {@link Property} {@link List}.
@@ -19,7 +20,7 @@ import java.util.Map;
  * @param <O>
  *          The parent object type of this {@link Property}.
  * @param <E>
- *          The element type of the list this {@link Property} represents.
+ *          The element type of the {@link List} this {@link Property} represents.
  */
 public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> implements
         IncludableProperty<O, List<E>, E, Integer>,
@@ -139,7 +140,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * @param <O>
      *          The parent object type of the {@link Property}.
      * @param <E>
-     *          The element type of the list the {@link Property} represents.
+     *          The element type of the {@link List} the {@link Property} represents.
      * @param getter
      *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
      * @return
@@ -157,7 +158,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * @param <O>
      *          The parent object type of the {@link Property}.
      * @param <E>
-     *          The element type of the list the {@link Property} represents.
+     *          The element type of the {@link List} the {@link Property} represents.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @param getter
@@ -175,7 +176,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * @param <O>
      *          The parent object type of the {@link Property}.
      * @param <E>
-     *          The element type of the list the {@link Property} represents.
+     *          The element type of the {@link List} the {@link Property} represents.
      * @param getter
      *          A function that is able to retrieve the value from its parent object; might <b>not</b> be null.
      * @param setter
@@ -193,7 +194,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * @param <O>
      *          The parent object type of the {@link Property}.
      * @param <E>
-     *          The element type of the list the {@link Property} represents.
+     *          The element type of the {@link List} the {@link Property} represents.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @param getter
@@ -211,7 +212,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * Factory method for a {@link Property} {@link List} that resides in another {@link List}.
      *
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @return
      *          A new instance, never null
      */
@@ -223,7 +224,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * Factory method for a {@link Property} {@link List} that resides in another {@link List}.
      *
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @return
@@ -234,12 +235,38 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     }
 
     /**
+     * Factory method for a {@link Property} {@link List} that resides in a {@link Set}.
+     *
+     * @param <E>
+     *          The element type of the {@link List}.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelPropertyList<Set<List<E>>, E> fromSet() {
+        return fromSet(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link List} that resides in a {@link List}.
+     *
+     * @param <E>
+     *          The element type of the {@link List}.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <E> ModelPropertyList<Set<List<E>>, E> fromSet(String id) {
+        return new ModelPropertyList<>(id, SetReferencedGetter.from(), SetReferencedSetter.from());
+    }
+
+    /**
      * Factory method for a {@link Property} {@link List} that resides in a {@link Map}.
      *
      * @param <K>
      *          The key type of the map this {@link Property} represents.
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @return
      *          A new instance, never null
      */
@@ -253,7 +280,7 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
      * @param <K>
      *          The key type of the map this {@link Property} represents.
      * @param <E>
-     *          The element type of the list.
+     *          The element type of the {@link List}.
      * @param id
      *          The identifier of the {@link Property}; might be null, then the object id is used.
      * @return

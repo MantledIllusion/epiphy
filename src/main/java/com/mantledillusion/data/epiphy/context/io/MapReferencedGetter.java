@@ -54,7 +54,7 @@ public class MapReferencedGetter<K, V> implements ReferencedGetter<Map<K, V>, V>
                 ((PropertyKey<K>) context.getReference(property, PropertyKey.class)).getReference() : null;
         return (key != null ? Stream.of(key) : object.keySet().stream()).
                 filter(k -> includeNull || object.get(k) != null).
-                map(k -> context.union(PropertyKey.of(property, k))).
+                map(k -> context.union(PropertyKey.ofMap(property, k))).
                 collect(Collectors.toSet());
     }
 
@@ -64,7 +64,7 @@ public class MapReferencedGetter<K, V> implements ReferencedGetter<Map<K, V>, V>
                 ((PropertyKey<K>) context.getReference(property, PropertyKey.class)).getReference() : null;
         return (key != null ? Stream.of(key) : object.keySet().stream()).
                 filter(k -> Objects.equals(object.get(k), value)).
-                map(k -> context.union(PropertyKey.of(property, k))).
+                map(k -> context.union(PropertyKey.ofMap(property, k))).
                 collect(Collectors.toSet());
     }
 

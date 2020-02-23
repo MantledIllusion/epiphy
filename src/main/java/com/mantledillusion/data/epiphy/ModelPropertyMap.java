@@ -226,6 +226,36 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
     }
 
     /**
+     * Factory method for a {@link Property} {@link Map} that resides in a {@link Set}.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, V> ModelPropertyMap<Set<Map<K, V>>, K, V> fromSet() {
+        return fromSet(null);
+    }
+
+    /**
+     * Factory method for a {@link Property} {@link Map} that resides in a {@link Set}.
+     *
+     * @param <K>
+     *          The key type of the map this {@link Property} represents.
+     * @param <V>
+     *          The value type of the map this {@link Property} represents.
+     * @param id
+     *          The identifier of the {@link Property}; might be null, then the object id is used.
+     * @return
+     *          A new instance, never null
+     */
+    public static <K, V> ModelPropertyMap<Set<Map<K, V>>, K, V> fromSet(String id) {
+        return new ModelPropertyMap<>(id, SetReferencedGetter.from(), SetReferencedSetter.from());
+    }
+
+    /**
      * Factory method for a {@link Property} {@link Map} that resides in another {@link Map}.
      *
      * @param <K1>

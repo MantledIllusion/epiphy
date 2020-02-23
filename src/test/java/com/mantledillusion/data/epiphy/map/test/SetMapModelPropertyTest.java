@@ -16,8 +16,8 @@ public class SetMapModelPropertyTest extends AbstractMapModelPropertyTest {
 
 	@Test
 	public void testSet() {
-		Context context = Context.of(PropertyKey.of(MapModelProperties.ELEMENTMAP, "A"),
-				PropertyKey.of(MapModelProperties.ELEMENT, "A"));
+		Context context = Context.of(PropertyKey.ofMap(MapModelProperties.ELEMENTMAP, "A"),
+				PropertyKey.ofMap(MapModelProperties.ELEMENT, "A"));
 		MapModelProperties.ELEMENTMAP_TO_ELEMENT.set(this.model, NEW_ELEMENT, context);
 		assertSame(NEW_ELEMENT, MapModelProperties.ELEMENTMAP_TO_ELEMENT.get(this.model, context));
 	}
@@ -25,8 +25,8 @@ public class SetMapModelPropertyTest extends AbstractMapModelPropertyTest {
 	@Test
 	public void testSetInterrupted() {
 		this.model.put("A", null);
-		Context context = Context.of(PropertyKey.of(MapModelProperties.ELEMENTMAP, "A"),
-				PropertyKey.of(MapModelProperties.ELEMENT, "A"));
+		Context context = Context.of(PropertyKey.ofMap(MapModelProperties.ELEMENTMAP, "A"),
+				PropertyKey.ofMap(MapModelProperties.ELEMENT, "A"));
 		assertThrows(InterruptedPropertyPathException.class, () -> {
 			MapModelProperties.ELEMENTMAP_TO_ELEMENT.set(this.model, NEW_ELEMENT, context);
 		});
@@ -41,8 +41,8 @@ public class SetMapModelPropertyTest extends AbstractMapModelPropertyTest {
 
 	@Test
 	public void testSetOutbound() {
-		Context context = Context.of(PropertyKey.of(MapModelProperties.ELEMENTMAP, "A"),
-				PropertyKey.of(MapModelProperties.ELEMENT, "C"));
+		Context context = Context.of(PropertyKey.ofMap(MapModelProperties.ELEMENTMAP, "A"),
+				PropertyKey.ofMap(MapModelProperties.ELEMENT, "C"));
 		assertThrows(OutboundPropertyPathException.class, () -> {
 			MapModelProperties.ELEMENTMAP_TO_ELEMENT.set(this.model, NEW_ELEMENT, context);
 		});

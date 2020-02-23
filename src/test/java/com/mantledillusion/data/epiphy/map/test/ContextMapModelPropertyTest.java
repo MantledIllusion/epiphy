@@ -54,7 +54,7 @@ public class ContextMapModelPropertyTest extends AbstractMapModelPropertyTest {
         map.put("B", ELEMENT_A_ELEMENT_B);
 
         Collection<Context> contexts = MapModelProperties.ELEMENT.contextualize(map,
-                Context.of(PropertyKey.of(MapModelProperties.ELEMENT, "B")));
+                Context.of(PropertyKey.ofMap(MapModelProperties.ELEMENT, "B")));
         Assertions.assertEquals(1, contexts.size());
         Context context = contexts.iterator().next();
 
@@ -86,7 +86,7 @@ public class ContextMapModelPropertyTest extends AbstractMapModelPropertyTest {
         map.put("B", ELEMENT_A_ELEMENT_B);
 
         Collection<Context> contexts = MapModelProperties.ELEMENT.contextualize(map, ELEMENT_A_ELEMENT_B,
-                Context.of(PropertyKey.of(MapModelProperties.ELEMENT, "B")));
+                Context.of(PropertyKey.ofMap(MapModelProperties.ELEMENT, "B")));
         Assertions.assertEquals(1, contexts.size());
 
         Context context = contexts.iterator().next();
