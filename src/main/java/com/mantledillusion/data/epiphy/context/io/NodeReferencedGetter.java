@@ -30,7 +30,7 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
         N node = this.getter.get(property, object, context, allowNull);
         if (context.containsReference(this.nodeRetriever, PropertyRoute.class)) {
             for (Context routeContext: context.getReference(this.nodeRetriever, PropertyRoute.class).getReference()) {
-                node = this.nodeRetriever.get(node, routeContext, false);
+                node = this.nodeRetriever.get(node, routeContext, allowNull);
             }
         }
         return node;
