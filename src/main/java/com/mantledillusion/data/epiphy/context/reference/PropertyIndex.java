@@ -46,8 +46,6 @@ public final class PropertyIndex extends PropertyReference<Property<? extends Li
 	/**
 	 * Creates a new {@link PropertyIndex}.
 	 *
-	 * @param <E>
-	 * 			The type of the listed element.
 	 * @param listedProperty
 	 * 			The listed property this {@link PropertyIndex} contexts; might <b>not</b> be null.
 	 * @param index
