@@ -55,7 +55,7 @@ public final class PropertyKey<K> extends PropertyReference<Property<? extends M
 	 * 			The {@link Property}'s element; might <b>not</b> be null.
 	 * @return A new {@link PropertyKey}, never null
 	 */
-	public static <E> PropertyKey ofSet(Property<? extends Set<E>, E> mappedProperty, E element) {
+	public static <E> PropertyKey ofSet(Property<?, ?> mappedProperty, E element) {
 		if (mappedProperty == null) {
 			throw new IllegalArgumentException("Cannot create an index for a null mapped property.");
 		}
@@ -67,15 +67,13 @@ public final class PropertyKey<K> extends PropertyReference<Property<? extends M
 	 *
 	 * @param <K>
 	 *          The key type of the map this {@link Property} represents.
-	 * @param <V>
-	 *          The value type of the map this {@link Property} represents.
 	 * @param mappedProperty
 	 * 			The listed property this {@link PropertyKey} contexts; might <b>not</b> be null.
 	 * @param key
 	 * 			The index of the given {@link Property}'s element; might <b>not</b> be null.
 	 * @return A new {@link PropertyKey}, never null
 	 */
-	public static <K, V> PropertyKey ofMap(Property<? extends Map<K, V>, V> mappedProperty, K key) {
+	public static <K> PropertyKey ofMap(Property<?, ?> mappedProperty, K key) {
 		if (mappedProperty == null) {
 			throw new IllegalArgumentException("Cannot create an index for a null mapped property.");
 		}

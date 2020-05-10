@@ -51,4 +51,23 @@ public interface ReferencedSetter<O, V> {
 	 * @return True if this is a working implementation of the {@link ReferencedGetter}, false otherwise
 	 */
 	boolean isWritable();
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	default <S> ReferencedSetter<S, V> obfuscate(Class<O> objectType) {
+		if (objectType == null) {
+			throw new IllegalArgumentException("Cannot obfuscate using a null object type class");
+		}
+		return new ReferencedSetter() {
+
+			@Override
+			public void set(Property property, Object object, Object value, Context context) throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException, ReadonlyPropertyException {
+				ReferencedSetter.this.set(property, objectType.isInstance(object) ? (O) object : null, (V) value, context);
+			}
+
+			@Override
+			public boolean isWritable() {
+				return ReferencedSetter.this.isWritable();
+			}
+		};
+	}
 }

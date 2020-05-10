@@ -29,6 +29,11 @@ public class ModelProperty<O, V> extends AbstractModelProperty<O, V> {
     // ###########################################################################################################
 
     @Override
+    public <S> ModelProperty<S, V> obfuscate(Class<O> objectType) {
+        return new ModelProperty<>(getId(), getGetter().obfuscate(objectType), getSetter().obfuscate(objectType));
+    }
+
+    @Override
     public <S> ModelProperty<S, V> prepend(Property<S, O> parent) {
         return new ModelProperty<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),

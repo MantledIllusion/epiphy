@@ -111,4 +111,43 @@ public interface ReferencedGetter<O, V> {
 	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
 	 */
 	Collection<Context> contextualize(Property<O, V> property, O object, V value, Context context);
+
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	default <S> ReferencedGetter<S, V> obfuscate(Class<O> objectType) {
+		if (objectType == null) {
+			throw new IllegalArgumentException("Cannot obfuscate using a null object type class");
+		}
+		return new ReferencedGetter() {
+
+			@Override
+			public Object get(Property property, Object object, Context context, boolean allowNull) throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException {
+				return ReferencedGetter.this.get((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, context, allowNull);
+			}
+
+			@Override
+			public Property<?, ?> getParent() {
+				return ReferencedGetter.this.getParent();
+			}
+
+			@Override
+			public Set<Property<?, ?>> getHierarchy(Property property) {
+				return ReferencedGetter.this.getHierarchy(property);
+			}
+
+			@Override
+			public int occurrences(Property property, Object object) {
+				return ReferencedGetter.this.occurrences((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null);
+			}
+
+			@Override
+			public Collection<Context> contextualize(Property property, Object object, Context context, boolean includeNull) {
+				return ReferencedGetter.this.contextualize((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, context, includeNull);
+			}
+
+			@Override
+			public Collection<Context> contextualize(Property property, Object object, Object value, Context context) {
+				return ReferencedGetter.this.contextualize((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, (V) value, context);
+			}
+		};
+	}
 }

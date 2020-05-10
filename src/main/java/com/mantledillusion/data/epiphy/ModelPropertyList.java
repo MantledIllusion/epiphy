@@ -38,6 +38,11 @@ public class ModelPropertyList<O, E> extends AbstractModelProperty<O, List<E>> i
     // ###########################################################################################################
 
     @Override
+    public <S> ModelPropertyList<S, E> obfuscate(Class<O> objectType) {
+        return new ModelPropertyList<>(getId(), getGetter().obfuscate(objectType), getSetter().obfuscate(objectType));
+    }
+
+    @Override
     public <S> ModelPropertyList<S, E> prepend(Property<S, O> parent) {
         return new ModelPropertyList<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),

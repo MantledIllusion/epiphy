@@ -66,6 +66,11 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         }
 
         @Override
+        public <S> Property<S, N> obfuscate(Class<N> objectType) {
+            return this.nodeRetriever.obfuscate(objectType);
+        }
+
+        @Override
         public <S> Property<S, N> prepend(Property<S, N> parent) {
             return this.nodeRetriever.prepend(parent);
         }
@@ -105,7 +110,12 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
      * @return The {@link NodeRetriever}, never null
      */
     public NodeRetriever<N> getNodeRetriever() {
-        return nodeRetriever;
+        return this.nodeRetriever;
+    }
+
+    @Override
+    public <S> ModelPropertyNode<S, N> obfuscate(Class<O> objectType) {
+        return new ModelPropertyNode<>(getId(), getGetter().obfuscate(objectType), getSetter().obfuscate(objectType), this.nodeRetriever);
     }
 
     @Override

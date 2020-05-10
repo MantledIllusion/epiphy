@@ -276,6 +276,18 @@ public interface Property<O, V> {
     // ###########################################################################################################
 
     /**
+     * Obfuscates the source object type of this property to any other type.
+     * <p>
+     * When not encountering a source object of the given object type, the {@link Property} will treat that source
+     * as if it was null, effectively allowing properties to operate on any type desired.
+     *
+     * @param <S> The super type of the {@link Property}'s object type to obfuscate to.
+     * @param objectType The object type's {@link Class}; might <b>not</b> be null.
+     * @return A new {@link Property} instance with the same features as this one, never null
+     */
+    <S> Property<S, V> obfuscate(Class<O> objectType);
+
+    /**
      * Builds a path with this {@link Property} as the leading and the given {@link Property} as the trailing end.
      * <p>
      * A {@link Property} path also is a property, but with at least one intermediate object between the root object

@@ -34,6 +34,11 @@ public class ModelPropertySet<O, E> extends AbstractModelProperty<O, Set<E>> imp
     // ###########################################################################################################
 
     @Override
+    public <S> ModelPropertySet<S, E> obfuscate(Class<O> objectType) {
+        return new ModelPropertySet<>(getId(), getGetter().obfuscate(objectType), getSetter().obfuscate(objectType));
+    }
+
+    @Override
     public <S> ModelPropertySet<S, E> prepend(Property<S, O> parent) {
         return new ModelPropertySet<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),

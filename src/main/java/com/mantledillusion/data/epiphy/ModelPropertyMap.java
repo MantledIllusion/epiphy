@@ -37,6 +37,11 @@ public class ModelPropertyMap<O, K, V>  extends AbstractModelProperty<O, Map<K, 
     // ###########################################################################################################
 
     @Override
+    public <S> ModelPropertyMap<S, K, V> obfuscate(Class<O> objectType) {
+        return new ModelPropertyMap<>(getId(), getGetter().obfuscate(objectType), getSetter().obfuscate(objectType));
+    }
+
+    @Override
     public <S> ModelPropertyMap<S, K, V> prepend(Property<S, O> parent) {
         return new ModelPropertyMap<>(parent.getId()+'.'+getId(),
                 PathReferencedGetter.from(parent, this, getGetter()),
