@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.io.*;
 import com.mantledillusion.data.epiphy.context.io.ReferencedGetter;
 import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
@@ -81,8 +82,8 @@ public class ModelPropertyNode<O, N> extends AbstractModelProperty<O, N> {
         }
 
         @Override
-        public Collection<Context> contextualize(N object, Context context, boolean includeNull) {
-            return this.nodeRetriever.contextualize(object, context, includeNull);
+        public Collection<Context> contextualize(N object, Context context, TraversingMode traversingMode, boolean includeNull) {
+            return this.nodeRetriever.contextualize(object, context, traversingMode, includeNull);
         }
 
         @Override

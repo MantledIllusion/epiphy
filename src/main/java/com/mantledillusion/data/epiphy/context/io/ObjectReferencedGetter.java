@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.Getter;
@@ -36,7 +37,7 @@ public class ObjectReferencedGetter<O, V> implements ReferencedGetter<O, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<O, V> property, O object, Context context, boolean includeNull) {
+    public Collection<Context> contextualize(Property<O, V> property, O object, Context context, TraversingMode traversingMode, boolean includeNull) {
         return !property.isNull(object, context) || (includeNull && property.exists(object, context)) ?
                 Collections.singleton(context) : Collections.emptySet();
     }

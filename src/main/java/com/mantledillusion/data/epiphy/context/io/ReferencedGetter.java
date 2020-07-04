@@ -1,6 +1,8 @@
 package com.mantledillusion.data.epiphy.context.io;
 
+import com.mantledillusion.data.epiphy.ModelPropertyNode;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -86,13 +88,16 @@ public interface ReferencedGetter<O, V> {
 	 * 			The instance to check the value occurrences in; might be null.
 	 * @param context
 	 *          The context to use as a base; might be null.
+	 * @param traversingMode
+	 *          Transcend recursively through all layers of {@link ModelPropertyNode}s that might be on the path from
+	 *          the root {@link Property} to this {@link Property}; might <b>not</b> be null.
 	 * @param includeNull
 	 *          Include {@link Context}s for all values where {@link Property#exists(Object, Context)} would return
 	 *          true, so they might be null.
 	 * @return
 	 * 			A {@link Collection} of {@link Context}s, never null, might be empty
 	 */
-	Collection<Context> contextualize(Property<O, V> property, O object, Context context, boolean includeNull);
+	Collection<Context> contextualize(Property<O, V> property, O object, Context context, TraversingMode traversingMode, boolean includeNull);
 
 	/**
 	 * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
@@ -120,7 +125,8 @@ public interface ReferencedGetter<O, V> {
 		return new ReferencedGetter() {
 
 			@Override
-			public Object get(Property property, Object object, Context context, boolean allowNull) throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException {
+			public Object get(Property property, Object object, Context context, boolean allowNull)
+					throws InterruptedPropertyPathException, UnreferencedPropertyPathException, OutboundPropertyPathException {
 				return ReferencedGetter.this.get((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, context, allowNull);
 			}
 
@@ -140,8 +146,8 @@ public interface ReferencedGetter<O, V> {
 			}
 
 			@Override
-			public Collection<Context> contextualize(Property property, Object object, Context context, boolean includeNull) {
-				return ReferencedGetter.this.contextualize((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, context, includeNull);
+			public Collection<Context> contextualize(Property property, Object object, Context context, TraversingMode traversingMode, boolean includeNull) {
+				return ReferencedGetter.this.contextualize((Property<O, V>) property, objectType.isInstance(object) ? (O) object : null, context, traversingMode, includeNull);
 			}
 
 			@Override

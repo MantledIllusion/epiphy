@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.io.ReferencedGetter;
 import com.mantledillusion.data.epiphy.context.io.ReferencedSetter;
 
@@ -68,15 +69,17 @@ abstract class AbstractModelProperty<O, V> implements Property<O, V> {
     // ############################################## CONTEXTING #################################################
     // ###########################################################################################################
 
-
     @Override
     public int occurrences(O object) {
         return this.getter.occurrences(this, object);
     }
 
     @Override
-    public Collection<Context> contextualize(O object, Context context, boolean includeNull) {
-        return this.getter.contextualize(this, object, Context.defaultIfNull(context), includeNull);
+    public Collection<Context> contextualize(O object, Context context, TraversingMode traversingMode, boolean includeNull) {
+        if (traversingMode == null) {
+            throw new IllegalArgumentException("Cannot contextualize without specifying the traversing mode");
+        }
+        return this.getter.contextualize(this, object, Context.defaultIfNull(context), traversingMode, includeNull);
     }
 
     @Override

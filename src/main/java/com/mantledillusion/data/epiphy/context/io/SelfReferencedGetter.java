@@ -2,6 +2,7 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 
 import java.util.*;
 
@@ -30,7 +31,7 @@ public class SelfReferencedGetter<V> implements ReferencedGetter<V, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<V, V> property, V object, Context context, boolean includeNull) {
+    public Collection<Context> contextualize(Property<V, V> property, V object, Context context, TraversingMode traversingMode, boolean includeNull) {
         return Collections.singleton(context);
     }
 

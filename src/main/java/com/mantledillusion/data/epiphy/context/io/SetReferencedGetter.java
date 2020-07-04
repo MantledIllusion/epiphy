@@ -2,6 +2,7 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.reference.PropertyKey;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -59,7 +60,7 @@ public class SetReferencedGetter<E> implements ReferencedGetter<Set<E>, E> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<Set<E>, E> property, Set<E> object, Context context, boolean includeNull) {
+    public Collection<Context> contextualize(Property<Set<E>, E> property, Set<E> object, Context context, TraversingMode traversingMode, boolean includeNull) {
         boolean hasReference = context.containsReference(property, PropertyKey.class);
         E element = hasReference ? ((PropertyKey<E>) context.getReference(property, PropertyKey.class)).getReference() : null;
         return hasReference ? (element != null || includeNull ?

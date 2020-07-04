@@ -2,6 +2,7 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.reference.PropertyKey;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -49,7 +50,7 @@ public class MapReferencedGetter<K, V> implements ReferencedGetter<Map<K, V>, V>
     }
 
     @Override
-    public Collection<Context> contextualize(Property<Map<K, V>, V> property, Map<K, V> object, Context context, boolean includeNull) {
+    public Collection<Context> contextualize(Property<Map<K, V>, V> property, Map<K, V> object, Context context, TraversingMode traversingMode, boolean includeNull) {
         K key = context.containsReference(property, PropertyKey.class) ?
                 ((PropertyKey<K>) context.getReference(property, PropertyKey.class)).getReference() : null;
         return (key != null ? Stream.of(key) : object.keySet().stream()).

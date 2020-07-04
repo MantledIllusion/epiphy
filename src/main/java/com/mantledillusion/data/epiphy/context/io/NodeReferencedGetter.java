@@ -3,6 +3,7 @@ package com.mantledillusion.data.epiphy.context.io;
 import com.mantledillusion.data.epiphy.NodeRetriever;
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
@@ -63,25 +64,29 @@ public class NodeReferencedGetter<O, N> implements ReferencedGetter<O, N> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<O, N> property, O object, Context context, boolean includeNull) {
+    public Collection<Context> contextualize(Property<O, N> property, O object, Context context, TraversingMode traversingMode, boolean includeNull) {
         N node = get(property, object, context, false);
         if (node != null) {
             PropertyRoute baseRoute = context.containsReference(this.nodeRetriever, PropertyRoute.class) ?
                     context.getReference(this.nodeRetriever, PropertyRoute.class) : PropertyRoute.of(this.nodeRetriever);
-            return subContextualize(node, baseRoute, context, includeNull).collect(Collectors.toList());
+            return subContextualize(node, baseRoute, context, traversingMode, includeNull).collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
     }
 
-    private Stream<Context> subContextualize(N node, PropertyRoute route, Context baseContext, boolean includeNull) {
-        return Stream.concat(Stream.of(baseContext.union(route)),
-                this.nodeRetriever.contextualize(node, includeNull).stream().
-                flatMap(subContext -> {
-                    PropertyRoute appendedRoute = route.append(subContext);
-                    N child = this.nodeRetriever.get(node, subContext, false);
-                    return subContextualize(child, appendedRoute, baseContext, includeNull);
-                }));
+    private Stream<Context> subContextualize(N node, PropertyRoute route, Context baseContext, TraversingMode traversingMode, boolean includeNull) {
+        return Stream.concat(!traversingMode.isIncludeParent() ? Stream.empty() : Stream.of(baseContext.union(route)),
+                !traversingMode.isIncludeChildren() ? Stream.empty() : this.nodeRetriever.contextualize(node, includeNull).stream().
+                        flatMap(subContext -> {
+                            PropertyRoute appendedRoute = route.append(subContext);
+                            if (traversingMode == TraversingMode.RECURSIVE) {
+                                N child = this.nodeRetriever.get(node, subContext, false);
+                                return subContextualize(child, appendedRoute, baseContext, traversingMode, includeNull);
+                            } else {
+                                return Stream.of(baseContext.union(appendedRoute));
+                            }
+                        }));
     }
 
     @Override

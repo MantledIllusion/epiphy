@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy.mixed.tests;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.context.reference.PropertyIndex;
 import com.mantledillusion.data.epiphy.context.reference.PropertyRoute;
 import com.mantledillusion.data.epiphy.mixed.AbstractMixedModelPropertyTest;
@@ -10,8 +11,10 @@ import com.mantledillusion.data.epiphy.mixed.model.MixedSubType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class ContextMixedModelPropertyTest extends AbstractMixedModelPropertyTest {
 
@@ -93,5 +96,42 @@ public class ContextMixedModelPropertyTest extends AbstractMixedModelPropertyTes
         Assertions.assertEquals(1, route.getReference().length);
         Assertions.assertTrue(route.getReference()[0].containsReference(MixedModelProperties.LISTED_NODE, PropertyIndex.class));
         Assertions.assertSame(NODE_CHILD1B, MixedModelProperties.NODE_ID.get(this.model, context));
+    }
+
+    @Test
+    public void testNonRecursivePathContexting() {
+        List<Context> contexts = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, null, TraversingMode.PARENT));
+        Assertions.assertEquals(1, contexts.size());
+        Assertions.assertEquals(NODE_ROOT, MixedModelProperties.NODE_ID.get(this.model, contexts.get(0)));
+
+        contexts = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contexts.get(0), TraversingMode.CHILD));
+        Assertions.assertEquals(2, contexts.size());
+        Assertions.assertEquals(NODE_CHILD1A, MixedModelProperties.NODE_ID.get(this.model, contexts.get(0)));
+        Assertions.assertEquals(NODE_CHILD1B, MixedModelProperties.NODE_ID.get(this.model, contexts.get(1)));
+
+        // CHILD 1 A
+        List<Context> contextsA = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contexts.get(0), TraversingMode.PARENT));
+        Assertions.assertEquals(1, contextsA.size());
+        Assertions.assertEquals(NODE_CHILD1A, MixedModelProperties.NODE_ID.get(this.model, contextsA.get(0)));
+
+        contextsA = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contextsA.get(0), TraversingMode.CHILD));
+        Assertions.assertEquals(1, contextsA.size());
+        Assertions.assertEquals(NODE_CHILD2A, MixedModelProperties.NODE_ID.get(this.model, contextsA.get(0)));
+
+        // CHILD 2 A
+        contextsA = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contextsA.get(0), TraversingMode.PARENT));
+        Assertions.assertEquals(1, contextsA.size());
+        Assertions.assertEquals(NODE_CHILD2A, MixedModelProperties.NODE_ID.get(this.model, contextsA.get(0)));
+
+        contextsA = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contextsA.get(0), TraversingMode.CHILD));
+        Assertions.assertEquals(0, contextsA.size());
+
+        // CHILD 1 B
+        List<Context> contextsB = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contexts.get(1), TraversingMode.PARENT));
+        Assertions.assertEquals(1, contextsB.size());
+        Assertions.assertEquals(NODE_CHILD1B, MixedModelProperties.NODE_ID.get(this.model, contextsB.get(0)));
+
+        contextsB = new ArrayList<>(MixedModelProperties.NODE_ID.contextualize(this.model, contextsB.get(0), TraversingMode.CHILD));
+        Assertions.assertEquals(0, contextsB.size());
     }
 }

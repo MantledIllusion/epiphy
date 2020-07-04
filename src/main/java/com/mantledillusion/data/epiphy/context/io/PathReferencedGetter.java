@@ -2,6 +2,7 @@ package com.mantledillusion.data.epiphy.context.io;
 
 import com.mantledillusion.data.epiphy.Property;
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -53,20 +54,20 @@ public class PathReferencedGetter<S, O, V> implements ReferencedGetter<S, V> {
     }
 
     @Override
-    public Collection<Context> contextualize(Property<S, V> property, S object, Context context, boolean includeNull) {
-        return this.parent.contextualize(object, context, false).stream().
+    public Collection<Context> contextualize(Property<S, V> property, S object, Context context, TraversingMode traversingMode, boolean includeNull) {
+        return this.parent.contextualize(object, context, traversingMode, includeNull).stream().
                 flatMap(parentContext ->
-                        this.child.contextualize(this.parent.get(object, parentContext), parentContext, includeNull).
+                        this.child.contextualize(this.parent.get(object, parentContext), parentContext, traversingMode, includeNull).
                         stream().map(childContext -> parentContext.union(childContext))).
                 collect(Collectors.toList());
     }
 
     @Override
     public Collection<Context> contextualize(Property<S, V> property, S object, V value, Context context) {
-        return this.parent.contextualize(object, context, false).stream().
+        return this.parent.contextualize(object, context, TraversingMode.RECURSIVE, false).stream().
                 flatMap(parentContext -> {
                     O parent = this.parent.get(object, parentContext);
-                    return this.child.contextualize(parent, parentContext, true).stream().
+                    return this.child.contextualize(parent, parentContext, TraversingMode.RECURSIVE, true).stream().
                         filter(childContext -> Objects.equals(this.child.get(parent, childContext, false), value)).
                         map(childContext -> parentContext.union(childContext));
                 }).

@@ -1,6 +1,7 @@
 package com.mantledillusion.data.epiphy;
 
 import com.mantledillusion.data.epiphy.context.Context;
+import com.mantledillusion.data.epiphy.context.TraversingMode;
 import com.mantledillusion.data.epiphy.exception.InterruptedPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.OutboundPropertyPathException;
 import com.mantledillusion.data.epiphy.exception.ReadonlyPropertyException;
@@ -363,7 +364,7 @@ public interface Property<O, V> {
      * 			A {@link Collection} of {@link Context}s, never null, might be empty
      */
     default Collection<Context> contextualize(O object) {
-        return contextualize(object, null,false);
+        return contextualize(object, null,TraversingMode.RECURSIVE, false);
     }
 
     /**
@@ -380,7 +381,25 @@ public interface Property<O, V> {
      * 			A {@link Collection} of {@link Context}s, never null, might be empty
      */
     default Collection<Context> contextualize(O object, Context context) {
-        return contextualize(object, context, false);
+        return contextualize(object, context, TraversingMode.RECURSIVE, false);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param traversingMode
+     *          Transcend recursively through all layers of {@link ModelPropertyNode}s that might be on the path from
+     *          the root {@link Property} to this {@link Property}; might <b>not</b> be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, TraversingMode traversingMode) {
+        return contextualize(object, null, traversingMode, false);
     }
 
     /**
@@ -398,7 +417,48 @@ public interface Property<O, V> {
      * 			A {@link Collection} of {@link Context}s, never null, might be empty
      */
     default Collection<Context> contextualize(O object, boolean includeNull) {
-        return contextualize(object, null, includeNull);
+        return contextualize(object, null, TraversingMode.RECURSIVE, includeNull);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param traversingMode
+     *          Transcend recursively through all layers of {@link ModelPropertyNode}s that might be on the path from
+     *          the root {@link Property} to this {@link Property}; might <b>not</b> be null.
+     * @param includeNull
+     *          Include {@link Context}s for all values where {@link #exists(Object, Context)} would return true, so
+     *          they might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, TraversingMode traversingMode, boolean includeNull) {
+        return contextualize(object, null, traversingMode, includeNull);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @param traversingMode
+     *          Transcend recursively through all layers of {@link ModelPropertyNode}s that might be on the path from
+     *          the root {@link Property} to this {@link Property}; might <b>not</b> be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    default Collection<Context> contextualize(O object, Context context, TraversingMode traversingMode) {
+        return contextualize(object, context, traversingMode, false);
     }
 
     /**
@@ -417,7 +477,30 @@ public interface Property<O, V> {
      * @return
      * 			A {@link Collection} of {@link Context}s, never null, might be empty
      */
-    Collection<Context> contextualize(O object, Context context, boolean includeNull);
+    default Collection<Context> contextualize(O object, Context context, boolean includeNull) {
+        return contextualize(object, context, TraversingMode.RECURSIVE, includeNull);
+    }
+
+    /**
+     * Returns a {@link Collection} of {@link Context}s for every occurrence of this {@link Property} in the given
+     * object.
+     * <p>
+     * The amount of returned {@link Context}s equals the result of {@link #occurrences(Object)} on the same object.
+     *
+     * @param object
+     * 			The instance to check the value occurrences in; might be null.
+     * @param context
+     *          The context to use as a base; might be null.
+     * @param traversingMode
+     *          Transcend recursively through all layers of {@link ModelPropertyNode}s that might be on the path from
+     *          the root {@link Property} to this {@link Property}; might <b>not</b> be null.
+     * @param includeNull
+     *          Include {@link Context}s for all values where {@link #exists(Object, Context)} would return true, so
+     *          they might be null.
+     * @return
+     * 			A {@link Collection} of {@link Context}s, never null, might be empty
+     */
+    Collection<Context> contextualize(O object, Context context, TraversingMode traversingMode, boolean includeNull);
 
     /**
      * Returns a {@link Collection} of {@link Context}s for every occurrence where this {@link Property} is represented
@@ -460,7 +543,7 @@ public interface Property<O, V> {
      * @return
      *          A {@link Stream} of values, never null, might be empty
      */
-    default Stream<V> stream(O  object) {
+    default Stream<V> stream(O object) {
         return contextualize(object).stream().
                 map(context -> get(object, context, true));
     }
@@ -477,7 +560,7 @@ public interface Property<O, V> {
      * @return
      *          A {@link Stream} of values, never null, might be empty
      */
-    default Stream<V> stream(O  object, Context context) {
+    default Stream<V> stream(O object, Context context) {
         return contextualize(object, context).stream().
                 map(ctx -> get(object, ctx, true));
     }
