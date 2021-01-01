@@ -5,7 +5,7 @@
 
 	<groupId>com.mantledillusion.data</groupId>
 	<artifactId>epiphy</artifactId>
-	<version>4.0.1-SNAPSHOT</version>
+	<version>4.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Epiphy</name>
