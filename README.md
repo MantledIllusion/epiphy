@@ -161,11 +161,11 @@ Integer max(OwnerType owner, ModelProperty<OwnerType, Integer> property) {
 This method could then be simply called differently:
 
 ```java
-Integer maxHp = max(owner, OwnerTyp.CAR
+Integer maxHp = max(owner, OwnerType.CAR
         .append(CarType.ENGINE)
         .append(EngineType.HP));
 
-Integer maxPressure = max(owner, OwnerTyp.CAR
+Integer maxPressure = max(owner, OwnerType.CAR
         .append(CarType.WHEEL)
         .append(WheelType.TIRE)
         .append(TireType.PRESSURE));
