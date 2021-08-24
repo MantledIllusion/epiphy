@@ -26,8 +26,6 @@ Abstracting such models comes down to abstracting these element types and allowi
 For example, a data model might look like this:
 
 ```java
-import com.mantledillusion.data.epiphy.ModelProperty;
-
 class OwnerType {
     static ModelPropertyList<OwnerType, CarType> CARS = ModelPropertyList.fromObject(owner -> owner.car);
     static ModelProperty<OwnerType, CarType> CAR = CARS.append(ModelProperty.fromList());
